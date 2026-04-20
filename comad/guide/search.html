@@ -80,7 +80,7 @@ bun run packages/search/src/cli.ts "RAG pipeline" --min-stars 500
 bun run packages/search/src/cli.ts "agent orchestration" --lang typescript --max 10</code></pre>
 
     <h3 data-i18n="p1.h3">실제 출력</h3>
-<pre><code>[search] Searching multiple sources for: "mcp server stdio bun typescript"
+<pre><code data-i18n-html="p1.log">[search] Searching multiple sources for: "mcp server stdio bun typescript"
 [search:pypi]        Found 0 packages
 [search:arxiv]       Found 1 papers with code
 [search:npm]         Found 5 packages
@@ -199,7 +199,7 @@ Running verification (typecheck + tests)...
   Reverted:               2
   Avg survival score:    0.79</code></pre>
 
-    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);" data-i18n-html="related"><span data-i18n="related.label">관련 파일</span>: <code>brain/packages/search/src/{cli,evaluator,planner,sandbox,plan-cache,plan-tracker,survival,ear-ingest}.ts</code>, <code>brain/data/plan-decisions.jsonl</code></p>
+    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);"><span data-i18n="related.label">관련 파일</span>: <code>brain/packages/search/src/{cli,evaluator,planner,sandbox,plan-cache,plan-tracker,survival,ear-ingest}.ts</code>, <code>brain/data/plan-decisions.jsonl</code></p>
 
   </main>
 </div>
@@ -240,6 +240,7 @@ window.I18N_DICT = {
     'ov.flow.log': 'adoption log appended',
     'p1.h2': 'Phase 1 — Discover & evaluate',
     'p1.h3': 'Real output',
+    'p1.log': '[search] Searching multiple sources for: "mcp server stdio bun typescript"\n[search:pypi]        Found 0 packages\n[search:arxiv]       Found 1 papers with code\n[search:npm]         Found 5 packages\n[search:multiSource] 6 results from 3 sources (675ms)\n[search] Found 17 repos for "mcp server stdio bun typescript" (5 sub-queries, 2091ms)\n[search] Evaluating 17 candidates...\n[search] Done in 2104ms: <span class="hl">10 adopt, 2 study, 5 skip</span>\n\n### [ADOPT] neo4j-contrib/mcp-neo4j  (score 98, 936 stars)\nTrust: 91 | Quality: 100 | Relevance: 100\n',
     'eval.h2': '3-axis eval + off-topic gate',
     'eval.p1': 'Each repo gets three scores, docked by anti-signals. The <strong>off-topic gate</strong> (added 2026-04-13) blocks out-of-domain candidates (e.g., genome tools like CRAQ).',
     'eval.th.axis': 'Axis',
@@ -311,6 +312,7 @@ window.I18N_DICT = {
     'ov.flow.log': '채택 이력 누적',
     'p1.h2': 'Phase 1 — 탐색 & 평가',
     'p1.h3': '실제 출력',
+    'p1.log': '[search] Searching multiple sources for: "mcp server stdio bun typescript"\n[search:pypi]        Found 0 packages\n[search:arxiv]       Found 1 papers with code\n[search:npm]         Found 5 packages\n[search:multiSource] 6 results from 3 sources (675ms)\n[search] Found 17 repos for "mcp server stdio bun typescript" (5 sub-queries, 2091ms)\n[search] Evaluating 17 candidates...\n[search] Done in 2104ms: <span class="hl">10 adopt, 2 study, 5 skip</span>\n\n### [ADOPT] neo4j-contrib/mcp-neo4j  (98점, 936 stars)\nTrust: 91 | Quality: 100 | Relevance: 100\n',
     'eval.h2': '3축 평가 + 오프토픽 게이트',
     'eval.p1': '각 레포는 세 점수를 받고, anti-signal을 감점합니다. 2026-04-13 추가된 <strong>오프토픽 게이트</strong>가 도메인 벗어난 후보(CRAQ같은 genome tool 등)를 차단합니다.',
     'eval.th.axis': '축',

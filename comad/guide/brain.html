@@ -206,7 +206,7 @@ bun run packages/core/src/community-detector.ts</code></pre>
     <h2 id="benchmark" data-i18n="bench.h2">품질 벤치마크</h2>
     <p data-i18n="bench.p1">50문항 고정 문제 세트로 주간 측정합니다. 난이도별 recall · grounding rate · latency를 기록해 그래프 성장에 따라 품질이 향상되는지 추적.</p>
 
-<pre><code><span class="dim">$ bun run packages/graphrag/src/run-benchmark.ts</span>
+<pre><code data-i18n-html="bench.log"><span class="dim">$ bun run packages/graphrag/src/run-benchmark.ts</span>
 GraphRAG Benchmark — Starting...
 Graph: 27,320 nodes, 45,103 edges
 
@@ -398,6 +398,7 @@ window.I18N_DICT = {
     'viz.fig': 'Post-community-detection view. Each color is a different community — Tech cluster (blue), AI safety cluster (orange), etc.',
     'bench.h2': 'Quality benchmark',
     'bench.p1': 'Measured weekly against a fixed 50-question set. Recall · grounding rate · latency are logged per difficulty to track quality growth as the graph grows.',
+    'bench.log': '<span class="dim">$ bun run packages/graphrag/src/run-benchmark.ts</span>\nGraphRAG Benchmark — Starting...\nGraph: 27,320 nodes, 45,103 edges\n\n[b01] easy   Which paper first proposed the Transformer architecture?\n             ✓ 9.9s (recall: 100%, grounding: 100%)\n...\n[b50] hard   What problem does Constitutional AI solve relative to RLHF?\n             ✓ 15.1s (recall: 100%, grounding: 92%)\n\n═══════════════════════════════════════\n  Good: 25  Partial: 25  Poor: 0\n  <span class="hl">Entity Recall:    93%</span>\n  <span class="hl">Grounding Rate:   93%</span>\n  <span class="hl">Avg Latency:      13.8s</span>\n───────────────────────────────────────\n  easy    recall: 100%  good: 27%\n  medium  recall: 83%   good: 47%\n  hard    recall: 96%   good: 72%\n═══════════════════════════════════════',
     'bench.callout': '<strong>2026-04-13 Phase A/B improvements</strong><br>Added CONCEPT_EXPANSIONS + 3KB context cap (per Karpathy) + Neo4j-based dynamic expansion (Bush). Recall 83% → 93%, latency 20.7s → 13.8s, hard good rate 25% → 72% vs. the prior baseline.',
     'config.h2': 'comad.config.yaml',
     'config.p1': 'Change domain by editing one YAML file. <code>presets/</code> contains 4 templates: AI/ML, Web Dev, Finance, Biotech.',
@@ -535,6 +536,7 @@ window.I18N_DICT = {
     'viz.fig': '커뮤니티 감지 후 시각화. 각 색상은 다른 커뮤니티 — Tech 클러스터(파랑), AI 안전성 클러스터(오렌지) 등.',
     'bench.h2': '품질 벤치마크',
     'bench.p1': '50문항 고정 문제 세트로 주간 측정합니다. 난이도별 recall · grounding rate · latency를 기록해 그래프 성장에 따라 품질이 향상되는지 추적.',
+    'bench.log': '<span class="dim">$ bun run packages/graphrag/src/run-benchmark.ts</span>\nGraphRAG Benchmark — Starting...\nGraph: 27,320 nodes, 45,103 edges\n\n[b01] easy   Transformer 아키텍처를 처음 제안한 논문은?\n             ✓ 9.9s (recall: 100%, grounding: 100%)\n...\n[b50] hard   Constitutional AI가 RLHF 대비 해결한 문제는?\n             ✓ 15.1s (recall: 100%, grounding: 92%)\n\n═══════════════════════════════════════\n  Good: 25  Partial: 25  Poor: 0\n  <span class="hl">Entity Recall:    93%</span>\n  <span class="hl">Grounding Rate:   93%</span>\n  <span class="hl">Avg Latency:      13.8s</span>\n───────────────────────────────────────\n  easy    recall: 100%  good: 27%\n  medium  recall: 83%   good: 47%\n  hard    recall: 96%   good: 72%\n═══════════════════════════════════════',
     'bench.callout': '<strong>2026-04-13 Phase A/B 개선 효과</strong><br>CONCEPT_EXPANSIONS 추가 + 3KB context cap (Karpathy 지적) + Neo4j 기반 동적 확장(Bush). 이전 대비 Recall 83% → 93%, Latency 20.7s → 13.8s, Hard Good Rate 25% → 72%.',
     'config.h2': 'comad.config.yaml',
     'config.p1': '도메인을 바꾸려면 YAML 한 파일만 수정합니다. <code>presets/</code> 디렉토리에 AI/ML, Web Dev, Finance, Biotech 4개 템플릿.',
