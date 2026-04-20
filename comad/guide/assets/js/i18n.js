@@ -3,12 +3,13 @@
 // Buttons use onclick="toggleLang()". State persists in localStorage('comad-lang').
 
 (function () {
-  const dict = window.I18N_DICT || { en: {}, ko: {} };
-
   let currentLang = localStorage.getItem('comad-lang')
     || (navigator.language && navigator.language.startsWith('ko') ? 'ko' : 'en');
 
   function applyLang(lang) {
+    // Read fresh each call: i18n.js is loaded BEFORE the inline
+    // window.I18N_DICT script runs, so we can't capture it at module init.
+    const dict = window.I18N_DICT || { en: {}, ko: {} };
     const d = dict[lang];
     if (!d) return;
     document.documentElement.lang = lang;
