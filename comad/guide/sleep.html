@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sleep — Comad 가이드</title>
+<title data-i18n="meta.title">Sleep — Comad 가이드</title>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="assets/css/guide.css">
+<link rel="stylesheet" href="/comad/assets/css/comad-shared.css">
 </head>
 <body>
 
 <header class="topbar">
-  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub">가이드</span></a>
+  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub" data-i18n="brand.sub">가이드</span></a>
   <nav>
-    <a href="index.html">홈</a>
-    <a href="scheduler.html">스케줄러</a>
+    <a href="index.html" data-i18n="nav.home">홈</a>
+    <a href="scheduler.html" data-i18n="nav.scheduler">스케줄러</a>
     <a href="brain.html">Brain</a>
     <a href="ear.html">Ear</a>
     <a href="eye.html">Eye</a>
@@ -23,23 +24,24 @@
     <a href="voice.html">Voice</a>
     <a href="browse.html">Browse</a>
   </nav>
+  <button class="lang-toggle" onclick="toggleLang()"><span id="langEn">EN</span> / <span id="langKo">KO</span></button>
 </header>
 
 <div class="layout">
   <aside class="toc">
     <div class="toc-title">Sleep</div>
-    <a href="#overview">개요</a>
-    <a href="#types">메모리 유형</a>
-    <a href="#trigger">dream 실행</a>
-    <a href="#memory-md">MEMORY.md 인덱스</a>
-    <a href="#mcp">MCP 서버</a>
-    <a href="#policy">정리 정책</a>
+    <a href="#overview" data-i18n="toc.overview">개요</a>
+    <a href="#types" data-i18n="toc.types">메모리 유형</a>
+    <a href="#trigger" data-i18n="toc.trigger">dream 실행</a>
+    <a href="#memory-md" data-i18n="toc.md">MEMORY.md 인덱스</a>
+    <a href="#mcp" data-i18n="toc.mcp">MCP 서버</a>
+    <a href="#policy" data-i18n="toc.policy">정리 정책</a>
   </aside>
 
   <main>
     <div class="page-hero">
-      <h1>Sleep — <em>메모리 정리 에이전트</em></h1>
-      <p class="page-desc">
+      <h1 data-i18n-html="h1">Sleep — <em>메모리 정리 에이전트</em></h1>
+      <p class="page-desc" data-i18n="page.desc">
         Claude Code의 프로젝트별 auto memory 디렉토리를 전수 스캔해 중복 감지, 통합, 오래된 기록 정리를 수행합니다.
         "dream" 한 마디로 발동되며, 변경 이력을 MCP 서버로 조회할 수 있습니다.
       </p>
@@ -51,114 +53,289 @@
       </div>
     </div>
 
-    <h2 id="overview">개요</h2>
-    <p>Claude Code는 각 프로젝트마다 <code>~/.claude/projects/&lt;cwd&gt;/memory/</code>에 자동 메모리를 저장합니다. 시간이 쌓이면 중복, 오래된 정보, 파편화된 내용이 축적되는데, Sleep이 이를 주기적으로 정리합니다.</p>
+    <h2 id="overview" data-i18n="ov.h2">개요</h2>
+    <p data-i18n-html="ov.p1">Claude Code는 각 프로젝트마다 <code>~/.claude/projects/&lt;cwd&gt;/memory/</code>에 자동 메모리를 저장합니다. 시간이 쌓이면 중복, 오래된 정보, 파편화된 내용이 축적되는데, Sleep이 이를 주기적으로 정리합니다.</p>
 
-<pre><code><span class="dim">Before sleep:</span>
-memory/project_session_20260412.md   (62 lines)
-memory/project_session_20260408.md   (70 lines)
-memory/feedback_ci_check.md          (동일 내용)
-memory/feedback_ci_after_push.md     (거의 동일)
-MEMORY.md                            (1,333 lines, 많은 링크 깨짐)
+<pre><code><span class="dim" data-i18n="ov.before">Before sleep:</span>
+memory/project_session_20260412.md   <span data-i18n="ov.b1">(62 lines)</span>
+memory/project_session_20260408.md   <span data-i18n="ov.b2">(70 lines)</span>
+memory/feedback_ci_check.md          <span data-i18n="ov.b3">(동일 내용)</span>
+memory/feedback_ci_after_push.md     <span data-i18n="ov.b4">(거의 동일)</span>
+MEMORY.md                            <span data-i18n="ov.b5">(1,333 lines, 많은 링크 깨짐)</span>
 
-<span class="dim">After sleep (dream):</span>
-memory/project_session_20260412.md   (5 lines, 요약본)
-memory/project_session_20260408.md   (6 lines)
-<span class="hl">feedback_ci_check.md 삭제</span>
-feedback_ci_after_push.md            (통합 버전)
-MEMORY.md                            (1,166 lines, 링크 전수 검증)</code></pre>
+<span class="dim" data-i18n="ov.after">After sleep (dream):</span>
+memory/project_session_20260412.md   <span data-i18n="ov.a1">(5 lines, 요약본)</span>
+memory/project_session_20260408.md   <span data-i18n="ov.a2">(6 lines)</span>
+<span class="hl" data-i18n="ov.a3">feedback_ci_check.md 삭제</span>
+feedback_ci_after_push.md            <span data-i18n="ov.a4">(통합 버전)</span>
+MEMORY.md                            <span data-i18n="ov.a5">(1,166 lines, 링크 전수 검증)</span></code></pre>
 
-    <h2 id="types">메모리 유형</h2>
-    <p>자동 메모리는 4가지로 분류됩니다. Sleep은 유형별로 다른 정리 정책을 적용합니다.</p>
+    <h2 id="types" data-i18n="types.h2">메모리 유형</h2>
+    <p data-i18n="types.p1">자동 메모리는 4가지로 분류됩니다. Sleep은 유형별로 다른 정리 정책을 적용합니다.</p>
 
     <table>
-      <tr><th>유형</th><th>내용</th><th>정리 정책</th></tr>
-      <tr><td><strong>user</strong></td><td>사용자의 역할, 선호, 지식 수준</td><td>거의 변하지 않음. 중복만 제거</td></tr>
-      <tr><td><strong>feedback</strong></td><td>사용자가 준 피드백 (하지 마/계속 이렇게 해)</td><td>유사 항목 통합, 왜 &amp; 언제 적용 명시</td></tr>
-      <tr><td><strong>project</strong></td><td>진행 중인 작업, 목표, 데드라인, 기술 결정</td><td>시간 지난 세션 요약 압축, 최근 3-5개만 상세 유지</td></tr>
-      <tr><td><strong>reference</strong></td><td>외부 시스템 포인터 (Linear 프로젝트 URL 등)</td><td>링크 깨짐 확인, 중복 제거</td></tr>
+      <tr><th data-i18n="types.th1">유형</th><th data-i18n="types.th2">내용</th><th data-i18n="types.th3">정리 정책</th></tr>
+      <tr><td><strong>user</strong></td><td data-i18n="types.user.c">사용자의 역할, 선호, 지식 수준</td><td data-i18n="types.user.p">거의 변하지 않음. 중복만 제거</td></tr>
+      <tr><td><strong>feedback</strong></td><td data-i18n="types.fb.c">사용자가 준 피드백 (하지 마/계속 이렇게 해)</td><td data-i18n-html="types.fb.p">유사 항목 통합, 왜 &amp; 언제 적용 명시</td></tr>
+      <tr><td><strong>project</strong></td><td data-i18n="types.pr.c">진행 중인 작업, 목표, 데드라인, 기술 결정</td><td data-i18n="types.pr.p">시간 지난 세션 요약 압축, 최근 3-5개만 상세 유지</td></tr>
+      <tr><td><strong>reference</strong></td><td data-i18n="types.rf.c">외부 시스템 포인터 (Linear 프로젝트 URL 등)</td><td data-i18n="types.rf.p">링크 깨짐 확인, 중복 제거</td></tr>
     </table>
 
-    <h2 id="trigger">dream 실행</h2>
-    <p>아무 Claude Code 세션에서 "dream" 또는 "정리해줘" 등 트리거 문구를 입력하면 comad-sleep 에이전트가 발동됩니다.</p>
+    <h2 id="trigger" data-i18n="tr.h2">dream 실행</h2>
+    <p data-i18n="tr.p1">아무 Claude Code 세션에서 "dream" 또는 "정리해줘" 등 트리거 문구를 입력하면 comad-sleep 에이전트가 발동됩니다.</p>
 
-<pre><code><span class="kw">You:</span> dream
+<pre><code><span class="kw" data-i18n="tr.you">You:</span> dream
 
-<span class="hl">Claude (comad-sleep):</span>
-ComadSleep Report — 2026-04-13T03:13Z
+<span class="hl" data-i18n="tr.claude">Claude (comad-sleep):</span>
+<span data-i18n="tr.report">ComadSleep Report — 2026-04-13T03:13Z
 Scanned: 6 projects, 47 files
 Backup: ~/.claude/memory-backup-2026-04-13T031330
 
 Stale locks removed: 3
 
-Changes (13):
-  · project_improvement_status.md       58줄 → 44줄 (현행화)
-  · project_session_20260412.md         62줄 → 5줄 (04-13이 후속 세션이라 압축)
-  · feedback_ci_check.md                <span class="hl">삭제</span> (ci_after_push와 중복)
-  · feedback_ci_after_push.md           CI 정책 통합본으로 재작성
-  · reference_neo4j_shared.md           eye 포트 7688→7687 (PR #1 반영)
-  · ... (8건 더)
+Changes (13):</span>
+  · project_improvement_status.md       <span data-i18n="tr.ch1">58줄 → 44줄 (현행화)</span>
+  · project_session_20260412.md         <span data-i18n="tr.ch2">62줄 → 5줄 (04-13이 후속 세션이라 압축)</span>
+  · feedback_ci_check.md                <span class="hl" data-i18n="tr.ch3">삭제</span> <span data-i18n="tr.ch3b">(ci_after_push와 중복)</span>
+  · feedback_ci_after_push.md           <span data-i18n="tr.ch4">CI 정책 통합본으로 재작성</span>
+  · reference_neo4j_shared.md           <span data-i18n="tr.ch5">eye 포트 7688→7687 (PR #1 반영)</span>
+  · ... <span data-i18n="tr.ch6">(8건 더)</span>
 
-결과:
+<span data-i18n="tr.result">결과:
   주요 프로젝트 메모리: 693줄 → 533줄 (-23%)
   전체 메모리: 47 files, 1,166줄
-  22개 MEMORY.md 링크 전수 검증: 전부 OK</code></pre>
+  22개 MEMORY.md 링크 전수 검증: 전부 OK</span></code></pre>
 
-    <div class="callout">
+    <div class="callout" data-i18n-html="tr.callout">
       <strong>백업 자동 생성</strong> — 정리 전 원본이 <code>~/.claude/memory-backup-&lt;timestamp&gt;/</code>에 복사됩니다. 잘못된 병합으로 정보가 사라지면 언제든 복원.
     </div>
 
-    <h2 id="memory-md">MEMORY.md 인덱스</h2>
-    <p>각 프로젝트의 <code>memory/MEMORY.md</code>는 세부 메모리 파일들을 한 줄 요약으로 엮은 인덱스입니다. Sleep이 항상 이 인덱스의 일관성을 유지합니다.</p>
+    <h2 id="memory-md" data-i18n="md.h2">MEMORY.md 인덱스</h2>
+    <p data-i18n-html="md.p1">각 프로젝트의 <code>memory/MEMORY.md</code>는 세부 메모리 파일들을 한 줄 요약으로 엮은 인덱스입니다. Sleep이 항상 이 인덱스의 일관성을 유지합니다.</p>
 
-<pre><code><span class="dim"># memory/MEMORY.md</span>
-- [Session 2026-04-13](project_session_20260413.md) — GraphRAG recall 93%, 크론 OAuth 해결, LaunchAgent 마이그레이션
-- [Session 2026-04-12](project_session_20260412.md) — 자가진화 6 Phase, 스코어 84/100
-- [Pending tasks](project_pending_tasks.md) — meta-edge 분할 · 50K 그래프 성장
-- [/search skill](project_search_skill_plan.md) — 멀티소스 + Neo4j 저장 + 주간 CRON 구현 완료
-- [Design simplicity](feedback_design_simplicity.md) — Karpathy 기준 심플리시티 선호
+<pre><code><span class="dim" data-i18n="md.hdr"># memory/MEMORY.md</span>
+<span data-i18n="md.l1">- [Session 2026-04-13](project_session_20260413.md) — GraphRAG recall 93%, 크론 OAuth 해결, LaunchAgent 마이그레이션</span>
+<span data-i18n="md.l2">- [Session 2026-04-12](project_session_20260412.md) — 자가진화 6 Phase, 스코어 84/100</span>
+<span data-i18n="md.l3">- [Pending tasks](project_pending_tasks.md) — meta-edge 분할 · 50K 그래프 성장</span>
+<span data-i18n="md.l4">- [/search skill](project_search_skill_plan.md) — 멀티소스 + Neo4j 저장 + 주간 CRON 구현 완료</span>
+<span data-i18n="md.l5">- [Design simplicity](feedback_design_simplicity.md) — Karpathy 기준 심플리시티 선호</span>
 - ...</code></pre>
 
-    <h2 id="mcp">MCP 서버 — 조회</h2>
-    <p>comad-sleep은 MCP 서버도 제공합니다. 정리 이력과 메타데이터를 대화로 조회.</p>
+    <h2 id="mcp" data-i18n="mcp.h2">MCP 서버 — 조회</h2>
+    <p data-i18n="mcp.p1">comad-sleep은 MCP 서버도 제공합니다. 정리 이력과 메타데이터를 대화로 조회.</p>
 
     <table>
-      <tr><th>도구</th><th>용도</th></tr>
-      <tr><td><code>comad_sleep_info</code></td><td>마지막 dream 실행 시각, 다음 권장 실행 일정</td></tr>
-      <tr><td><code>comad_sleep_history</code></td><td>최근 N회의 dream 리포트 (무엇이 바뀌었나)</td></tr>
+      <tr><th data-i18n="mcp.th.tool">도구</th><th data-i18n="mcp.th.role">용도</th></tr>
+      <tr><td><code>comad_sleep_info</code></td><td data-i18n="mcp.info">마지막 dream 실행 시각, 다음 권장 실행 일정</td></tr>
+      <tr><td><code>comad_sleep_history</code></td><td data-i18n="mcp.history">최근 N회의 dream 리포트 (무엇이 바뀌었나)</td></tr>
     </table>
 
-    <h2 id="policy">정리 정책</h2>
-    <p>Sleep이 자동으로 판단하는 규칙들:</p>
+    <h2 id="policy" data-i18n="pol.h2">정리 정책</h2>
+    <p data-i18n="pol.p1">Sleep이 자동으로 판단하는 규칙들:</p>
 
-    <h3>무엇을 저장하지 말 것 (중복되는 기억)</h3>
+    <h3 data-i18n="pol.h3_1">무엇을 저장하지 말 것 (중복되는 기억)</h3>
     <ul>
-      <li>코드 패턴/컨벤션/아키텍처 — <code>git log</code>/소스가 진실</li>
-      <li>디버깅 해결책 — 커밋 메시지에 이미 있음</li>
-      <li>현재 대화 중인 task 상태 — 일시적 정보</li>
-      <li>CLAUDE.md에 이미 명시된 것</li>
+      <li data-i18n-html="pol.li1_1">코드 패턴/컨벤션/아키텍처 — <code>git log</code>/소스가 진실</li>
+      <li data-i18n="pol.li1_2">디버깅 해결책 — 커밋 메시지에 이미 있음</li>
+      <li data-i18n="pol.li1_3">현재 대화 중인 task 상태 — 일시적 정보</li>
+      <li data-i18n="pol.li1_4">CLAUDE.md에 이미 명시된 것</li>
     </ul>
 
-    <h3>세션 파일 압축 타이밍</h3>
+    <h3 data-i18n="pol.h3_2">세션 파일 압축 타이밍</h3>
     <ul>
-      <li>같은 작업의 후속 세션이 있으면 <strong>이전 세션을 5-10줄로 압축</strong> (링크와 핵심 결정만)</li>
-      <li>30일 이상 지난 세션은 자동 요약 후보</li>
-      <li>"How to apply" 섹션이 있는 기억은 TTL이 명시된 경우에만 삭제</li>
+      <li data-i18n-html="pol.li2_1">같은 작업의 후속 세션이 있으면 <strong>이전 세션을 5-10줄로 압축</strong> (링크와 핵심 결정만)</li>
+      <li data-i18n="pol.li2_2">30일 이상 지난 세션은 자동 요약 후보</li>
+      <li data-i18n="pol.li2_3">"How to apply" 섹션이 있는 기억은 TTL이 명시된 경우에만 삭제</li>
     </ul>
 
-    <div class="callout warm">
+    <div class="callout warm" data-i18n-html="pol.callout">
       <strong>트리거 자동화</strong> — SessionStart hook이 MEMORY.md 라인 수를 확인해 150줄 초과면 "dream"을 제안합니다. 직접 말 안 해도 Claude가 먼저 안내.
     </div>
 
-    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);">관련 파일: <code>sleep/</code>, <code>sleep/mcp-server/</code>, <code>~/.claude/projects/*/memory/</code></p>
+    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);" data-i18n-html="related"><span data-i18n="related.label">관련 파일</span>: <code>sleep/</code>, <code>sleep/mcp-server/</code>, <code>~/.claude/projects/*/memory/</code></p>
 
   </main>
 </div>
 
 <footer class="page-foot">
-  <a href="photo.html">← Photo</a> · <a href="index.html">가이드 홈</a> · <a href="voice.html">다음: Voice →</a>
+  <a href="photo.html" data-i18n="foot.prev">← Photo</a> · <a href="index.html" data-i18n="foot.home">가이드 홈</a> · <a href="voice.html" data-i18n="foot.next">다음: Voice →</a>
 </footer>
 
 <script src="assets/js/guide.js"></script>
+<script src="assets/js/i18n.js"></script>
+<script>
+window.I18N_DICT = {
+  en: {
+    'meta.title': 'Sleep — Comad Guide',
+    'brand.sub': 'Guide',
+    'nav.home': 'Home',
+    'nav.scheduler': 'Scheduler',
+    'toc.overview': 'Overview',
+    'toc.types': 'Memory types',
+    'toc.trigger': 'Run "dream"',
+    'toc.md': 'MEMORY.md index',
+    'toc.mcp': 'MCP server',
+    'toc.policy': 'Consolidation policy',
+    'h1': 'Sleep — <em>Memory consolidation agent</em>',
+    'page.desc': 'Scans every Claude Code project\'s auto-memory directory to detect duplicates, consolidate related notes, and prune stale records. Invoked with one word ("dream"); a history-query MCP server surfaces past runs.',
+    'ov.h2': 'Overview',
+    'ov.p1': 'Claude Code writes auto-memory to <code>~/.claude/projects/&lt;cwd&gt;/memory/</code> per project. Duplicates, stale notes, and fragmented content accumulate over time — Sleep periodically consolidates them.',
+    'ov.before': 'Before sleep:',
+    'ov.b1': '(62 lines)',
+    'ov.b2': '(70 lines)',
+    'ov.b3': '(identical content)',
+    'ov.b4': '(near-identical)',
+    'ov.b5': '(1,333 lines, many broken links)',
+    'ov.after': 'After sleep (dream):',
+    'ov.a1': '(5 lines, summary)',
+    'ov.a2': '(6 lines)',
+    'ov.a3': 'feedback_ci_check.md deleted',
+    'ov.a4': '(merged version)',
+    'ov.a5': '(1,166 lines, all links verified)',
+    'types.h2': 'Memory types',
+    'types.p1': 'Auto-memory falls into 4 categories. Sleep applies a different policy per type.',
+    'types.th1': 'Type',
+    'types.th2': 'Content',
+    'types.th3': 'Consolidation policy',
+    'types.user.c': 'User role, preferences, knowledge level',
+    'types.user.p': 'Rarely changes. Only dedupe',
+    'types.fb.c': 'User feedback (don\'t / keep doing)',
+    'types.fb.p': 'Merge similar entries; make Why &amp; When-to-apply explicit',
+    'types.pr.c': 'Active work, goals, deadlines, technical decisions',
+    'types.pr.p': 'Compress older sessions to a summary; keep only the most recent 3-5 in detail',
+    'types.rf.c': 'External-system pointers (Linear project URL, etc.)',
+    'types.rf.p': 'Check for broken links, dedupe',
+    'tr.h2': 'Run "dream"',
+    'tr.p1': 'From any Claude Code session, say "dream" or "clean up memory" to invoke the comad-sleep agent.',
+    'tr.you': 'You:',
+    'tr.claude': 'Claude (comad-sleep):',
+    'tr.report': 'ComadSleep Report — 2026-04-13T03:13Z\nScanned: 6 projects, 47 files\nBackup: ~/.claude/memory-backup-2026-04-13T031330\n\nStale locks removed: 3\n\nChanges (13):',
+    'tr.ch1': '58 lines → 44 lines (brought current)',
+    'tr.ch2': '62 lines → 5 lines (compressed because 04-13 is the follow-up session)',
+    'tr.ch3': 'deleted',
+    'tr.ch3b': '(duplicate of ci_after_push)',
+    'tr.ch4': 'rewritten as a merged CI-policy doc',
+    'tr.ch5': 'eye port 7688→7687 (PR #1 reflected)',
+    'tr.ch6': '(8 more)',
+    'tr.result': 'Result:\n  Key project memory: 693 lines → 533 lines (-23%)\n  Total memory: 47 files, 1,166 lines\n  All 22 MEMORY.md links verified: all OK',
+    'tr.callout': '<strong>Auto-backup</strong> — the original tree is copied to <code>~/.claude/memory-backup-&lt;timestamp&gt;/</code> before consolidation. If a bad merge loses info, just restore.',
+    'md.h2': 'MEMORY.md index',
+    'md.p1': 'Each project\'s <code>memory/MEMORY.md</code> is a one-line-summary index over the detail files. Sleep keeps this index consistent.',
+    'md.hdr': '# memory/MEMORY.md',
+    'md.l1': '- [Session 2026-04-13](project_session_20260413.md) — GraphRAG recall 93%, cron OAuth fix, LaunchAgent migration',
+    'md.l2': '- [Session 2026-04-12](project_session_20260412.md) — self-evolution 6 phases, score 84/100',
+    'md.l3': '- [Pending tasks](project_pending_tasks.md) — meta-edge split · 50K graph growth',
+    'md.l4': '- [/search skill](project_search_skill_plan.md) — multi-source + Neo4j store + weekly cron done',
+    'md.l5': '- [Design simplicity](feedback_design_simplicity.md) — Karpathy-grade simplicity preferred',
+    'mcp.h2': 'MCP server — queries',
+    'mcp.p1': 'comad-sleep also exposes an MCP server so you can query consolidation history and metadata conversationally.',
+    'mcp.th.tool': 'Tool',
+    'mcp.th.role': 'Purpose',
+    'mcp.info': 'Last dream time, recommended next run',
+    'mcp.history': 'Recent N dream reports (what changed)',
+    'pol.h2': 'Consolidation policy',
+    'pol.p1': 'Rules Sleep applies automatically:',
+    'pol.h3_1': 'What NOT to save (redundant memory)',
+    'pol.li1_1': 'Code patterns / conventions / architecture — <code>git log</code> / source is the source of truth',
+    'pol.li1_2': 'Debug fixes — already in commit messages',
+    'pol.li1_3': 'In-progress task state — ephemeral',
+    'pol.li1_4': 'Anything already stated in CLAUDE.md',
+    'pol.h3_2': 'When to compress session files',
+    'pol.li2_1': 'When there\'s a follow-up session for the same work, <strong>compress the prior session to 5-10 lines</strong> (links + key decisions only)',
+    'pol.li2_2': 'Sessions older than 30 days are auto-summary candidates',
+    'pol.li2_3': 'Memories with a "How to apply" section are only deleted when a TTL is explicit',
+    'pol.callout': '<strong>Auto trigger</strong> — the SessionStart hook counts MEMORY.md lines and suggests "dream" when they exceed 150. You don\'t have to remember — Claude prompts first.',
+    'related.label': 'Related files',
+    'foot.prev': '← Photo',
+    'foot.home': 'Guide home',
+    'foot.next': 'Next: Voice →'
+  },
+  ko: {
+    'meta.title': 'Sleep — Comad 가이드',
+    'brand.sub': '가이드',
+    'nav.home': '홈',
+    'nav.scheduler': '스케줄러',
+    'toc.overview': '개요',
+    'toc.types': '메모리 유형',
+    'toc.trigger': 'dream 실행',
+    'toc.md': 'MEMORY.md 인덱스',
+    'toc.mcp': 'MCP 서버',
+    'toc.policy': '정리 정책',
+    'h1': 'Sleep — <em>메모리 정리 에이전트</em>',
+    'page.desc': 'Claude Code의 프로젝트별 auto memory 디렉토리를 전수 스캔해 중복 감지, 통합, 오래된 기록 정리를 수행합니다. "dream" 한 마디로 발동되며, 변경 이력을 MCP 서버로 조회할 수 있습니다.',
+    'ov.h2': '개요',
+    'ov.p1': 'Claude Code는 각 프로젝트마다 <code>~/.claude/projects/&lt;cwd&gt;/memory/</code>에 자동 메모리를 저장합니다. 시간이 쌓이면 중복, 오래된 정보, 파편화된 내용이 축적되는데, Sleep이 이를 주기적으로 정리합니다.',
+    'ov.before': 'Before sleep:',
+    'ov.b1': '(62 lines)',
+    'ov.b2': '(70 lines)',
+    'ov.b3': '(동일 내용)',
+    'ov.b4': '(거의 동일)',
+    'ov.b5': '(1,333 lines, 많은 링크 깨짐)',
+    'ov.after': 'After sleep (dream):',
+    'ov.a1': '(5 lines, 요약본)',
+    'ov.a2': '(6 lines)',
+    'ov.a3': 'feedback_ci_check.md 삭제',
+    'ov.a4': '(통합 버전)',
+    'ov.a5': '(1,166 lines, 링크 전수 검증)',
+    'types.h2': '메모리 유형',
+    'types.p1': '자동 메모리는 4가지로 분류됩니다. Sleep은 유형별로 다른 정리 정책을 적용합니다.',
+    'types.th1': '유형',
+    'types.th2': '내용',
+    'types.th3': '정리 정책',
+    'types.user.c': '사용자의 역할, 선호, 지식 수준',
+    'types.user.p': '거의 변하지 않음. 중복만 제거',
+    'types.fb.c': '사용자가 준 피드백 (하지 마/계속 이렇게 해)',
+    'types.fb.p': '유사 항목 통합, 왜 &amp; 언제 적용 명시',
+    'types.pr.c': '진행 중인 작업, 목표, 데드라인, 기술 결정',
+    'types.pr.p': '시간 지난 세션 요약 압축, 최근 3-5개만 상세 유지',
+    'types.rf.c': '외부 시스템 포인터 (Linear 프로젝트 URL 등)',
+    'types.rf.p': '링크 깨짐 확인, 중복 제거',
+    'tr.h2': 'dream 실행',
+    'tr.p1': '아무 Claude Code 세션에서 "dream" 또는 "정리해줘" 등 트리거 문구를 입력하면 comad-sleep 에이전트가 발동됩니다.',
+    'tr.you': 'You:',
+    'tr.claude': 'Claude (comad-sleep):',
+    'tr.report': 'ComadSleep Report — 2026-04-13T03:13Z\nScanned: 6 projects, 47 files\nBackup: ~/.claude/memory-backup-2026-04-13T031330\n\nStale locks removed: 3\n\nChanges (13):',
+    'tr.ch1': '58줄 → 44줄 (현행화)',
+    'tr.ch2': '62줄 → 5줄 (04-13이 후속 세션이라 압축)',
+    'tr.ch3': '삭제',
+    'tr.ch3b': '(ci_after_push와 중복)',
+    'tr.ch4': 'CI 정책 통합본으로 재작성',
+    'tr.ch5': 'eye 포트 7688→7687 (PR #1 반영)',
+    'tr.ch6': '(8건 더)',
+    'tr.result': '결과:\n  주요 프로젝트 메모리: 693줄 → 533줄 (-23%)\n  전체 메모리: 47 files, 1,166줄\n  22개 MEMORY.md 링크 전수 검증: 전부 OK',
+    'tr.callout': '<strong>백업 자동 생성</strong> — 정리 전 원본이 <code>~/.claude/memory-backup-&lt;timestamp&gt;/</code>에 복사됩니다. 잘못된 병합으로 정보가 사라지면 언제든 복원.',
+    'md.h2': 'MEMORY.md 인덱스',
+    'md.p1': '각 프로젝트의 <code>memory/MEMORY.md</code>는 세부 메모리 파일들을 한 줄 요약으로 엮은 인덱스입니다. Sleep이 항상 이 인덱스의 일관성을 유지합니다.',
+    'md.hdr': '# memory/MEMORY.md',
+    'md.l1': '- [Session 2026-04-13](project_session_20260413.md) — GraphRAG recall 93%, 크론 OAuth 해결, LaunchAgent 마이그레이션',
+    'md.l2': '- [Session 2026-04-12](project_session_20260412.md) — 자가진화 6 Phase, 스코어 84/100',
+    'md.l3': '- [Pending tasks](project_pending_tasks.md) — meta-edge 분할 · 50K 그래프 성장',
+    'md.l4': '- [/search skill](project_search_skill_plan.md) — 멀티소스 + Neo4j 저장 + 주간 CRON 구현 완료',
+    'md.l5': '- [Design simplicity](feedback_design_simplicity.md) — Karpathy 기준 심플리시티 선호',
+    'mcp.h2': 'MCP 서버 — 조회',
+    'mcp.p1': 'comad-sleep은 MCP 서버도 제공합니다. 정리 이력과 메타데이터를 대화로 조회.',
+    'mcp.th.tool': '도구',
+    'mcp.th.role': '용도',
+    'mcp.info': '마지막 dream 실행 시각, 다음 권장 실행 일정',
+    'mcp.history': '최근 N회의 dream 리포트 (무엇이 바뀌었나)',
+    'pol.h2': '정리 정책',
+    'pol.p1': 'Sleep이 자동으로 판단하는 규칙들:',
+    'pol.h3_1': '무엇을 저장하지 말 것 (중복되는 기억)',
+    'pol.li1_1': '코드 패턴/컨벤션/아키텍처 — <code>git log</code>/소스가 진실',
+    'pol.li1_2': '디버깅 해결책 — 커밋 메시지에 이미 있음',
+    'pol.li1_3': '현재 대화 중인 task 상태 — 일시적 정보',
+    'pol.li1_4': 'CLAUDE.md에 이미 명시된 것',
+    'pol.h3_2': '세션 파일 압축 타이밍',
+    'pol.li2_1': '같은 작업의 후속 세션이 있으면 <strong>이전 세션을 5-10줄로 압축</strong> (링크와 핵심 결정만)',
+    'pol.li2_2': '30일 이상 지난 세션은 자동 요약 후보',
+    'pol.li2_3': '"How to apply" 섹션이 있는 기억은 TTL이 명시된 경우에만 삭제',
+    'pol.callout': '<strong>트리거 자동화</strong> — SessionStart hook이 MEMORY.md 라인 수를 확인해 150줄 초과면 "dream"을 제안합니다. 직접 말 안 해도 Claude가 먼저 안내.',
+    'related.label': '관련 파일',
+    'foot.prev': '← Photo',
+    'foot.home': '가이드 홈',
+    'foot.next': '다음: Voice →'
+  }
+};
+</script>
 </body>
 </html>

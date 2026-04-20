@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Browse — Comad 가이드</title>
+<title data-i18n="meta.title">Browse — Comad 가이드</title>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="assets/css/guide.css">
+<link rel="stylesheet" href="/comad/assets/css/comad-shared.css">
 </head>
 <body>
 
 <header class="topbar">
-  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub">가이드</span></a>
+  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub" data-i18n="brand.sub">가이드</span></a>
   <nav>
-    <a href="index.html">홈</a>
-    <a href="scheduler.html">스케줄러</a>
+    <a href="index.html" data-i18n="nav.home">홈</a>
+    <a href="scheduler.html" data-i18n="nav.scheduler">스케줄러</a>
     <a href="brain.html">Brain</a>
     <a href="ear.html">Ear</a>
     <a href="eye.html">Eye</a>
@@ -23,27 +24,28 @@
     <a href="voice.html">Voice</a>
     <a href="browse.html" class="active">Browse</a>
   </nav>
+  <button class="lang-toggle" onclick="toggleLang()"><span id="langEn">EN</span> / <span id="langKo">KO</span></button>
 </header>
 
 <div class="layout">
   <aside class="toc">
     <div class="toc-title">Browse</div>
-    <a href="#overview">개요</a>
-    <a href="#install">설치 & 구조</a>
-    <a href="#core">기본 명령</a>
-    <a href="#find">find — 스냅샷 없이 refs만</a>
-    <a href="#batch">batch — N개 명령 1 round-trip</a>
-    <a href="#session">세션 & 쿠키 지속성</a>
-    <a href="#tabs">멀티 탭</a>
-    <a href="#wait">고급 대기</a>
-    <a href="#deferred">보류 기능 (dormant)</a>
-    <a href="#integration">다른 모듈 연동</a>
+    <a href="#overview" data-i18n="toc.overview">개요</a>
+    <a href="#install" data-i18n="toc.install">설치 & 구조</a>
+    <a href="#core" data-i18n="toc.core">기본 명령</a>
+    <a href="#find" data-i18n="toc.find">find — 스냅샷 없이 refs만</a>
+    <a href="#batch" data-i18n="toc.batch">batch — N개 명령 1 round-trip</a>
+    <a href="#session" data-i18n="toc.session">세션 & 쿠키 지속성</a>
+    <a href="#tabs" data-i18n="toc.tabs">멀티 탭</a>
+    <a href="#wait" data-i18n="toc.wait">고급 대기</a>
+    <a href="#deferred" data-i18n="toc.def">보류 기능 (dormant)</a>
+    <a href="#integration" data-i18n="toc.int">다른 모듈 연동</a>
   </aside>
 
   <main>
     <div class="page-hero">
-      <h1>Browse — <em>헤드리스 브라우저 모듈</em></h1>
-      <p class="page-desc">
+      <h1 data-i18n-html="h1">Browse — <em>헤드리스 브라우저 모듈</em></h1>
+      <p class="page-desc" data-i18n-html="page.desc">
         AI 에이전트가 웹 페이지를 읽고 조작하기 위한 최소 Playwright 래퍼. anti-bot stealth, CLI + HTTP 데몬 + 프로그래매틱 API를 제공하며,
         <strong>토큰 절감</strong>에 초점을 둔 <code>find</code>·<code>batch</code>·세션 영속화가 핵심입니다.
       </p>
@@ -56,82 +58,82 @@
       </div>
     </div>
 
-    <h2 id="overview">개요</h2>
-    <p>Browse는 Claude Code 등 AI 에이전트가 브라우저를 자연어 지시로 조작할 때 드는 <strong>토큰 비용과 round-trip 수</strong>를 줄이도록 설계됐습니다. 핵심 설계 원칙:</p>
+    <h2 id="overview" data-i18n="ov.h2">개요</h2>
+    <p data-i18n-html="ov.p1">Browse는 Claude Code 등 AI 에이전트가 브라우저를 자연어 지시로 조작할 때 드는 <strong>토큰 비용과 round-trip 수</strong>를 줄이도록 설계됐습니다. 핵심 설계 원칙:</p>
     <ul>
-      <li><strong>@ref 기반 상호작용</strong> — <code>snapshot</code>·<code>find</code>가 반환하는 <code>@e1</code>, <code>@e2</code>... 같은 안정 레퍼런스로 클릭·입력을 지정. 긴 CSS selector가 대화 로그에 누적되지 않습니다.</li>
-      <li><strong>영속 데몬</strong> — 첫 명령에서 HTTP 서버를 자동 기동, 15분 idle 후 자동 종료. Chromium 재부팅 비용을 피합니다.</li>
-      <li><strong>배치 실행</strong> — 로그인 같은 5-6단계 플로우를 stdin JSON 하나로 압축해 단일 round-trip으로 처리.</li>
-      <li><strong>세션 영속화</strong> — <code>--session &lt;name&gt;</code> 플래그로 storageState(쿠키·localStorage)를 자동 저장·복원해 로그인 반복 제거.</li>
+      <li data-i18n-html="ov.li1"><strong>@ref 기반 상호작용</strong> — <code>snapshot</code>·<code>find</code>가 반환하는 <code>@e1</code>, <code>@e2</code>... 같은 안정 레퍼런스로 클릭·입력을 지정. 긴 CSS selector가 대화 로그에 누적되지 않습니다.</li>
+      <li data-i18n-html="ov.li2"><strong>영속 데몬</strong> — 첫 명령에서 HTTP 서버를 자동 기동, 15분 idle 후 자동 종료. Chromium 재부팅 비용을 피합니다.</li>
+      <li data-i18n-html="ov.li3"><strong>배치 실행</strong> — 로그인 같은 5-6단계 플로우를 stdin JSON 하나로 압축해 단일 round-trip으로 처리.</li>
+      <li data-i18n-html="ov.li4"><strong>세션 영속화</strong> — <code>--session &lt;name&gt;</code> 플래그로 storageState(쿠키·localStorage)를 자동 저장·복원해 로그인 반복 제거.</li>
     </ul>
 
-    <h2 id="install">설치 & 구조</h2>
+    <h2 id="install" data-i18n="inst.h2">설치 & 구조</h2>
 
-<pre><code><span class="dim"># comad-world 루트에서</span>
+<pre><code><span class="dim" data-i18n="inst.cmt1"># comad-world 루트에서</span>
 cd browse &amp;&amp; bun install
 
-<span class="dim"># CLI 한 번 실행하면 데몬이 자동 기동</span>
+<span class="dim" data-i18n="inst.cmt2"># CLI 한 번 실행하면 데몬이 자동 기동</span>
 bun run src/cli.ts goto https://example.com</code></pre>
 
-    <p>4계층 구조:</p>
+    <p data-i18n="inst.p1">4계층 구조:</p>
     <ul>
-      <li><strong>CLI</strong> <code>src/cli.ts</code> — 얇은 HTTP 클라이언트, 데몬 자동 기동</li>
-      <li><strong>Server</strong> <code>src/server.ts</code> — 랜덤 포트 HTTP 데몬, 토큰 인증, 15분 idle shutdown</li>
-      <li><strong>Browser</strong> <code>src/browser.ts</code> — Playwright Chromium + anti-bot 스텔스, 멀티탭 관리</li>
-      <li><strong>Commands</strong> <code>src/commands.ts</code> + <code>src/deferred.ts</code> — 기본 명령 + 플래그 게이트 보류 명령</li>
+      <li data-i18n-html="inst.li1"><strong>CLI</strong> <code>src/cli.ts</code> — 얇은 HTTP 클라이언트, 데몬 자동 기동</li>
+      <li data-i18n-html="inst.li2"><strong>Server</strong> <code>src/server.ts</code> — 랜덤 포트 HTTP 데몬, 토큰 인증, 15분 idle shutdown</li>
+      <li data-i18n-html="inst.li3"><strong>Browser</strong> <code>src/browser.ts</code> — Playwright Chromium + anti-bot 스텔스, 멀티탭 관리</li>
+      <li data-i18n-html="inst.li4"><strong>Commands</strong> <code>src/commands.ts</code> + <code>src/deferred.ts</code> — 기본 명령 + 플래그 게이트 보류 명령</li>
     </ul>
 
-    <p>상태 파일:</p>
+    <p data-i18n="inst.p2">상태 파일:</p>
     <table>
-      <tr><th>파일</th><th>역할</th></tr>
-      <tr><td><code>.comad/browse.json</code></td><td>데몬 포트·토큰·pid</td></tr>
-      <tr><td><code>.comad/browse-features.json</code></td><td>보류 기능 플래그</td></tr>
-      <tr><td><code>.comad/sessions/&lt;name&gt;.json</code></td><td>Playwright storageState (쿠키 + 웹 스토리지)</td></tr>
-      <tr><td><code>.comad/auth.json</code></td><td>자격증명 금고 (auth 기능 활성 시)</td></tr>
+      <tr><th data-i18n="inst.th1">파일</th><th data-i18n="inst.th2">역할</th></tr>
+      <tr><td><code>.comad/browse.json</code></td><td data-i18n="inst.row1">데몬 포트·토큰·pid</td></tr>
+      <tr><td><code>.comad/browse-features.json</code></td><td data-i18n="inst.row2">보류 기능 플래그</td></tr>
+      <tr><td><code>.comad/sessions/&lt;name&gt;.json</code></td><td data-i18n="inst.row3">Playwright storageState (쿠키 + 웹 스토리지)</td></tr>
+      <tr><td><code>.comad/auth.json</code></td><td data-i18n="inst.row4">자격증명 금고 (auth 기능 활성 시)</td></tr>
     </table>
 
-    <h2 id="core">기본 명령</h2>
+    <h2 id="core" data-i18n="core.h2">기본 명령</h2>
 
-<pre><code><span class="dim"># 네비게이션</span>
+<pre><code><span class="dim" data-i18n="core.cmt1"># 네비게이션</span>
 browse goto https://example.com
 browse back
 browse reload
 
-<span class="dim"># 읽기</span>
-browse text                   <span class="dim"># body.innerText (50KB 캡)</span>
-browse html                   <span class="dim"># page.content()</span>
-browse links                  <span class="dim"># 앵커 전부</span>
+<span class="dim" data-i18n="core.cmt2"># 읽기</span>
+browse text                   <span class="dim" data-i18n="core.cmt3"># body.innerText (50KB 캡)</span>
+browse html                   <span class="dim" data-i18n="core.cmt4"># page.content()</span>
+browse links                  <span class="dim" data-i18n="core.cmt5"># 앵커 전부</span>
 browse title
-browse snapshot -i            <span class="dim"># 상호작용 요소만 @ref 매핑 (최대 500)</span>
+browse snapshot -i            <span class="dim" data-i18n="core.cmt6"># 상호작용 요소만 @ref 매핑 (최대 500)</span>
 
-<span class="dim"># 상호작용</span>
-browse click @e3              <span class="dim"># ref 또는 selector</span>
+<span class="dim" data-i18n="core.cmt7"># 상호작용</span>
+browse click @e3              <span class="dim" data-i18n="core.cmt8"># ref 또는 selector</span>
 browse fill @e2 "hello world"
 browse scroll down 500
 browse screenshot output.png</code></pre>
 
-    <div class="callout">
+    <div class="callout" data-i18n-html="core.callout">
       <code>snapshot -i</code>는 최대 500개 엘리먼트를 반환합니다. <strong>대부분의 경우 <code>find</code>로 충분</strong>하며 더 저렴합니다.
     </div>
 
-    <h2 id="find">find — 스냅샷 없이 refs만</h2>
+    <h2 id="find" data-i18n="find.h2">find — 스냅샷 없이 refs만</h2>
 
-    <p>role/text/label/placeholder/testid로 필터링해 <strong>매칭되는 요소만</strong> <code>@e</code> ref로 반환합니다. 전체 스냅샷을 토큰에 쏟아넣지 않아도 되죠.</p>
+    <p data-i18n-html="find.p1">role/text/label/placeholder/testid로 필터링해 <strong>매칭되는 요소만</strong> <code>@e</code> ref로 반환합니다. 전체 스냅샷을 토큰에 쏟아넣지 않아도 되죠.</p>
 
 <pre><code>browse find role=button limit=5
-<span class="dim"># @e1 [button] "Submit" [testid="signup-submit"]
-# @e2 [button] "Cancel"</span>
+<span class="dim">@e1 [button] "Submit" [testid="signup-submit"]
+@e2 [button] "Cancel"</span>
 
 browse find text=Submit
 browse find placeholder=Email
 browse find testid=signup-form
 
-<span class="dim"># 이후 ref로 바로 상호작용</span>
+<span class="dim" data-i18n="find.cmt"># 이후 ref로 바로 상호작용</span>
 browse click @e1</code></pre>
 
-    <h2 id="batch">batch — N개 명령 1 round-trip</h2>
+    <h2 id="batch" data-i18n="batch.h2">batch — N개 명령 1 round-trip</h2>
 
-    <p>로그인·검색 플로우처럼 여러 단계가 순차적일 때 stdin JSON으로 묶으면 <strong>1 round-trip</strong>에 전부 실행됩니다. 각 단계 결과가 배열로 돌아옵니다.</p>
+    <p data-i18n-html="batch.p1">로그인·검색 플로우처럼 여러 단계가 순차적일 때 stdin JSON으로 묶으면 <strong>1 round-trip</strong>에 전부 실행됩니다. 각 단계 결과가 배열로 돌아옵니다.</p>
 
 <pre><code>echo '{"steps":[
   {"command":"goto","args":{"url":"https://app.example.com/login"}},
@@ -144,36 +146,36 @@ browse click @e1</code></pre>
   {"command":"wait","args":{"url":"**/dashboard","timeout":10000}}
 ]}' | browse batch -</code></pre>
 
-    <p>기존 방식: 8 명령 × 8 round-trip × 매번 스냅샷 재호출. batch 방식: <strong>1 round-trip, 스냅샷 불필요</strong>. 토큰 로그도 그만큼 간결해집니다.</p>
+    <p data-i18n-html="batch.p2">기존 방식: 8 명령 × 8 round-trip × 매번 스냅샷 재호출. batch 방식: <strong>1 round-trip, 스냅샷 불필요</strong>. 토큰 로그도 그만큼 간결해집니다.</p>
 
-    <h2 id="session">세션 & 쿠키 지속성</h2>
+    <h2 id="session" data-i18n="sess.h2">세션 & 쿠키 지속성</h2>
 
-    <p><code>--session &lt;name&gt;</code> 플래그를 주면 서버 시작 시 <code>.comad/sessions/&lt;name&gt;.json</code>에서 storageState를 로드하고, 종료 시 자동 저장합니다. Playwright의 공식 storageState를 그대로 사용하므로 쿠키·localStorage·IndexedDB가 그대로 유지됩니다.</p>
+    <p data-i18n-html="sess.p1"><code>--session &lt;name&gt;</code> 플래그를 주면 서버 시작 시 <code>.comad/sessions/&lt;name&gt;.json</code>에서 storageState를 로드하고, 종료 시 자동 저장합니다. Playwright의 공식 storageState를 그대로 사용하므로 쿠키·localStorage·IndexedDB가 그대로 유지됩니다.</p>
 
-<pre><code><span class="dim"># 첫 실행 — 로그인 후 세션 자동 저장</span>
+<pre><code><span class="dim" data-i18n="sess.cmt1"># 첫 실행 — 로그인 후 세션 자동 저장</span>
 browse --session myapp goto https://app.example.com/login
-<span class="dim"># ... 로그인 플로우 실행 ...</span>
-browse stop                        <span class="dim"># close 시 세션 저장</span>
+<span class="dim" data-i18n="sess.cmt2"># ... 로그인 플로우 실행 ...</span>
+browse stop                        <span class="dim" data-i18n="sess.cmt3"># close 시 세션 저장</span>
 
-<span class="dim"># 다음 실행 — 이미 로그인 상태</span>
+<span class="dim" data-i18n="sess.cmt4"># 다음 실행 — 이미 로그인 상태</span>
 browse --session myapp goto https://app.example.com/dashboard
 
-<span class="dim"># 쿠키·스토리지 수동 관리</span>
+<span class="dim" data-i18n="sess.cmt5"># 쿠키·스토리지 수동 관리</span>
 browse cookies get
 browse cookies clear
 browse storage set kind=session key=token value=abc123
 browse storage get kind=local</code></pre>
 
-    <h2 id="tabs">멀티 탭</h2>
+    <h2 id="tabs" data-i18n="tabs.h2">멀티 탭</h2>
 
-<pre><code>browse tab list                    <span class="dim"># 활성 탭은 * 표시</span>
+<pre><code>browse tab list                    <span class="dim" data-i18n="tabs.cmt">활성 탭은 * 표시</span>
 browse tab new url=https://docs.example.com
 browse tab switch id=t2
 browse tab close id=t3</code></pre>
 
-    <p>탭 ID는 세션 내에서 재사용되지 않는 <code>t1</code>, <code>t2</code>, ... 형태입니다. 모든 명령은 현재 활성 탭에서 동작합니다.</p>
+    <p data-i18n-html="tabs.p1">탭 ID는 세션 내에서 재사용되지 않는 <code>t1</code>, <code>t2</code>, ... 형태입니다. 모든 명령은 현재 활성 탭에서 동작합니다.</p>
 
-    <h2 id="wait">고급 대기</h2>
+    <h2 id="wait" data-i18n="wait.h2">고급 대기</h2>
 
 <pre><code>browse wait selector=.result
 browse wait text=Welcome timeout=10000
@@ -181,49 +183,224 @@ browse wait url='**/dashboard'
 browse wait load_state=networkidle
 browse wait js='document.readyState === "complete"'</code></pre>
 
-    <h2 id="deferred">보류 기능 (dormant)</h2>
+    <h2 id="deferred" data-i18n="def.h2">보류 기능 (dormant)</h2>
 
-    <p>네 가지 고급 기능은 <strong>구현 완료·기본 비활성</strong>입니다. 필요할 때 플래그만 켜면 즉시 동작합니다.</p>
+    <p data-i18n-html="def.p1">네 가지 고급 기능은 <strong>구현 완료·기본 비활성</strong>입니다. 필요할 때 플래그만 켜면 즉시 동작합니다.</p>
 
     <table>
-      <tr><th>기능</th><th>역할</th></tr>
-      <tr><td><code>diff</code></td><td>snapshot 또는 screenshot 베이스라인 대비 현재와 비교</td></tr>
-      <tr><td><code>har</code></td><td>request/response 버퍼 + JSON export</td></tr>
-      <tr><td><code>auth</code></td><td>AES-256-GCM 암호화 자격증명 금고 + 자동 로그인</td></tr>
-      <tr><td><code>route</code></td><td>네트워크 패턴 block / mock</td></tr>
+      <tr><th data-i18n="def.th1">기능</th><th data-i18n="def.th2">역할</th></tr>
+      <tr><td><code>diff</code></td><td data-i18n="def.diff">snapshot 또는 screenshot 베이스라인 대비 현재와 비교</td></tr>
+      <tr><td><code>har</code></td><td data-i18n="def.har">request/response 버퍼 + JSON export</td></tr>
+      <tr><td><code>auth</code></td><td data-i18n="def.auth">AES-256-GCM 암호화 자격증명 금고 + 자동 로그인</td></tr>
+      <tr><td><code>route</code></td><td data-i18n="def.route">네트워크 패턴 block / mock</td></tr>
     </table>
 
-<pre><code>browse feature list                <span class="dim"># 현재 상태</span>
+<pre><code>browse feature list                <span class="dim" data-i18n="def.cmt1">현재 상태</span>
 browse feature enable name=diff
 browse feature enable name=har
 browse feature enable name=auth
 browse feature enable name=route
 
-<span class="dim"># 또는 환경 변수로</span>
+<span class="dim" data-i18n="def.cmt2"># 또는 환경 변수로</span>
 COMAD_BROWSE_DIFF=1 browse diff action=snapshot</code></pre>
 
-    <p>비활성 상태에서 호출하면 힌트가 돌아옵니다: <code>Feature "diff" is dormant. Enable with: browse feature enable name=diff</code></p>
+    <p data-i18n-html="def.p2">비활성 상태에서 호출하면 힌트가 돌아옵니다: <code>Feature "diff" is dormant. Enable with: browse feature enable name=diff</code></p>
 
-    <div class="callout warm">
+    <div class="callout warm" data-i18n-html="def.callout">
       <strong>auth 기능 보안</strong> — 기본은 plaintext 저장이며 경고가 출력됩니다. 실제 사용 전 <code>COMAD_BROWSE_AUTH_KEY</code> 환경변수를 설정하면 AES-256-GCM으로 암호화되어 저장됩니다.
     </div>
 
-    <h2 id="integration">다른 모듈 연동</h2>
+    <h2 id="integration" data-i18n="int.h2">다른 모듈 연동</h2>
     <ul>
-      <li><strong>Brain content-fetcher</strong> — JS가 많은 페이지는 native fetch 실패 시 <code>browse goto</code> + <code>browse text</code>로 자동 fallback. 크롤 레시피가 복잡한 SPA도 추출 가능.</li>
-      <li><strong>Voice QA</strong> — <code>voice/qa.md</code> 플레이북이 <code>browse find</code> + <code>browse batch</code>로 폼·라우팅 회귀를 테스트.</li>
-      <li><strong>프로그래매틱 API</strong> — <code>import { launch, getPage, close, executeCommand } from "comad-browse"</code>로 스크립트에서 직접 사용 가능.</li>
+      <li data-i18n-html="int.li1"><strong>Brain content-fetcher</strong> — JS가 많은 페이지는 native fetch 실패 시 <code>browse goto</code> + <code>browse text</code>로 자동 fallback. 크롤 레시피가 복잡한 SPA도 추출 가능.</li>
+      <li data-i18n-html="int.li2"><strong>Voice QA</strong> — <code>voice/qa.md</code> 플레이북이 <code>browse find</code> + <code>browse batch</code>로 폼·라우팅 회귀를 테스트.</li>
+      <li data-i18n-html="int.li3"><strong>프로그래매틱 API</strong> — <code>import { launch, getPage, close, executeCommand } from "comad-browse"</code>로 스크립트에서 직접 사용 가능.</li>
     </ul>
 
-    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);">관련 파일: <code>browse/src/{cli,server,browser,commands,deferred,features}.ts</code>, <code>voice/qa.md</code>, <code>brain/packages/core/src/content-fetcher.ts</code></p>
+    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);" data-i18n-html="related"><span data-i18n="related.label">관련 파일</span>: <code>browse/src/{cli,server,browser,commands,deferred,features}.ts</code>, <code>voice/qa.md</code>, <code>brain/packages/core/src/content-fetcher.ts</code></p>
 
   </main>
 </div>
 
 <footer class="page-foot">
-  <a href="voice.html">← Voice</a> · <a href="index.html">가이드 홈</a>
+  <a href="voice.html" data-i18n="foot.prev">← Voice</a> · <a href="index.html" data-i18n="foot.home">가이드 홈</a>
 </footer>
 
 <script src="assets/js/guide.js"></script>
+<script src="assets/js/i18n.js"></script>
+<script>
+window.I18N_DICT = {
+  en: {
+    'meta.title': 'Browse — Comad Guide',
+    'brand.sub': 'Guide',
+    'nav.home': 'Home',
+    'nav.scheduler': 'Scheduler',
+    'toc.overview': 'Overview',
+    'toc.install': 'Install & layout',
+    'toc.core': 'Core commands',
+    'toc.find': 'find — refs without full snapshot',
+    'toc.batch': 'batch — N commands, 1 round-trip',
+    'toc.session': 'Sessions & cookie persistence',
+    'toc.tabs': 'Multi-tab',
+    'toc.wait': 'Advanced waits',
+    'toc.def': 'Dormant features',
+    'toc.int': 'Integration with other modules',
+    'h1': 'Browse — <em>Headless browser module</em>',
+    'page.desc': 'A minimal Playwright wrapper tuned for AI agents to read and drive web pages. Anti-bot stealth, CLI + HTTP daemon + programmatic API. The core is <strong>token efficiency</strong> via <code>find</code>, <code>batch</code>, and session persistence.',
+    'ov.h2': 'Overview',
+    'ov.p1': 'Browse is designed to reduce <strong>token cost and round-trips</strong> when AI agents (like Claude Code) drive a browser from natural-language instructions. Key design principles:',
+    'ov.li1': '<strong>@ref-based interaction</strong> — <code>snapshot</code> / <code>find</code> return stable refs like <code>@e1</code>, <code>@e2</code> for clicking / typing. Long CSS selectors don\'t pile up in the transcript.',
+    'ov.li2': '<strong>Persistent daemon</strong> — the first command auto-starts an HTTP server that auto-shuts down after 15 min idle. Avoids the cost of rebooting Chromium.',
+    'ov.li3': '<strong>Batch execution</strong> — compress 5-6 step flows (e.g., login) into a single stdin JSON round-trip.',
+    'ov.li4': '<strong>Session persistence</strong> — the <code>--session &lt;name&gt;</code> flag auto-saves/loads storageState (cookies, localStorage) so you don\'t re-log-in every run.',
+    'inst.h2': 'Install & layout',
+    'inst.cmt1': '# from comad-world root',
+    'inst.cmt2': '# one CLI run auto-starts the daemon',
+    'inst.p1': '4-layer structure:',
+    'inst.li1': '<strong>CLI</strong> <code>src/cli.ts</code> — thin HTTP client, auto-starts the daemon',
+    'inst.li2': '<strong>Server</strong> <code>src/server.ts</code> — random-port HTTP daemon with token auth, 15 min idle shutdown',
+    'inst.li3': '<strong>Browser</strong> <code>src/browser.ts</code> — Playwright Chromium + anti-bot stealth, multi-tab management',
+    'inst.li4': '<strong>Commands</strong> <code>src/commands.ts</code> + <code>src/deferred.ts</code> — core commands + flag-gated dormant commands',
+    'inst.p2': 'State files:',
+    'inst.th1': 'File',
+    'inst.th2': 'Role',
+    'inst.row1': 'Daemon port · token · pid',
+    'inst.row2': 'Dormant-feature flags',
+    'inst.row3': 'Playwright storageState (cookies + web storage)',
+    'inst.row4': 'Credential vault (when auth feature is on)',
+    'core.h2': 'Core commands',
+    'core.cmt1': '# Navigation',
+    'core.cmt2': '# Read',
+    'core.cmt3': '# body.innerText (50KB cap)',
+    'core.cmt4': '# page.content()',
+    'core.cmt5': '# all anchors',
+    'core.cmt6': '# @ref map of interactive elements (max 500)',
+    'core.cmt7': '# Interact',
+    'core.cmt8': '# ref or selector',
+    'core.callout': '<code>snapshot -i</code> returns up to 500 elements. <strong>Most of the time <code>find</code> is enough</strong> and is cheaper.',
+    'find.h2': 'find — refs without full snapshot',
+    'find.p1': 'Filter by role / text / label / placeholder / testid and get <strong>only matching elements</strong> back as <code>@e</code> refs. No need to dump a full snapshot into the transcript.',
+    'find.cmt': '# then interact by ref directly',
+    'batch.h2': 'batch — N commands, 1 round-trip',
+    'batch.p1': 'When a flow has several sequential steps (login, search, etc.), wrap them in stdin JSON — all of them execute in <strong>one round-trip</strong>, and each step\'s result comes back as an array element.',
+    'batch.p2': 'Before: 8 commands × 8 round-trips × snapshot every time. After: <strong>1 round-trip, no snapshot</strong>. The token log compresses accordingly.',
+    'sess.h2': 'Sessions & cookie persistence',
+    'sess.p1': 'With <code>--session &lt;name&gt;</code>, the server loads storageState from <code>.comad/sessions/&lt;name&gt;.json</code> on start and saves it on shutdown. It uses Playwright\'s built-in storageState as is, preserving cookies, localStorage, and IndexedDB.',
+    'sess.cmt1': '# First run — session auto-saved after login',
+    'sess.cmt2': '# ... run the login flow ...',
+    'sess.cmt3': '# saves the session on close',
+    'sess.cmt4': '# Next run — already logged in',
+    'sess.cmt5': '# Manage cookies & storage manually',
+    'tabs.h2': 'Multi-tab',
+    'tabs.cmt': 'active tab is marked *',
+    'tabs.p1': 'Tab IDs are <code>t1</code>, <code>t2</code>, ... and are not reused within a session. All commands operate on the current active tab.',
+    'wait.h2': 'Advanced waits',
+    'def.h2': 'Dormant features',
+    'def.p1': 'Four advanced features are <strong>implemented but off by default</strong>. Flip a flag and they\'re live.',
+    'def.th1': 'Feature',
+    'def.th2': 'Role',
+    'def.diff': 'Compare current against snapshot or screenshot baseline',
+    'def.har': 'Buffer request/response + JSON export',
+    'def.auth': 'AES-256-GCM-encrypted credential vault + auto-login',
+    'def.route': 'Block / mock by network pattern',
+    'def.cmt1': 'current state',
+    'def.cmt2': '# or via env var',
+    'def.p2': 'If called while dormant, you get a hint back: <code>Feature "diff" is dormant. Enable with: browse feature enable name=diff</code>',
+    'def.callout': '<strong>auth feature security</strong> — default stores plaintext and prints a warning. Before real use, set the <code>COMAD_BROWSE_AUTH_KEY</code> env var and the vault stores AES-256-GCM-encrypted.',
+    'int.h2': 'Integration with other modules',
+    'int.li1': '<strong>Brain content-fetcher</strong> — for JS-heavy pages, native fetch auto-falls back to <code>browse goto</code> + <code>browse text</code>. Works for complex SPA crawl recipes too.',
+    'int.li2': '<strong>Voice QA</strong> — the <code>voice/qa.md</code> playbook regresses forms / routing via <code>browse find</code> + <code>browse batch</code>.',
+    'int.li3': '<strong>Programmatic API</strong> — use directly from scripts with <code>import { launch, getPage, close, executeCommand } from "comad-browse"</code>.',
+    'related.label': 'Related files',
+    'foot.prev': '← Voice',
+    'foot.home': 'Guide home'
+  },
+  ko: {
+    'meta.title': 'Browse — Comad 가이드',
+    'brand.sub': '가이드',
+    'nav.home': '홈',
+    'nav.scheduler': '스케줄러',
+    'toc.overview': '개요',
+    'toc.install': '설치 & 구조',
+    'toc.core': '기본 명령',
+    'toc.find': 'find — 스냅샷 없이 refs만',
+    'toc.batch': 'batch — N개 명령 1 round-trip',
+    'toc.session': '세션 & 쿠키 지속성',
+    'toc.tabs': '멀티 탭',
+    'toc.wait': '고급 대기',
+    'toc.def': '보류 기능 (dormant)',
+    'toc.int': '다른 모듈 연동',
+    'h1': 'Browse — <em>헤드리스 브라우저 모듈</em>',
+    'page.desc': 'AI 에이전트가 웹 페이지를 읽고 조작하기 위한 최소 Playwright 래퍼. anti-bot stealth, CLI + HTTP 데몬 + 프로그래매틱 API를 제공하며, <strong>토큰 절감</strong>에 초점을 둔 <code>find</code>·<code>batch</code>·세션 영속화가 핵심입니다.',
+    'ov.h2': '개요',
+    'ov.p1': 'Browse는 Claude Code 등 AI 에이전트가 브라우저를 자연어 지시로 조작할 때 드는 <strong>토큰 비용과 round-trip 수</strong>를 줄이도록 설계됐습니다. 핵심 설계 원칙:',
+    'ov.li1': '<strong>@ref 기반 상호작용</strong> — <code>snapshot</code>·<code>find</code>가 반환하는 <code>@e1</code>, <code>@e2</code>... 같은 안정 레퍼런스로 클릭·입력을 지정. 긴 CSS selector가 대화 로그에 누적되지 않습니다.',
+    'ov.li2': '<strong>영속 데몬</strong> — 첫 명령에서 HTTP 서버를 자동 기동, 15분 idle 후 자동 종료. Chromium 재부팅 비용을 피합니다.',
+    'ov.li3': '<strong>배치 실행</strong> — 로그인 같은 5-6단계 플로우를 stdin JSON 하나로 압축해 단일 round-trip으로 처리.',
+    'ov.li4': '<strong>세션 영속화</strong> — <code>--session &lt;name&gt;</code> 플래그로 storageState(쿠키·localStorage)를 자동 저장·복원해 로그인 반복 제거.',
+    'inst.h2': '설치 & 구조',
+    'inst.cmt1': '# comad-world 루트에서',
+    'inst.cmt2': '# CLI 한 번 실행하면 데몬이 자동 기동',
+    'inst.p1': '4계층 구조:',
+    'inst.li1': '<strong>CLI</strong> <code>src/cli.ts</code> — 얇은 HTTP 클라이언트, 데몬 자동 기동',
+    'inst.li2': '<strong>Server</strong> <code>src/server.ts</code> — 랜덤 포트 HTTP 데몬, 토큰 인증, 15분 idle shutdown',
+    'inst.li3': '<strong>Browser</strong> <code>src/browser.ts</code> — Playwright Chromium + anti-bot 스텔스, 멀티탭 관리',
+    'inst.li4': '<strong>Commands</strong> <code>src/commands.ts</code> + <code>src/deferred.ts</code> — 기본 명령 + 플래그 게이트 보류 명령',
+    'inst.p2': '상태 파일:',
+    'inst.th1': '파일',
+    'inst.th2': '역할',
+    'inst.row1': '데몬 포트·토큰·pid',
+    'inst.row2': '보류 기능 플래그',
+    'inst.row3': 'Playwright storageState (쿠키 + 웹 스토리지)',
+    'inst.row4': '자격증명 금고 (auth 기능 활성 시)',
+    'core.h2': '기본 명령',
+    'core.cmt1': '# 네비게이션',
+    'core.cmt2': '# 읽기',
+    'core.cmt3': '# body.innerText (50KB 캡)',
+    'core.cmt4': '# page.content()',
+    'core.cmt5': '# 앵커 전부',
+    'core.cmt6': '# 상호작용 요소만 @ref 매핑 (최대 500)',
+    'core.cmt7': '# 상호작용',
+    'core.cmt8': '# ref 또는 selector',
+    'core.callout': '<code>snapshot -i</code>는 최대 500개 엘리먼트를 반환합니다. <strong>대부분의 경우 <code>find</code>로 충분</strong>하며 더 저렴합니다.',
+    'find.h2': 'find — 스냅샷 없이 refs만',
+    'find.p1': 'role/text/label/placeholder/testid로 필터링해 <strong>매칭되는 요소만</strong> <code>@e</code> ref로 반환합니다. 전체 스냅샷을 토큰에 쏟아넣지 않아도 되죠.',
+    'find.cmt': '# 이후 ref로 바로 상호작용',
+    'batch.h2': 'batch — N개 명령 1 round-trip',
+    'batch.p1': '로그인·검색 플로우처럼 여러 단계가 순차적일 때 stdin JSON으로 묶으면 <strong>1 round-trip</strong>에 전부 실행됩니다. 각 단계 결과가 배열로 돌아옵니다.',
+    'batch.p2': '기존 방식: 8 명령 × 8 round-trip × 매번 스냅샷 재호출. batch 방식: <strong>1 round-trip, 스냅샷 불필요</strong>. 토큰 로그도 그만큼 간결해집니다.',
+    'sess.h2': '세션 & 쿠키 지속성',
+    'sess.p1': '<code>--session &lt;name&gt;</code> 플래그를 주면 서버 시작 시 <code>.comad/sessions/&lt;name&gt;.json</code>에서 storageState를 로드하고, 종료 시 자동 저장합니다. Playwright의 공식 storageState를 그대로 사용하므로 쿠키·localStorage·IndexedDB가 그대로 유지됩니다.',
+    'sess.cmt1': '# 첫 실행 — 로그인 후 세션 자동 저장',
+    'sess.cmt2': '# ... 로그인 플로우 실행 ...',
+    'sess.cmt3': '# close 시 세션 저장',
+    'sess.cmt4': '# 다음 실행 — 이미 로그인 상태',
+    'sess.cmt5': '# 쿠키·스토리지 수동 관리',
+    'tabs.h2': '멀티 탭',
+    'tabs.cmt': '활성 탭은 * 표시',
+    'tabs.p1': '탭 ID는 세션 내에서 재사용되지 않는 <code>t1</code>, <code>t2</code>, ... 형태입니다. 모든 명령은 현재 활성 탭에서 동작합니다.',
+    'wait.h2': '고급 대기',
+    'def.h2': '보류 기능 (dormant)',
+    'def.p1': '네 가지 고급 기능은 <strong>구현 완료·기본 비활성</strong>입니다. 필요할 때 플래그만 켜면 즉시 동작합니다.',
+    'def.th1': '기능',
+    'def.th2': '역할',
+    'def.diff': 'snapshot 또는 screenshot 베이스라인 대비 현재와 비교',
+    'def.har': 'request/response 버퍼 + JSON export',
+    'def.auth': 'AES-256-GCM 암호화 자격증명 금고 + 자동 로그인',
+    'def.route': '네트워크 패턴 block / mock',
+    'def.cmt1': '현재 상태',
+    'def.cmt2': '# 또는 환경 변수로',
+    'def.p2': '비활성 상태에서 호출하면 힌트가 돌아옵니다: <code>Feature "diff" is dormant. Enable with: browse feature enable name=diff</code>',
+    'def.callout': '<strong>auth 기능 보안</strong> — 기본은 plaintext 저장이며 경고가 출력됩니다. 실제 사용 전 <code>COMAD_BROWSE_AUTH_KEY</code> 환경변수를 설정하면 AES-256-GCM으로 암호화되어 저장됩니다.',
+    'int.h2': '다른 모듈 연동',
+    'int.li1': '<strong>Brain content-fetcher</strong> — JS가 많은 페이지는 native fetch 실패 시 <code>browse goto</code> + <code>browse text</code>로 자동 fallback. 크롤 레시피가 복잡한 SPA도 추출 가능.',
+    'int.li2': '<strong>Voice QA</strong> — <code>voice/qa.md</code> 플레이북이 <code>browse find</code> + <code>browse batch</code>로 폼·라우팅 회귀를 테스트.',
+    'int.li3': '<strong>프로그래매틱 API</strong> — <code>import { launch, getPage, close, executeCommand } from "comad-browse"</code>로 스크립트에서 직접 사용 가능.',
+    'related.label': '관련 파일',
+    'foot.prev': '← Voice',
+    'foot.home': '가이드 홈'
+  }
+};
+</script>
 </body>
 </html>

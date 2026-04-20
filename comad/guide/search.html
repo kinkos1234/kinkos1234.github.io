@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Search — Comad 가이드</title>
+<title data-i18n="meta.title">Search — Comad 가이드</title>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="assets/css/guide.css">
+<link rel="stylesheet" href="/comad/assets/css/comad-shared.css">
 </head>
 <body>
 
 <header class="topbar">
-  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub">가이드</span></a>
+  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub" data-i18n="brand.sub">가이드</span></a>
   <nav>
-    <a href="index.html">홈</a>
-    <a href="scheduler.html">스케줄러</a>
+    <a href="index.html" data-i18n="nav.home">홈</a>
+    <a href="scheduler.html" data-i18n="nav.scheduler">스케줄러</a>
     <a href="brain.html">Brain</a>
     <a href="ear.html">Ear</a>
     <a href="eye.html">Eye</a>
@@ -23,25 +24,26 @@
     <a href="voice.html">Voice</a>
     <a href="browse.html">Browse</a>
   </nav>
+  <button class="lang-toggle" onclick="toggleLang()"><span id="langEn">EN</span> / <span id="langKo">KO</span></button>
 </header>
 
 <div class="layout">
   <aside class="toc">
     <div class="toc-title">Search</div>
-    <a href="#overview">개요</a>
-    <a href="#phase1">Phase 1 — 탐색 & 평가</a>
-    <a href="#evaluator">3축 평가 + 게이트</a>
-    <a href="#phase2">Phase 2 — 플랜 생성</a>
-    <a href="#phase3">Phase 3 — Sandbox 검증</a>
-    <a href="#cache">plan cache</a>
-    <a href="#ear-feed">ear 자동 피드</a>
-    <a href="#stats">대시보드</a>
+    <a href="#overview" data-i18n="toc.overview">개요</a>
+    <a href="#phase1" data-i18n="toc.p1">Phase 1 — 탐색 & 평가</a>
+    <a href="#evaluator" data-i18n="toc.eval">3축 평가 + 게이트</a>
+    <a href="#phase2" data-i18n="toc.p2">Phase 2 — 플랜 생성</a>
+    <a href="#phase3" data-i18n="toc.p3">Phase 3 — Sandbox 검증</a>
+    <a href="#cache" data-i18n="toc.cache">plan cache</a>
+    <a href="#ear-feed" data-i18n="toc.ear">ear 자동 피드</a>
+    <a href="#stats" data-i18n="toc.stats">대시보드</a>
   </aside>
 
   <main>
     <div class="page-hero">
-      <h1>Search — <em>자기진화 파이프라인</em></h1>
-      <p class="page-desc">
+      <h1 data-i18n-html="h1">Search — <em>자기진화 파이프라인</em></h1>
+      <p class="page-desc" data-i18n="page.desc">
         GitHub · npm · PyPI · arXiv 병렬 탐색으로 레포/논문을 발굴 · 3축 평가 · 오프토픽 게이트 ·
         채택 계획 자동 생성 · git worktree sandbox 검증 · 채택 이력 추적. 전체 3-Phase 파이프라인.
       </p>
@@ -54,30 +56,30 @@
       </div>
     </div>
 
-    <h2 id="overview">개요</h2>
-    <p>Comad World의 자기진화 축. Brain이 축적한 트렌드를 질의로 변환해 외부에서 관련 레포를 찾고, 엄격한 평가와 sandbox 테스트를 거쳐 <strong>채택 의사결정 이력</strong>을 JSONL에 누적합니다.</p>
+    <h2 id="overview" data-i18n="ov.h2">개요</h2>
+    <p data-i18n-html="ov.p1">Comad World의 자기진화 축. Brain이 축적한 트렌드를 질의로 변환해 외부에서 관련 레포를 찾고, 엄격한 평가와 sandbox 테스트를 거쳐 <strong>채택 의사결정 이력</strong>을 JSONL에 누적합니다.</p>
 
-<pre><code><span class="dim">쿼리</span>
+<pre><code><span class="dim" data-i18n="ov.flow.query">쿼리</span>
  ↓
-<span class="hl">Phase 1</span>  multi-source search (GitHub/npm/PyPI/arXiv 병렬)
+<span class="hl">Phase 1</span>  <span data-i18n="ov.flow.p1">multi-source search (GitHub/npm/PyPI/arXiv 병렬)</span>
  ↓
-       evaluator (trust/quality/relevance + off-topic gate)
- ↓       adopt · study · skip 3갈래 판정
+       <span data-i18n="ov.flow.eval">evaluator (trust/quality/relevance + off-topic gate)</span>
+ ↓       <span data-i18n="ov.flow.verdict">adopt · study · skip 3갈래 판정</span>
  ↓
-<span class="hl">Phase 2</span>  planner (패턴 레지스트리 기반 적용 계획)
- ↓       plan-cache에 SHA1(query, constraints)로 저장
+<span class="hl">Phase 2</span>  <span data-i18n="ov.flow.p2">planner (패턴 레지스트리 기반 적용 계획)</span>
+ ↓       <span data-i18n="ov.flow.cache">plan-cache에 SHA1(query, constraints)로 저장</span>
  ↓
-<span class="hl">Phase 3</span>  sandbox (git worktree → bun install → tsc → bun test)
- ↓       tests-retry(1회) + recordDecision
+<span class="hl">Phase 3</span>  <span data-i18n="ov.flow.p3">sandbox (git worktree → bun install → tsc → bun test)</span>
+ ↓       <span data-i18n="ov.flow.retry">tests-retry(1회) + recordDecision</span>
  ↓
-plan-decisions.jsonl  ← 채택 이력 누적</code></pre>
+plan-decisions.jsonl  ← <span data-i18n="ov.flow.log">채택 이력 누적</span></code></pre>
 
-    <h2 id="phase1">Phase 1 — 탐색 & 평가</h2>
+    <h2 id="phase1" data-i18n="p1.h2">Phase 1 — 탐색 & 평가</h2>
 <pre><code>bun run packages/search/src/cli.ts "knowledge graph MCP"
 bun run packages/search/src/cli.ts "RAG pipeline" --min-stars 500
 bun run packages/search/src/cli.ts "agent orchestration" --lang typescript --max 10</code></pre>
 
-    <h3>실제 출력</h3>
+    <h3 data-i18n="p1.h3">실제 출력</h3>
 <pre><code>[search] Searching multiple sources for: "mcp server stdio bun typescript"
 [search:pypi]        Found 0 packages
 [search:arxiv]       Found 1 papers with code
@@ -91,59 +93,59 @@ bun run packages/search/src/cli.ts "agent orchestration" --lang typescript --max
 Trust: 91 | Quality: 100 | Relevance: 100
 </code></pre>
 
-    <h2 id="evaluator">3축 평가 + 오프토픽 게이트</h2>
-    <p>각 레포는 세 점수를 받고, anti-signal을 감점합니다. 2026-04-13 추가된 <strong>오프토픽 게이트</strong>가 도메인 벗어난 후보(CRAQ같은 genome tool 등)를 차단합니다.</p>
+    <h2 id="evaluator" data-i18n="eval.h2">3축 평가 + 오프토픽 게이트</h2>
+    <p data-i18n-html="eval.p1">각 레포는 세 점수를 받고, anti-signal을 감점합니다. 2026-04-13 추가된 <strong>오프토픽 게이트</strong>가 도메인 벗어난 후보(CRAQ같은 genome tool 등)를 차단합니다.</p>
 
     <table>
-      <tr><th>축</th><th>가중치</th><th>입력</th></tr>
-      <tr><td><strong>trust</strong></td><td>0.2</td><td>star/fork 비율, 최근 커밋, issue 건강도, license 존재</td></tr>
-      <tr><td><strong>quality</strong></td><td>0.3</td><td>README 품질, CI 존재, 테스트 존재, getting-started 섹션</td></tr>
-      <tr><td><strong>relevance</strong></td><td>0.5</td><td><code>comad.config.yaml</code> 키워드 매칭 수</td></tr>
+      <tr><th data-i18n="eval.th.axis">축</th><th data-i18n="eval.th.w">가중치</th><th data-i18n="eval.th.in">입력</th></tr>
+      <tr><td><strong>trust</strong></td><td>0.2</td><td data-i18n="eval.row.trust">star/fork 비율, 최근 커밋, issue 건강도, license 존재</td></tr>
+      <tr><td><strong>quality</strong></td><td>0.3</td><td data-i18n="eval.row.quality">README 품질, CI 존재, 테스트 존재, getting-started 섹션</td></tr>
+      <tr><td><strong>relevance</strong></td><td>0.5</td><td data-i18n-html="eval.row.rel"><code>comad.config.yaml</code> 키워드 매칭 수</td></tr>
     </table>
 
-    <h3>Anti-signals (8개)</h3>
+    <h3 data-i18n="eval.h3">Anti-signals (8개)</h3>
     <ul>
-      <li>마케팅 과잉 README (🚀🔥⚡ 연발, "blazing fast", "revolutionary")</li>
-      <li>라이선스 없음</li>
-      <li>이슈 대비 스타 비율 비정상 (방치 가능성)</li>
-      <li>6개월 이상 커밋 없음</li>
-      <li>스타 대비 포크 극히 낮음 (구경꾼 레포)</li>
-      <li>README에 시작 가이드 없음</li>
-      <li><strong>comad 스택과 무관한 도메인</strong> (genome/finance/game/physics/CMS 등)</li>
-      <li><strong>comad 핵심 키워드 미매치</strong> (knowledge graph/MCP/Neo4j/agent/RAG 중 하나도 없음)</li>
+      <li data-i18n-html="eval.as1">마케팅 과잉 README (🚀🔥⚡ 연발, "blazing fast", "revolutionary")</li>
+      <li data-i18n="eval.as2">라이선스 없음</li>
+      <li data-i18n="eval.as3">이슈 대비 스타 비율 비정상 (방치 가능성)</li>
+      <li data-i18n="eval.as4">6개월 이상 커밋 없음</li>
+      <li data-i18n="eval.as5">스타 대비 포크 극히 낮음 (구경꾼 레포)</li>
+      <li data-i18n="eval.as6">README에 시작 가이드 없음</li>
+      <li data-i18n-html="eval.as7"><strong>comad 스택과 무관한 도메인</strong> (genome/finance/game/physics/CMS 등)</li>
+      <li data-i18n-html="eval.as8"><strong>comad 핵심 키워드 미매치</strong> (knowledge graph/MCP/Neo4j/agent/RAG 중 하나도 없음)</li>
     </ul>
 
-    <div class="callout">
+    <div class="callout" data-i18n-html="eval.callout">
       <strong>Adoption gate</strong> — <code>totalScore ≥ 0.5 && antiSignals ≤ 1 && !offTopic && coreMatch</code>. 이전 버전에서 CRAQ(genome assembly)가 "improvement"/"quality" 키워드로 adopt까지 올라갔던 버그를 수정.
     </div>
 
-    <h2 id="phase2">Phase 2 — 플랜 생성</h2>
-    <p><code>--plan</code> 플래그를 붙이면 adopt 판정된 레포에 대해 패턴 레지스트리(<code>patterns.ts</code>) 기반으로 구체적 파일 변경 계획을 만듭니다.</p>
+    <h2 id="phase2" data-i18n="p2.h2">Phase 2 — 플랜 생성</h2>
+    <p data-i18n-html="p2.p1"><code>--plan</code> 플래그를 붙이면 adopt 판정된 레포에 대해 패턴 레지스트리(<code>patterns.ts</code>) 기반으로 구체적 파일 변경 계획을 만듭니다.</p>
 
 <pre><code>bun run packages/search/src/cli.ts "mcp server stdio" --plan --plan-count 3</code></pre>
 
 <pre><code>## Adoption Plan: neo4j-contrib/mcp-neo4j
 
-<span class="hl">Summary:</span> 3개 패턴을 brain/packages/mcp-server에 적용
-<span class="hl">Effort:</span>  moderate
-<span class="hl">Target:</span>  brain/packages/graphrag, brain/packages/mcp-server
+<span class="hl" data-i18n="p2.summary.lbl">Summary:</span> <span data-i18n="p2.summary.val">3개 패턴을 brain/packages/mcp-server에 적용</span>
+<span class="hl" data-i18n="p2.effort.lbl">Effort:</span>  <span data-i18n="p2.effort.val">moderate</span>
+<span class="hl" data-i18n="p2.target.lbl">Target:</span>  brain/packages/graphrag, brain/packages/mcp-server
 
 ### Changes (3)
 - <span class="kw">modify</span> brain/packages/graphrag/src/index.ts
-  mcp-neo4j의 RAG 구현 패턴 비교 — retrieval 전략, context window 관리
+  <span data-i18n="p2.change1">mcp-neo4j의 RAG 구현 패턴 비교 — retrieval 전략, context window 관리</span>
   Pattern: <span class="hl">RAG pipeline</span>
 - <span class="kw">modify</span> brain/packages/mcp-server/src/server.ts
   Pattern: <span class="hl">MCP integration</span>
 
 ### Risks
-- <span class="hl">[MEDIUM]</span> MCP 서버 수정은 모든 Claude Code 도구에 영향
-  Mitigation: 기존 테스트 통과 확인 후 반영</code></pre>
+- <span class="hl">[MEDIUM]</span> <span data-i18n="p2.risk1">MCP 서버 수정은 모든 Claude Code 도구에 영향</span>
+  <span data-i18n="p2.mitig.lbl">Mitigation:</span> <span data-i18n="p2.mitig.val">기존 테스트 통과 확인 후 반영</span></code></pre>
 
-    <h2 id="phase3">Phase 3 — Sandbox 검증</h2>
-    <p><code>--apply N</code>으로 N번째 플랜을 실제 git worktree에 격리해 검증합니다. <code>bun install + npx tsc --noEmit + bun test</code> 순서로 실행하고, transient 실패 시 <strong>1회 재시도</strong>합니다.</p>
+    <h2 id="phase3" data-i18n="p3.h2">Phase 3 — Sandbox 검증</h2>
+    <p data-i18n-html="p3.p1"><code>--apply N</code>으로 N번째 플랜을 실제 git worktree에 격리해 검증합니다. <code>bun install + npx tsc --noEmit + bun test</code> 순서로 실행하고, transient 실패 시 <strong>1회 재시도</strong>합니다.</p>
 
 <pre><code>bun run packages/search/src/cli.ts "mcp server stdio" --max 3 --apply 1
-<span class="dim"># --dry-run 으로 plan 표시만, sandbox 생성 안 함</span></code></pre>
+<span class="dim" data-i18n="p3.cmt1"># --dry-run 으로 plan 표시만, sandbox 생성 안 함</span></code></pre>
 
 <pre><code>[cache] Reusing 3 plans for "mcp server stdio"
 [search] Sandbox created: .worktrees/search-adopt-neo4j-contrib-mcp-neo4j-...
@@ -157,13 +159,13 @@ Running verification (typecheck + tests)...
 
 [PASS] All checks passed. Worktree ready for merge.
 
-<span class="dim">→ brain/data/plan-decisions.jsonl 에 기록:</span>
+<span class="dim" data-i18n="p3.log">→ brain/data/plan-decisions.jsonl 에 기록:</span>
 {"date":"2026-04-13","repo_name":"neo4j-contrib/mcp-neo4j",
  "patterns":["RAG pipeline","MCP integration"],
  "decision":"approved","applied":true,"outcome":"positive",...}</code></pre>
 
-    <h2 id="cache">plan-cache</h2>
-    <p><code>--apply 1</code>, <code>--apply 2</code>를 연속 호출할 때 매번 search+plan을 다시 돌리면 30-120초씩 걸리고 외부 API도 호출합니다. plan-cache가 SHA1(query, constraints)로 결과를 1시간 캐시해서 두 번째부터는 sandbox만 바로 생성됩니다.</p>
+    <h2 id="cache" data-i18n="cache.h2">plan-cache</h2>
+    <p data-i18n-html="cache.p1"><code>--apply 1</code>, <code>--apply 2</code>를 연속 호출할 때 매번 search+plan을 다시 돌리면 30-120초씩 걸리고 외부 API도 호출합니다. plan-cache가 SHA1(query, constraints)로 결과를 1시간 캐시해서 두 번째부터는 sandbox만 바로 생성됩니다.</p>
 
 <pre><code>data/search-cache/a3b5f9c2d1e47890.json
   {
@@ -171,10 +173,10 @@ Running verification (typecheck + tests)...
     "plans": [ ...3 plans... ]
   }</code></pre>
 
-    <h2 id="ear-feed">ear 자동 피드</h2>
-    <p><code>ear-ingest</code>(매일 07:00)가 어제 필독 기사에서 기술 토큰을 뽑아 <code>/search</code>에 자동 투입합니다. 자세한 내용은 <a href="ear.html#feed-search">Ear 가이드 — /search 자동 피드</a>.</p>
+    <h2 id="ear-feed" data-i18n="ear.h2">ear 자동 피드</h2>
+    <p data-i18n-html="ear.p1"><code>ear-ingest</code>(매일 07:00)가 어제 필독 기사에서 기술 토큰을 뽑아 <code>/search</code>에 자동 투입합니다. 자세한 내용은 <a href="ear.html#feed-search">Ear 가이드 — /search 자동 피드</a>.</p>
 
-    <h2 id="stats">대시보드</h2>
+    <h2 id="stats" data-i18n="stats.h2">대시보드</h2>
 <pre><code>bun run packages/search/src/cli.ts --stats</code></pre>
 
 <pre><code>## /search System Health Dashboard
@@ -197,15 +199,162 @@ Running verification (typecheck + tests)...
   Reverted:               2
   Avg survival score:    0.79</code></pre>
 
-    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);">관련 파일: <code>brain/packages/search/src/{cli,evaluator,planner,sandbox,plan-cache,plan-tracker,survival,ear-ingest}.ts</code>, <code>brain/data/plan-decisions.jsonl</code></p>
+    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);" data-i18n-html="related"><span data-i18n="related.label">관련 파일</span>: <code>brain/packages/search/src/{cli,evaluator,planner,sandbox,plan-cache,plan-tracker,survival,ear-ingest}.ts</code>, <code>brain/data/plan-decisions.jsonl</code></p>
 
   </main>
 </div>
 
 <footer class="page-foot">
-  <a href="eye.html">← Eye</a> · <a href="index.html">가이드 홈</a> · <a href="photo.html">다음: Photo →</a>
+  <a href="eye.html" data-i18n="foot.prev">← Eye</a> · <a href="index.html" data-i18n="foot.home">가이드 홈</a> · <a href="photo.html" data-i18n="foot.next">다음: Photo →</a>
 </footer>
 
 <script src="assets/js/guide.js"></script>
+<script src="assets/js/i18n.js"></script>
+<script>
+window.I18N_DICT = {
+  en: {
+    'meta.title': 'Search — Comad Guide',
+    'brand.sub': 'Guide',
+    'nav.home': 'Home',
+    'nav.scheduler': 'Scheduler',
+    'toc.overview': 'Overview',
+    'toc.p1': 'Phase 1 — Discover & evaluate',
+    'toc.eval': '3-axis eval + gate',
+    'toc.p2': 'Phase 2 — Plan generation',
+    'toc.p3': 'Phase 3 — Sandbox verify',
+    'toc.cache': 'plan cache',
+    'toc.ear': 'ear auto-feed',
+    'toc.stats': 'Dashboard',
+    'h1': 'Search — <em>Self-evolving pipeline</em>',
+    'page.desc': 'Parallel GitHub · npm · PyPI · arXiv discovery of repos/papers · 3-axis evaluation · off-topic gate · automated adoption plans · git-worktree sandbox verification · adoption history tracking. A complete 3-phase pipeline.',
+    'ov.h2': 'Overview',
+    'ov.p1': 'The self-evolution axis of Comad World. Converts Brain\'s accumulated trends into queries, finds relevant external repos, runs strict evaluation + sandbox tests, and appends <strong>adoption decisions</strong> to JSONL.',
+    'ov.flow.query': 'Query',
+    'ov.flow.p1': 'multi-source search (GitHub / npm / PyPI / arXiv in parallel)',
+    'ov.flow.eval': 'evaluator (trust / quality / relevance + off-topic gate)',
+    'ov.flow.verdict': '3-way verdict: adopt · study · skip',
+    'ov.flow.p2': 'planner (pattern-registry-driven adoption plans)',
+    'ov.flow.cache': 'cached in plan-cache by SHA1(query, constraints)',
+    'ov.flow.p3': 'sandbox (git worktree → bun install → tsc → bun test)',
+    'ov.flow.retry': 'tests-retry (1 pass) + recordDecision',
+    'ov.flow.log': 'adoption log appended',
+    'p1.h2': 'Phase 1 — Discover & evaluate',
+    'p1.h3': 'Real output',
+    'eval.h2': '3-axis eval + off-topic gate',
+    'eval.p1': 'Each repo gets three scores, docked by anti-signals. The <strong>off-topic gate</strong> (added 2026-04-13) blocks out-of-domain candidates (e.g., genome tools like CRAQ).',
+    'eval.th.axis': 'Axis',
+    'eval.th.w': 'Weight',
+    'eval.th.in': 'Inputs',
+    'eval.row.trust': 'star/fork ratio, recent commits, issue health, license presence',
+    'eval.row.quality': 'README quality, CI presence, tests, getting-started section',
+    'eval.row.rel': '<code>comad.config.yaml</code> keyword matches',
+    'eval.h3': 'Anti-signals (8)',
+    'eval.as1': 'Marketing-heavy README (🚀🔥⚡ spam, "blazing fast", "revolutionary")',
+    'eval.as2': 'No license',
+    'eval.as3': 'Abnormal issue-to-star ratio (likely abandoned)',
+    'eval.as4': 'No commits for 6+ months',
+    'eval.as5': 'Very low fork-to-star ratio (spectator repo)',
+    'eval.as6': 'No getting-started section in README',
+    'eval.as7': '<strong>Off-topic domain relative to the comad stack</strong> (genome / finance / game / physics / CMS, etc.)',
+    'eval.as8': '<strong>No comad core-keyword match</strong> (none of knowledge graph / MCP / Neo4j / agent / RAG)',
+    'eval.callout': '<strong>Adoption gate</strong> — <code>totalScore ≥ 0.5 && antiSignals ≤ 1 && !offTopic && coreMatch</code>. Fixes a past bug where CRAQ (genome assembly) got adopted via "improvement"/"quality" keywords.',
+    'p2.h2': 'Phase 2 — Plan generation',
+    'p2.p1': 'The <code>--plan</code> flag generates a concrete file-change plan for adopted repos, driven by the pattern registry (<code>patterns.ts</code>).',
+    'p2.summary.lbl': 'Summary:',
+    'p2.summary.val': 'Apply 3 patterns to brain/packages/mcp-server',
+    'p2.effort.lbl': 'Effort:',
+    'p2.effort.val': 'moderate',
+    'p2.target.lbl': 'Target:',
+    'p2.change1': 'Compare mcp-neo4j\'s RAG implementation — retrieval strategy, context-window handling',
+    'p2.risk1': 'Editing the MCP server affects every Claude Code tool',
+    'p2.mitig.lbl': 'Mitigation:',
+    'p2.mitig.val': 'Verify existing tests pass before rolling out',
+    'p3.h2': 'Phase 3 — Sandbox verify',
+    'p3.p1': '<code>--apply N</code> isolates the Nth plan in a real git worktree and verifies it. Runs <code>bun install + npx tsc --noEmit + bun test</code> in order; on transient failures, <strong>retries once</strong>.',
+    'p3.cmt1': '# --dry-run shows the plan only, no sandbox',
+    'p3.log': '→ appended to brain/data/plan-decisions.jsonl:',
+    'cache.h2': 'plan-cache',
+    'cache.p1': 'Running <code>--apply 1</code> then <code>--apply 2</code> in sequence would re-run search+plan each time (30–120s + external API hits). plan-cache keys by SHA1(query, constraints) and caches for 1 hour, so subsequent applies jump straight to sandbox.',
+    'ear.h2': 'ear auto-feed',
+    'ear.p1': '<code>ear-ingest</code> (daily 07:00) extracts tech tokens from yesterday\'s must-read articles and pushes them into <code>/search</code>. Details: <a href="ear.html#feed-search">Ear guide — /search auto-feed</a>.',
+    'stats.h2': 'Dashboard',
+    'related.label': 'Related files',
+    'foot.prev': '← Eye',
+    'foot.home': 'Guide home',
+    'foot.next': 'Next: Photo →'
+  },
+  ko: {
+    'meta.title': 'Search — Comad 가이드',
+    'brand.sub': '가이드',
+    'nav.home': '홈',
+    'nav.scheduler': '스케줄러',
+    'toc.overview': '개요',
+    'toc.p1': 'Phase 1 — 탐색 & 평가',
+    'toc.eval': '3축 평가 + 게이트',
+    'toc.p2': 'Phase 2 — 플랜 생성',
+    'toc.p3': 'Phase 3 — Sandbox 검증',
+    'toc.cache': 'plan cache',
+    'toc.ear': 'ear 자동 피드',
+    'toc.stats': '대시보드',
+    'h1': 'Search — <em>자기진화 파이프라인</em>',
+    'page.desc': 'GitHub · npm · PyPI · arXiv 병렬 탐색으로 레포/논문을 발굴 · 3축 평가 · 오프토픽 게이트 · 채택 계획 자동 생성 · git worktree sandbox 검증 · 채택 이력 추적. 전체 3-Phase 파이프라인.',
+    'ov.h2': '개요',
+    'ov.p1': 'Comad World의 자기진화 축. Brain이 축적한 트렌드를 질의로 변환해 외부에서 관련 레포를 찾고, 엄격한 평가와 sandbox 테스트를 거쳐 <strong>채택 의사결정 이력</strong>을 JSONL에 누적합니다.',
+    'ov.flow.query': '쿼리',
+    'ov.flow.p1': 'multi-source search (GitHub/npm/PyPI/arXiv 병렬)',
+    'ov.flow.eval': 'evaluator (trust/quality/relevance + off-topic gate)',
+    'ov.flow.verdict': 'adopt · study · skip 3갈래 판정',
+    'ov.flow.p2': 'planner (패턴 레지스트리 기반 적용 계획)',
+    'ov.flow.cache': 'plan-cache에 SHA1(query, constraints)로 저장',
+    'ov.flow.p3': 'sandbox (git worktree → bun install → tsc → bun test)',
+    'ov.flow.retry': 'tests-retry(1회) + recordDecision',
+    'ov.flow.log': '채택 이력 누적',
+    'p1.h2': 'Phase 1 — 탐색 & 평가',
+    'p1.h3': '실제 출력',
+    'eval.h2': '3축 평가 + 오프토픽 게이트',
+    'eval.p1': '각 레포는 세 점수를 받고, anti-signal을 감점합니다. 2026-04-13 추가된 <strong>오프토픽 게이트</strong>가 도메인 벗어난 후보(CRAQ같은 genome tool 등)를 차단합니다.',
+    'eval.th.axis': '축',
+    'eval.th.w': '가중치',
+    'eval.th.in': '입력',
+    'eval.row.trust': 'star/fork 비율, 최근 커밋, issue 건강도, license 존재',
+    'eval.row.quality': 'README 품질, CI 존재, 테스트 존재, getting-started 섹션',
+    'eval.row.rel': '<code>comad.config.yaml</code> 키워드 매칭 수',
+    'eval.h3': 'Anti-signals (8개)',
+    'eval.as1': '마케팅 과잉 README (🚀🔥⚡ 연발, "blazing fast", "revolutionary")',
+    'eval.as2': '라이선스 없음',
+    'eval.as3': '이슈 대비 스타 비율 비정상 (방치 가능성)',
+    'eval.as4': '6개월 이상 커밋 없음',
+    'eval.as5': '스타 대비 포크 극히 낮음 (구경꾼 레포)',
+    'eval.as6': 'README에 시작 가이드 없음',
+    'eval.as7': '<strong>comad 스택과 무관한 도메인</strong> (genome/finance/game/physics/CMS 등)',
+    'eval.as8': '<strong>comad 핵심 키워드 미매치</strong> (knowledge graph/MCP/Neo4j/agent/RAG 중 하나도 없음)',
+    'eval.callout': '<strong>Adoption gate</strong> — <code>totalScore ≥ 0.5 && antiSignals ≤ 1 && !offTopic && coreMatch</code>. 이전 버전에서 CRAQ(genome assembly)가 "improvement"/"quality" 키워드로 adopt까지 올라갔던 버그를 수정.',
+    'p2.h2': 'Phase 2 — 플랜 생성',
+    'p2.p1': '<code>--plan</code> 플래그를 붙이면 adopt 판정된 레포에 대해 패턴 레지스트리(<code>patterns.ts</code>) 기반으로 구체적 파일 변경 계획을 만듭니다.',
+    'p2.summary.lbl': 'Summary:',
+    'p2.summary.val': '3개 패턴을 brain/packages/mcp-server에 적용',
+    'p2.effort.lbl': 'Effort:',
+    'p2.effort.val': 'moderate',
+    'p2.target.lbl': 'Target:',
+    'p2.change1': 'mcp-neo4j의 RAG 구현 패턴 비교 — retrieval 전략, context window 관리',
+    'p2.risk1': 'MCP 서버 수정은 모든 Claude Code 도구에 영향',
+    'p2.mitig.lbl': 'Mitigation:',
+    'p2.mitig.val': '기존 테스트 통과 확인 후 반영',
+    'p3.h2': 'Phase 3 — Sandbox 검증',
+    'p3.p1': '<code>--apply N</code>으로 N번째 플랜을 실제 git worktree에 격리해 검증합니다. <code>bun install + npx tsc --noEmit + bun test</code> 순서로 실행하고, transient 실패 시 <strong>1회 재시도</strong>합니다.',
+    'p3.cmt1': '# --dry-run 으로 plan 표시만, sandbox 생성 안 함',
+    'p3.log': '→ brain/data/plan-decisions.jsonl 에 기록:',
+    'cache.h2': 'plan-cache',
+    'cache.p1': '<code>--apply 1</code>, <code>--apply 2</code>를 연속 호출할 때 매번 search+plan을 다시 돌리면 30-120초씩 걸리고 외부 API도 호출합니다. plan-cache가 SHA1(query, constraints)로 결과를 1시간 캐시해서 두 번째부터는 sandbox만 바로 생성됩니다.',
+    'ear.h2': 'ear 자동 피드',
+    'ear.p1': '<code>ear-ingest</code>(매일 07:00)가 어제 필독 기사에서 기술 토큰을 뽑아 <code>/search</code>에 자동 투입합니다. 자세한 내용은 <a href="ear.html#feed-search">Ear 가이드 — /search 자동 피드</a>.',
+    'stats.h2': '대시보드',
+    'related.label': '관련 파일',
+    'foot.prev': '← Eye',
+    'foot.home': '가이드 홈',
+    'foot.next': '다음: Photo →'
+  }
+};
+</script>
 </body>
 </html>

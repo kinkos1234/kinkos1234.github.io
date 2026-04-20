@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Photo — Comad 가이드</title>
+<title data-i18n="meta.title">Photo — Comad 가이드</title>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="assets/css/guide.css">
+<link rel="stylesheet" href="/comad/assets/css/comad-shared.css">
 </head>
 <body>
 
 <header class="topbar">
-  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub">가이드</span></a>
+  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub" data-i18n="brand.sub">가이드</span></a>
   <nav>
-    <a href="index.html">홈</a>
-    <a href="scheduler.html">스케줄러</a>
+    <a href="index.html" data-i18n="nav.home">홈</a>
+    <a href="scheduler.html" data-i18n="nav.scheduler">스케줄러</a>
     <a href="brain.html">Brain</a>
     <a href="ear.html">Ear</a>
     <a href="eye.html">Eye</a>
@@ -23,23 +24,24 @@
     <a href="voice.html">Voice</a>
     <a href="browse.html">Browse</a>
   </nav>
+  <button class="lang-toggle" onclick="toggleLang()"><span id="langEn">EN</span> / <span id="langKo">KO</span></button>
 </header>
 
 <div class="layout">
   <aside class="toc">
     <div class="toc-title">Photo</div>
-    <a href="#overview">개요</a>
-    <a href="#install">설치 (Photoshop MCP)</a>
-    <a href="#workflow">보정 워크플로우</a>
-    <a href="#mae">MAE 가드</a>
-    <a href="#batch">배치 모드</a>
-    <a href="#tips">운영 팁</a>
+    <a href="#overview" data-i18n="toc.overview">개요</a>
+    <a href="#install" data-i18n="toc.install">설치 (Photoshop MCP)</a>
+    <a href="#workflow" data-i18n="toc.wf">보정 워크플로우</a>
+    <a href="#mae" data-i18n="toc.mae">MAE 가드</a>
+    <a href="#batch" data-i18n="toc.batch">배치 모드</a>
+    <a href="#tips" data-i18n="toc.tips">운영 팁</a>
   </aside>
 
   <main>
     <div class="page-hero">
-      <h1>Photo — <em>AI 사진 보정</em></h1>
-      <p class="page-desc">
+      <h1 data-i18n-html="h1">Photo — <em>AI 사진 보정</em></h1>
+      <p class="page-desc" data-i18n="page.desc">
         이미지 분석 → 보정 계획 수립 → Photoshop MCP를 통한 비파괴 편집. Adjustment Layer 기반으로
         원본을 건드리지 않으며, MAE(Mean Absolute Error) 가드가 과보정을 방지합니다. 인물 배치 평균 92.2점.
       </p>
@@ -48,61 +50,61 @@
         <span class="tag">Photoshop MCP</span>
         <span class="tag accent">PIL + Camera Raw</span>
         <span class="tag warm">MAE &lt; 20</span>
-        <span class="tag lime">배치 모드</span>
+        <span class="tag lime" data-i18n="tag.batch">배치 모드</span>
       </div>
     </div>
 
-    <h2 id="overview">개요</h2>
-    <p>사진 한 장 또는 폴더를 입력하면, Claude Vision이 각 이미지를 분석해 어떤 보정이 필요한지 구체적 계획(밝기/대비/색온도/채도/선명도)을 만들고, Photoshop에 <strong>비파괴 편집</strong>을 지시합니다. 조정 레이어만 추가되므로 원본 픽셀은 그대로 유지됩니다.</p>
+    <h2 id="overview" data-i18n="ov.h2">개요</h2>
+    <p data-i18n-html="ov.p1">사진 한 장 또는 폴더를 입력하면, Claude Vision이 각 이미지를 분석해 어떤 보정이 필요한지 구체적 계획(밝기/대비/색온도/채도/선명도)을 만들고, Photoshop에 <strong>비파괴 편집</strong>을 지시합니다. 조정 레이어만 추가되므로 원본 픽셀은 그대로 유지됩니다.</p>
 
-    <div class="callout">
+    <div class="callout" data-i18n-html="ov.callout">
       <strong>왜 비파괴인가</strong> — 클라이언트가 "이 부분만 좀 덜해달라" 요청했을 때 특정 레이어의 opacity만 조절하면 됨. 처음부터 다시 돌릴 필요 없음.
     </div>
 
-    <h2 id="install">설치 (Photoshop MCP)</h2>
-<pre><code><span class="dim"># Adobe UXP 패널 (Photoshop 안에서 실행되는 플러그인)</span>
+    <h2 id="install" data-i18n="inst.h2">설치 (Photoshop MCP)</h2>
+<pre><code><span class="dim" data-i18n="inst.cmt1"># Adobe UXP 패널 (Photoshop 안에서 실행되는 플러그인)</span>
 cd photo
-./install.sh                       <span class="dim"># UXP 패널 + Python MCP 서버 설정</span>
+./install.sh                       <span class="dim" data-i18n="inst.cmt2"># UXP 패널 + Python MCP 서버 설정</span>
 
-<span class="dim"># Photoshop 실행 → Plugins → Comad Photo 패널 활성화</span>
+<span class="dim" data-i18n="inst.cmt3"># Photoshop 실행 → Plugins → Comad Photo 패널 활성화</span>
 
-<span class="dim"># Claude Code에서 MCP 연결 확인</span>
+<span class="dim" data-i18n="inst.cmt4"># Claude Code에서 MCP 연결 확인</span>
 claude mcp list | grep adobe-photoshop
-<span class="dim"># → adobe-photoshop: ... ✓ Connected</span></code></pre>
+<span class="dim" data-i18n="inst.cmt5"># → adobe-photoshop: ... ✓ Connected</span></code></pre>
 
-    <div class="callout warm">
+    <div class="callout warm" data-i18n-html="inst.callout">
       Photoshop은 반드시 <strong>실행 중</strong>이어야 합니다. UXP 플러그인이 Photoshop 내부에 로드되고, Python MCP 서버가 WebSocket으로 UXP와 통신. 3단 구조 → Photoshop ↔ UXP ↔ Python MCP ↔ Claude.
     </div>
 
-    <h2 id="workflow">보정 워크플로우</h2>
+    <h2 id="workflow" data-i18n="wf.h2">보정 워크플로우</h2>
 
-    <h3>대화형 (단일 이미지)</h3>
-<pre><code><span class="kw">You:</span> 이 사진 좀 보정해줘 (파일: portrait.jpg)
+    <h3 data-i18n="wf.h3_1">대화형 (단일 이미지)</h3>
+<pre><code><span class="kw" data-i18n="wf.you">You:</span> <span data-i18n="wf.request">이 사진 좀 보정해줘 (파일: portrait.jpg)</span>
 
-<span class="hl">Claude:</span>
-1. 이미지 분석 (Claude Vision):
+<span class="hl" data-i18n="wf.claude">Claude:</span>
+<span data-i18n="wf.step1">1. 이미지 분석 (Claude Vision):
    - 인물 사진, 실내 인공광
    - 노출 약간 부족 (-0.3 EV)
    - 화이트밸런스 따뜻함 편향 (tint +8 magenta)
-   - 피부톤 채도 살짝 낮음
+   - 피부톤 채도 살짝 낮음</span>
 
-2. 보정 계획:
+<span data-i18n="wf.step2">2. 보정 계획:
    [1] Levels: input 12-245 (그림자 리프트)
    [2] Color Balance: Midtones +3 Cyan, -3 Yellow
    [3] Hue/Saturation: Reds +8 saturation, oranges +6
-   [4] Selective Color (skin): Yellows -5, Reds +2
+   [4] Selective Color (skin): Yellows -5, Reds +2</span>
 
-3. Photoshop MCP 실행 중...
+<span data-i18n="wf.step3">3. Photoshop MCP 실행 중...
    ✓ Levels adjustment layer 추가
    ✓ Color Balance adjustment layer 추가
    ✓ Hue/Sat adjustment layer 추가
-   ✓ Selective Color adjustment layer 추가
-   <span class="hl">✓ MAE: 14.2 (&lt; 20 threshold)</span>
+   ✓ Selective Color adjustment layer 추가</span>
+   <span class="hl" data-i18n="wf.mae">✓ MAE: 14.2 (&lt; 20 threshold)</span>
 
-Total: 4 adjustment layers. 원본 픽셀 무변경.
-"이 부분만 되돌리려면 해당 레이어의 opacity를 조절하세요."</code></pre>
+<span data-i18n="wf.outro">Total: 4 adjustment layers. 원본 픽셀 무변경.
+"이 부분만 되돌리려면 해당 레이어의 opacity를 조절하세요."</span></code></pre>
 
-    <h3>동작하는 MCP 도구 (주요)</h3>
+    <h3 data-i18n="wf.h3_2">동작하는 MCP 도구 (주요)</h3>
     <ul>
       <li><code>mcp__adobe-photoshop__add_brightness_contrast_adjustment_layer</code></li>
       <li><code>mcp__adobe-photoshop__add_color_balance_adjustment_layer</code></li>
@@ -110,67 +112,204 @@ Total: 4 adjustment layers. 원본 픽셀 무변경.
       <li><code>mcp__adobe-photoshop__add_vibrance_adjustment_layer</code></li>
       <li><code>mcp__adobe-photoshop__apply_gaussian_blur</code></li>
       <li><code>mcp__adobe-photoshop__apply_motion_blur</code></li>
-      <li><code>mcp__adobe-photoshop__remove_background</code> (generative)</li>
-      <li><code>mcp__adobe-photoshop__generate_image</code> (Firefly)</li>
+      <li data-i18n-html="wf.mcp.rbg"><code>mcp__adobe-photoshop__remove_background</code> (generative)</li>
+      <li data-i18n-html="wf.mcp.gen"><code>mcp__adobe-photoshop__generate_image</code> (Firefly)</li>
       <li><code>mcp__adobe-photoshop__generative_fill</code></li>
       <li><code>mcp__adobe-photoshop__select_sky</code> / <code>select_subject</code></li>
-      <li>레이어 전체 관리 (duplicate/group/rename/visibility)</li>
-      <li>문서 저장 (<code>save_document_as</code> PSD/JPG/PNG)</li>
+      <li data-i18n-html="wf.mcp.layer">레이어 전체 관리 (duplicate/group/rename/visibility)</li>
+      <li data-i18n-html="wf.mcp.save">문서 저장 (<code>save_document_as</code> PSD/JPG/PNG)</li>
     </ul>
 
-    <h2 id="mae">MAE 가드</h2>
-    <p>Mean Absolute Error — 원본과 보정본의 픽셀 차이 평균. 20을 넘으면 과보정으로 판단하고 가장 강한 조정 레이어의 opacity를 낮추거나 제거합니다.</p>
+    <h2 id="mae" data-i18n="mae.h2">MAE 가드</h2>
+    <p data-i18n="mae.p1">Mean Absolute Error — 원본과 보정본의 픽셀 차이 평균. 20을 넘으면 과보정으로 판단하고 가장 강한 조정 레이어의 opacity를 낮추거나 제거합니다.</p>
 
-<pre><code>MAE 측정 (grayscale 기준):
-  < 10: 너무 보수적 (거의 변화 없음)
-  <span class="hl">10-20: 자연스러운 보정 (권장)</span>
-  20-30: 눈에 띄는 차이 (스타일 변경)
-  > 30: 과보정 (원본 분위기 손상)</code></pre>
+<pre><code><span data-i18n="mae.thr">MAE 측정 (grayscale 기준):
+  < 10: 너무 보수적 (거의 변화 없음)</span>
+  <span class="hl" data-i18n="mae.rec">10-20: 자연스러운 보정 (권장)</span>
+  <span data-i18n="mae.over">20-30: 눈에 띄는 차이 (스타일 변경)
+  > 30: 과보정 (원본 분위기 손상)</span></code></pre>
 
-    <div class="callout lime">
+    <div class="callout lime" data-i18n-html="mae.callout">
       <strong>실측 결과 (v0.4.0)</strong> — 인물 사진 15장 테스트: 평균 92.2점 (최저 86), MAE 평균 14.8. 배치 모드에서도 품질 일관성 확보.
     </div>
 
-    <h2 id="batch">배치 모드</h2>
-<pre><code><span class="kw">You:</span> ~/Photos/wedding/ 폴더 전체 보정해줘
+    <h2 id="batch" data-i18n="batch.h2">배치 모드</h2>
+<pre><code><span class="kw" data-i18n="batch.you">You:</span> <span data-i18n="batch.request">~/Photos/wedding/ 폴더 전체 보정해줘</span>
 
-<span class="hl">Claude:</span>
-발견: 47 images (JPG)
-로딩 후 일괄 분석...
-  [1/47] IMG_0001.jpg → 기준 톤 샘플 (reference)
-  [2/47] IMG_0002.jpg → reference 기준 매칭
+<span class="hl" data-i18n="batch.claude">Claude:</span>
+<span data-i18n="batch.found">발견: 47 images (JPG)
+로딩 후 일괄 분석...</span>
+  <span data-i18n="batch.r1">[1/47] IMG_0001.jpg → 기준 톤 샘플 (reference)</span>
+  <span data-i18n="batch.r2">[2/47] IMG_0002.jpg → reference 기준 매칭</span>
   ...
   [47/47] IMG_0047.jpg ✓
 
-Batch complete:
+<span data-i18n="batch.summary">Batch complete:
   성공: 45
   MAE 경계 초과: 2 (수동 검토 필요)
-  저장: ~/Photos/wedding/edited/*.psd</code></pre>
+  저장: ~/Photos/wedding/edited/*.psd</span></code></pre>
 
-    <div class="callout">
+    <div class="callout" data-i18n-html="batch.callout">
       배치 모드의 비밀은 <strong>첫 이미지를 reference tone</strong>으로 삼아 나머지를 매칭한다는 것. 한 이벤트에서 촬영된 사진들이 같은 톤으로 통일됩니다.
     </div>
 
-    <h2 id="tips">운영 팁</h2>
+    <h2 id="tips" data-i18n="tips.h2">운영 팁</h2>
 
-    <h3>레이어 병합 금지</h3>
-    <p>보정 후 레이어를 합치면 재조정 불가. PSD로 저장하고 필요할 때 JPG로 export만.</p>
+    <h3 data-i18n="tips.h3_1">레이어 병합 금지</h3>
+    <p data-i18n="tips.p1">보정 후 레이어를 합치면 재조정 불가. PSD로 저장하고 필요할 때 JPG로 export만.</p>
 
-    <h3>CU + AppleScript 금지</h3>
-    <p>Photoshop 제어는 오직 MCP 도구만 사용. AppleScript/System Events로 UI 조작은 비결정적이라 배치 실패 원인 1위.</p>
+    <h3 data-i18n="tips.h3_2">CU + AppleScript 금지</h3>
+    <p data-i18n="tips.p2">Photoshop 제어는 오직 MCP 도구만 사용. AppleScript/System Events로 UI 조작은 비결정적이라 배치 실패 원인 1위.</p>
 
-    <h3>CU wait 최소 1초</h3>
-    <p>컴퓨터 유즈(CU)로 Photoshop UI 관찰할 때 wait 1초 미만은 렌더 완료 전이라 false state 잡힘. <code>sleep 1</code> 이상.</p>
+    <h3 data-i18n="tips.h3_3">CU wait 최소 1초</h3>
+    <p data-i18n-html="tips.p3">컴퓨터 유즈(CU)로 Photoshop UI 관찰할 때 wait 1초 미만은 렌더 완료 전이라 false state 잡힘. <code>sleep 1</code> 이상.</p>
 
-    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);">관련 파일: <code>photo/</code>, <code>~/adb-mcp/mcp/ps-mcp.py</code></p>
+    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);" data-i18n-html="related"><span data-i18n="related.label">관련 파일</span>: <code>photo/</code>, <code>~/adb-mcp/mcp/ps-mcp.py</code></p>
 
   </main>
 </div>
 
 <footer class="page-foot">
-  <a href="search.html">← Search</a> · <a href="index.html">가이드 홈</a> · <a href="sleep.html">다음: Sleep →</a>
+  <a href="search.html" data-i18n="foot.prev">← Search</a> · <a href="index.html" data-i18n="foot.home">가이드 홈</a> · <a href="sleep.html" data-i18n="foot.next">다음: Sleep →</a>
 </footer>
 
 <script src="assets/js/guide.js"></script>
+<script src="assets/js/i18n.js"></script>
+<script>
+window.I18N_DICT = {
+  en: {
+    'meta.title': 'Photo — Comad Guide',
+    'brand.sub': 'Guide',
+    'nav.home': 'Home',
+    'nav.scheduler': 'Scheduler',
+    'toc.overview': 'Overview',
+    'toc.install': 'Install (Photoshop MCP)',
+    'toc.wf': 'Correction workflow',
+    'toc.mae': 'MAE guardrail',
+    'toc.batch': 'Batch mode',
+    'toc.tips': 'Operational tips',
+    'h1': 'Photo — <em>AI photo correction</em>',
+    'page.desc': 'Image analysis → correction plan → non-destructive edits via Photoshop MCP. Adjustment-layer-based, so the original pixels are preserved. A MAE (Mean Absolute Error) guardrail prevents over-correction. Portrait batch avg: 92.2.',
+    'tag.batch': 'Batch mode',
+    'ov.h2': 'Overview',
+    'ov.p1': 'Feed in a photo or a folder; Claude Vision analyzes each image, builds a concrete correction plan (brightness / contrast / white balance / saturation / sharpness), and instructs Photoshop to perform <strong>non-destructive edits</strong>. Only adjustment layers are added — original pixels stay intact.',
+    'ov.callout': '<strong>Why non-destructive</strong> — when a client says "dial that part back a bit", you just drop the opacity on that layer. No need to redo from scratch.',
+    'inst.h2': 'Install (Photoshop MCP)',
+    'inst.cmt1': '# Adobe UXP panel (plugin that runs inside Photoshop)',
+    'inst.cmt2': '# UXP panel + Python MCP server setup',
+    'inst.cmt3': '# Launch Photoshop → Plugins → activate the Comad Photo panel',
+    'inst.cmt4': '# Verify the MCP connection from Claude Code',
+    'inst.cmt5': '# → adobe-photoshop: ... ✓ Connected',
+    'inst.callout': 'Photoshop must be <strong>running</strong>. The UXP plugin loads inside Photoshop, and the Python MCP server talks to it over WebSocket. Three-layer chain → Photoshop ↔ UXP ↔ Python MCP ↔ Claude.',
+    'wf.h2': 'Correction workflow',
+    'wf.h3_1': 'Conversational (single image)',
+    'wf.you': 'You:',
+    'wf.request': 'Please correct this photo (file: portrait.jpg)',
+    'wf.claude': 'Claude:',
+    'wf.step1': '1. Image analysis (Claude Vision):\n   - Portrait, indoor artificial lighting\n   - Slightly underexposed (-0.3 EV)\n   - White balance leans warm (tint +8 magenta)\n   - Skin-tone saturation a bit low',
+    'wf.step2': '2. Correction plan:\n   [1] Levels: input 12-245 (lift shadows)\n   [2] Color Balance: Midtones +3 Cyan, -3 Yellow\n   [3] Hue/Saturation: Reds +8 saturation, oranges +6\n   [4] Selective Color (skin): Yellows -5, Reds +2',
+    'wf.step3': '3. Running Photoshop MCP...\n   ✓ Levels adjustment layer added\n   ✓ Color Balance adjustment layer added\n   ✓ Hue/Sat adjustment layer added\n   ✓ Selective Color adjustment layer added',
+    'wf.mae': '✓ MAE: 14.2 (< 20 threshold)',
+    'wf.outro': 'Total: 4 adjustment layers. Original pixels unchanged.\n"To dial any part back, adjust that layer\'s opacity."',
+    'wf.h3_2': 'Key MCP tools',
+    'wf.mcp.rbg': '<code>mcp__adobe-photoshop__remove_background</code> (generative)',
+    'wf.mcp.gen': '<code>mcp__adobe-photoshop__generate_image</code> (Firefly)',
+    'wf.mcp.layer': 'Layer management (duplicate / group / rename / visibility)',
+    'wf.mcp.save': 'Document save (<code>save_document_as</code> PSD / JPG / PNG)',
+    'mae.h2': 'MAE guardrail',
+    'mae.p1': 'Mean Absolute Error — the average pixel difference between original and corrected. Exceed 20 and it\'s treated as over-correction; the strongest adjustment layer has its opacity lowered or is removed.',
+    'mae.thr': 'MAE measurement (grayscale):\n  < 10: too conservative (almost no change)',
+    'mae.rec': '10-20: natural correction (recommended)',
+    'mae.over': '20-30: noticeable change (style shift)\n  > 30: over-corrected (damages original mood)',
+    'mae.callout': '<strong>Field results (v0.4.0)</strong> — 15 portrait shots: average 92.2 (min 86), average MAE 14.8. Quality stays consistent even in batch mode.',
+    'batch.h2': 'Batch mode',
+    'batch.you': 'You:',
+    'batch.request': 'Please correct every photo in ~/Photos/wedding/',
+    'batch.claude': 'Claude:',
+    'batch.found': 'Found: 47 images (JPG)\nLoading + batch analysis...',
+    'batch.r1': '[1/47] IMG_0001.jpg → reference tone sample',
+    'batch.r2': '[2/47] IMG_0002.jpg → matched to reference',
+    'batch.summary': 'Batch complete:\n  success: 45\n  MAE threshold exceeded: 2 (manual review needed)\n  saved: ~/Photos/wedding/edited/*.psd',
+    'batch.callout': 'Batch mode\'s trick is using the <strong>first image as the reference tone</strong> and matching the rest to it. Photos from the same event end up with a unified tone.',
+    'tips.h2': 'Operational tips',
+    'tips.h3_1': 'Never flatten layers',
+    'tips.p1': 'Merging layers after correction kills re-adjustment. Save as PSD; export to JPG only when needed.',
+    'tips.h3_2': 'No Computer-Use + AppleScript',
+    'tips.p2': 'Drive Photoshop through MCP tools only. AppleScript / System Events UI automation is non-deterministic and the #1 cause of batch failure.',
+    'tips.h3_3': 'CU wait ≥ 1 s',
+    'tips.p3': 'When observing Photoshop UI via Computer-Use, a wait below 1s lands before the render finishes and captures false state. Use <code>sleep 1</code> or more.',
+    'related.label': 'Related files',
+    'foot.prev': '← Search',
+    'foot.home': 'Guide home',
+    'foot.next': 'Next: Sleep →'
+  },
+  ko: {
+    'meta.title': 'Photo — Comad 가이드',
+    'brand.sub': '가이드',
+    'nav.home': '홈',
+    'nav.scheduler': '스케줄러',
+    'toc.overview': '개요',
+    'toc.install': '설치 (Photoshop MCP)',
+    'toc.wf': '보정 워크플로우',
+    'toc.mae': 'MAE 가드',
+    'toc.batch': '배치 모드',
+    'toc.tips': '운영 팁',
+    'h1': 'Photo — <em>AI 사진 보정</em>',
+    'page.desc': '이미지 분석 → 보정 계획 수립 → Photoshop MCP를 통한 비파괴 편집. Adjustment Layer 기반으로 원본을 건드리지 않으며, MAE(Mean Absolute Error) 가드가 과보정을 방지합니다. 인물 배치 평균 92.2점.',
+    'tag.batch': '배치 모드',
+    'ov.h2': '개요',
+    'ov.p1': '사진 한 장 또는 폴더를 입력하면, Claude Vision이 각 이미지를 분석해 어떤 보정이 필요한지 구체적 계획(밝기/대비/색온도/채도/선명도)을 만들고, Photoshop에 <strong>비파괴 편집</strong>을 지시합니다. 조정 레이어만 추가되므로 원본 픽셀은 그대로 유지됩니다.',
+    'ov.callout': '<strong>왜 비파괴인가</strong> — 클라이언트가 "이 부분만 좀 덜해달라" 요청했을 때 특정 레이어의 opacity만 조절하면 됨. 처음부터 다시 돌릴 필요 없음.',
+    'inst.h2': '설치 (Photoshop MCP)',
+    'inst.cmt1': '# Adobe UXP 패널 (Photoshop 안에서 실행되는 플러그인)',
+    'inst.cmt2': '# UXP 패널 + Python MCP 서버 설정',
+    'inst.cmt3': '# Photoshop 실행 → Plugins → Comad Photo 패널 활성화',
+    'inst.cmt4': '# Claude Code에서 MCP 연결 확인',
+    'inst.cmt5': '# → adobe-photoshop: ... ✓ Connected',
+    'inst.callout': 'Photoshop은 반드시 <strong>실행 중</strong>이어야 합니다. UXP 플러그인이 Photoshop 내부에 로드되고, Python MCP 서버가 WebSocket으로 UXP와 통신. 3단 구조 → Photoshop ↔ UXP ↔ Python MCP ↔ Claude.',
+    'wf.h2': '보정 워크플로우',
+    'wf.h3_1': '대화형 (단일 이미지)',
+    'wf.you': 'You:',
+    'wf.request': '이 사진 좀 보정해줘 (파일: portrait.jpg)',
+    'wf.claude': 'Claude:',
+    'wf.step1': '1. 이미지 분석 (Claude Vision):\n   - 인물 사진, 실내 인공광\n   - 노출 약간 부족 (-0.3 EV)\n   - 화이트밸런스 따뜻함 편향 (tint +8 magenta)\n   - 피부톤 채도 살짝 낮음',
+    'wf.step2': '2. 보정 계획:\n   [1] Levels: input 12-245 (그림자 리프트)\n   [2] Color Balance: Midtones +3 Cyan, -3 Yellow\n   [3] Hue/Saturation: Reds +8 saturation, oranges +6\n   [4] Selective Color (skin): Yellows -5, Reds +2',
+    'wf.step3': '3. Photoshop MCP 실행 중...\n   ✓ Levels adjustment layer 추가\n   ✓ Color Balance adjustment layer 추가\n   ✓ Hue/Sat adjustment layer 추가\n   ✓ Selective Color adjustment layer 추가',
+    'wf.mae': '✓ MAE: 14.2 (< 20 threshold)',
+    'wf.outro': 'Total: 4 adjustment layers. 원본 픽셀 무변경.\n"이 부분만 되돌리려면 해당 레이어의 opacity를 조절하세요."',
+    'wf.h3_2': '동작하는 MCP 도구 (주요)',
+    'wf.mcp.rbg': '<code>mcp__adobe-photoshop__remove_background</code> (generative)',
+    'wf.mcp.gen': '<code>mcp__adobe-photoshop__generate_image</code> (Firefly)',
+    'wf.mcp.layer': '레이어 전체 관리 (duplicate/group/rename/visibility)',
+    'wf.mcp.save': '문서 저장 (<code>save_document_as</code> PSD/JPG/PNG)',
+    'mae.h2': 'MAE 가드',
+    'mae.p1': 'Mean Absolute Error — 원본과 보정본의 픽셀 차이 평균. 20을 넘으면 과보정으로 판단하고 가장 강한 조정 레이어의 opacity를 낮추거나 제거합니다.',
+    'mae.thr': 'MAE 측정 (grayscale 기준):\n  < 10: 너무 보수적 (거의 변화 없음)',
+    'mae.rec': '10-20: 자연스러운 보정 (권장)',
+    'mae.over': '20-30: 눈에 띄는 차이 (스타일 변경)\n  > 30: 과보정 (원본 분위기 손상)',
+    'mae.callout': '<strong>실측 결과 (v0.4.0)</strong> — 인물 사진 15장 테스트: 평균 92.2점 (최저 86), MAE 평균 14.8. 배치 모드에서도 품질 일관성 확보.',
+    'batch.h2': '배치 모드',
+    'batch.you': 'You:',
+    'batch.request': '~/Photos/wedding/ 폴더 전체 보정해줘',
+    'batch.claude': 'Claude:',
+    'batch.found': '발견: 47 images (JPG)\n로딩 후 일괄 분석...',
+    'batch.r1': '[1/47] IMG_0001.jpg → 기준 톤 샘플 (reference)',
+    'batch.r2': '[2/47] IMG_0002.jpg → reference 기준 매칭',
+    'batch.summary': 'Batch complete:\n  성공: 45\n  MAE 경계 초과: 2 (수동 검토 필요)\n  저장: ~/Photos/wedding/edited/*.psd',
+    'batch.callout': '배치 모드의 비밀은 <strong>첫 이미지를 reference tone</strong>으로 삼아 나머지를 매칭한다는 것. 한 이벤트에서 촬영된 사진들이 같은 톤으로 통일됩니다.',
+    'tips.h2': '운영 팁',
+    'tips.h3_1': '레이어 병합 금지',
+    'tips.p1': '보정 후 레이어를 합치면 재조정 불가. PSD로 저장하고 필요할 때 JPG로 export만.',
+    'tips.h3_2': 'CU + AppleScript 금지',
+    'tips.p2': 'Photoshop 제어는 오직 MCP 도구만 사용. AppleScript/System Events로 UI 조작은 비결정적이라 배치 실패 원인 1위.',
+    'tips.h3_3': 'CU wait 최소 1초',
+    'tips.p3': '컴퓨터 유즈(CU)로 Photoshop UI 관찰할 때 wait 1초 미만은 렌더 완료 전이라 false state 잡힘. <code>sleep 1</code> 이상.',
+    'related.label': '관련 파일',
+    'foot.prev': '← Search',
+    'foot.home': '가이드 홈',
+    'foot.next': '다음: Sleep →'
+  }
+};
+</script>
 </body>
 </html>

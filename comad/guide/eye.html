@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eye — Comad 가이드</title>
+<title data-i18n="meta.title">Eye — Comad 가이드</title>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="assets/css/guide.css">
+<link rel="stylesheet" href="/comad/assets/css/comad-shared.css">
 </head>
 <body>
 
 <header class="topbar">
-  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub">가이드</span></a>
+  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub" data-i18n="brand.sub">가이드</span></a>
   <nav>
-    <a href="index.html">홈</a>
-    <a href="scheduler.html">스케줄러</a>
+    <a href="index.html" data-i18n="nav.home">홈</a>
+    <a href="scheduler.html" data-i18n="nav.scheduler">스케줄러</a>
     <a href="brain.html">Brain</a>
     <a href="ear.html">Ear</a>
     <a href="eye.html" class="active">Eye</a>
@@ -23,26 +24,27 @@
     <a href="voice.html">Voice</a>
     <a href="browse.html">Browse</a>
   </nav>
+  <button class="lang-toggle" onclick="toggleLang()"><span id="langEn">EN</span> / <span id="langKo">KO</span></button>
 </header>
 
 <div class="layout">
   <aside class="toc">
     <div class="toc-title">Eye</div>
-    <a href="#overview">개요</a>
-    <a href="#install">설치</a>
-    <a href="#pipeline">파이프라인 6단계</a>
-    <a href="#lenses">분석 렌즈 (10개)</a>
-    <a href="#web-ui">웹 UI</a>
-    <a href="#ai-readable">AI 크롤러 대응</a>
-    <a href="#mcp">MCP 도구 (7개)</a>
-    <a href="#predictions">예측 추적</a>
-    <a href="#cors">배포 설정</a>
+    <a href="#overview" data-i18n="toc.overview">개요</a>
+    <a href="#install" data-i18n="toc.install">설치</a>
+    <a href="#pipeline" data-i18n="toc.pipeline">파이프라인 6단계</a>
+    <a href="#lenses" data-i18n="toc.lenses">분석 렌즈 (10개)</a>
+    <a href="#web-ui" data-i18n="toc.web">웹 UI</a>
+    <a href="#ai-readable" data-i18n="toc.ai">AI 크롤러 대응</a>
+    <a href="#mcp" data-i18n="toc.mcp">MCP 도구 (7개)</a>
+    <a href="#predictions" data-i18n="toc.pred">예측 추적</a>
+    <a href="#cors" data-i18n="toc.cors">배포 설정</a>
   </aside>
 
   <main>
     <div class="page-hero">
-      <h1>Eye — <em>예측 시뮬레이션 엔진</em></h1>
-      <p class="page-desc">
+      <h1 data-i18n-html="h1">Eye — <em>예측 시뮬레이션 엔진</em></h1>
+      <p class="page-desc" data-i18n="page.desc">
         텍스트 입력(뉴스·보고서·논문)을 온톨로지 그래프로 변환하고, 10개 분석 렌즈를 통해
         전파 시뮬레이션을 돌려 종합 보고서를 생성합니다. FastAPI 백엔드 + Next.js UI + 7 MCP 도구.
       </p>
@@ -57,147 +59,366 @@
       </div>
     </div>
 
-    <h2 id="overview">개요</h2>
-    <p>Brain이 "무엇이 있는가"를 다룬다면, Eye는 "만약 X가 바뀌면 무슨 일이 일어나는가"를 다룹니다. 입력 텍스트에서 엔티티를 뽑아 별도의 Eye Neo4j 인스턴스(port 7687)에 그래프를 만들고, 각 노드의 변화가 이웃 노드에 얼마나 전파되는지 시뮬레이션합니다.</p>
+    <h2 id="overview" data-i18n="ov.h2">개요</h2>
+    <p data-i18n="ov.p1">Brain이 "무엇이 있는가"를 다룬다면, Eye는 "만약 X가 바뀌면 무슨 일이 일어나는가"를 다룹니다. 입력 텍스트에서 엔티티를 뽑아 별도의 Eye Neo4j 인스턴스(port 7687)에 그래프를 만들고, 각 노드의 변화가 이웃 노드에 얼마나 전파되는지 시뮬레이션합니다.</p>
 
     <figure class="shot">
       <img src="assets/img/eye-dashboard.png" alt="Eye dashboard">
-      <figcaption>Eye 대시보드 — 분석 목록, 렌즈 선택, 사이드바 네비게이션.</figcaption>
+      <figcaption data-i18n="ov.fig">Eye 대시보드 — 분석 목록, 렌즈 선택, 사이드바 네비게이션.</figcaption>
     </figure>
 
-    <h2 id="install">설치</h2>
-<pre><code><span class="dim"># Python venv + 의존성</span>
+    <h2 id="install" data-i18n="inst.h2">설치</h2>
+<pre><code><span class="dim" data-i18n="inst.cmt1"># Python venv + 의존성</span>
 cd eye
 python3.13 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-<span class="dim"># 환경 변수 (2026-04-12 @kht2199 PR로 정규화)</span>
+<span class="dim" data-i18n="inst.cmt2"># 환경 변수 (2026-04-12 @kht2199 PR로 정규화)</span>
 cp .env.example .env
-<span class="dim"># NEO4J_URI=bolt://localhost:7687  ← 7688이 아닌 7687 (brain과 분리된 DB)</span>
-<span class="dim"># CORS_ALLOW_ORIGINS=http://localhost:3000</span>
+<span class="dim" data-i18n="inst.cmt3"># NEO4J_URI=bolt://localhost:7687  ← 7688이 아닌 7687 (brain과 분리된 DB)</span>
+<span class="dim" data-i18n="inst.cmt4"># CORS_ALLOW_ORIGINS=http://localhost:3000</span>
 
-<span class="dim"># Neo4j 컨테이너</span>
+<span class="dim" data-i18n="inst.cmt5"># Neo4j 컨테이너</span>
 docker compose up -d
 
-<span class="dim"># FastAPI</span>
-python -m api.server              <span class="dim"># http://localhost:8000</span>
+<span class="dim" data-i18n="inst.cmt6"># FastAPI</span>
+python -m api.server              <span class="dim" data-i18n="inst.cmt7"># http://localhost:8000</span>
 
-<span class="dim"># Next.js 프론트엔드</span>
-cd web && npm install && npm run dev   <span class="dim"># http://localhost:3000</span></code></pre>
+<span class="dim" data-i18n="inst.cmt8"># Next.js 프론트엔드</span>
+cd web && npm install && npm run dev   <span class="dim" data-i18n="inst.cmt9"># http://localhost:3000</span></code></pre>
 
-    <div class="callout warm">
+    <div class="callout warm" data-i18n-html="inst.callout">
       Eye와 Brain은 <strong>별도 Neo4j 인스턴스</strong>를 씁니다 — eye:7687, brain:7688. 공유하지 않는 이유는 스키마가 다르고 (Eye는 분석 공간 레이어 포함) 트랜잭션 메모리 경쟁 때문입니다.
     </div>
 
-    <h2 id="pipeline">파이프라인 6단계</h2>
+    <h2 id="pipeline" data-i18n="pipe.h2">파이프라인 6단계</h2>
     <ol>
-      <li><strong>Ingestion</strong> — 텍스트 입력(파일/URL) 받아 청킹 + 임베딩(BGE-M3)</li>
-      <li><strong>Entity Extraction</strong> — Ollama(또는 Haiku) 기반 엔티티·관계·Claim 추출</li>
-      <li><strong>Graph Construction</strong> — Eye Neo4j에 노드/엣지 MERGE, analysis_space 태깅</li>
-      <li><strong>Community Detection</strong> — Leiden 기반 3단계 계층</li>
-      <li><strong>Propagation Simulation</strong> — 각 렌즈별로 변화 전파 확률 시뮬레이션 (N round)</li>
-      <li><strong>Report Generation</strong> — 렌즈별 해석 + 종합 예측 보고서 생성</li>
+      <li data-i18n-html="pipe.li1"><strong>Ingestion</strong> — 텍스트 입력(파일/URL) 받아 청킹 + 임베딩(BGE-M3)</li>
+      <li data-i18n-html="pipe.li2"><strong>Entity Extraction</strong> — Ollama(또는 Haiku) 기반 엔티티·관계·Claim 추출</li>
+      <li data-i18n-html="pipe.li3"><strong>Graph Construction</strong> — Eye Neo4j에 노드/엣지 MERGE, analysis_space 태깅</li>
+      <li data-i18n-html="pipe.li4"><strong>Community Detection</strong> — Leiden 기반 3단계 계층</li>
+      <li data-i18n-html="pipe.li5"><strong>Propagation Simulation</strong> — 각 렌즈별로 변화 전파 확률 시뮬레이션 (N round)</li>
+      <li data-i18n-html="pipe.li6"><strong>Report Generation</strong> — 렌즈별 해석 + 종합 예측 보고서 생성</li>
     </ol>
 
     <figure class="shot">
       <img src="assets/img/eye-new-analysis.png" alt="New analysis form">
-      <figcaption>새 분석 생성 — 텍스트 붙여넣기, 렌즈 선택, 시뮬레이션 파라미터(round, threshold).</figcaption>
+      <figcaption data-i18n="pipe.fig">새 분석 생성 — 텍스트 붙여넣기, 렌즈 선택, 시뮬레이션 파라미터(round, threshold).</figcaption>
     </figure>
 
-    <h2 id="lenses">분석 렌즈 (10개)</h2>
-    <p>실존 인물/이론에 기반한 10개 분석 프레임워크. 각 렌즈는 서로 다른 축으로 그래프를 해석합니다.</p>
+    <h2 id="lenses" data-i18n="lens.h2">분석 렌즈 (10개)</h2>
+    <p data-i18n="lens.p1">실존 인물/이론에 기반한 10개 분석 프레임워크. 각 렌즈는 서로 다른 축으로 그래프를 해석합니다.</p>
 
     <table>
-      <tr><th>렌즈</th><th>기반</th><th>질문</th></tr>
-      <tr><td><strong>Sun Tzu</strong></td><td>손자병법</td><td>상대 조직의 약점·강점·집중 포인트는?</td></tr>
-      <tr><td><strong>Adam Smith</strong></td><td>보이지 않는 손</td><td>자기 이익 추구의 집합이 만드는 시장 균형</td></tr>
-      <tr><td><strong>Taleb</strong></td><td>안티프래질</td><td>꼬리 리스크 · 비대칭 노출 · 블랙스완</td></tr>
-      <tr><td><strong>Kahneman</strong></td><td>Thinking Fast & Slow</td><td>의사결정 편향 · System 1/2</td></tr>
-      <tr><td><strong>Meadows</strong></td><td>시스템 사고</td><td>피드백 루프 · 레버리지 포인트</td></tr>
-      <tr><td>Clausewitz</td><td>전쟁론</td><td>목적 · 수단 · 마찰 (옵션)</td></tr>
-      <tr><td>Darwin</td><td>진화론</td><td>적응 · 선택 압력 (옵션)</td></tr>
-      <tr><td colspan="3" style="color:var(--text-muted);font-style:italic;">+ 3 legacy lenses (Porter's Five Forces, SWOT, PEST)</td></tr>
+      <tr><th data-i18n="lens.th1">렌즈</th><th data-i18n="lens.th2">기반</th><th data-i18n="lens.th3">질문</th></tr>
+      <tr><td><strong>Sun Tzu</strong></td><td data-i18n="lens.suntzu.base">손자병법</td><td data-i18n="lens.suntzu.q">상대 조직의 약점·강점·집중 포인트는?</td></tr>
+      <tr><td><strong>Adam Smith</strong></td><td data-i18n="lens.smith.base">보이지 않는 손</td><td data-i18n="lens.smith.q">자기 이익 추구의 집합이 만드는 시장 균형</td></tr>
+      <tr><td><strong>Taleb</strong></td><td data-i18n="lens.taleb.base">안티프래질</td><td data-i18n="lens.taleb.q">꼬리 리스크 · 비대칭 노출 · 블랙스완</td></tr>
+      <tr><td><strong>Kahneman</strong></td><td>Thinking Fast &amp; Slow</td><td data-i18n="lens.kahneman.q">의사결정 편향 · System 1/2</td></tr>
+      <tr><td><strong>Meadows</strong></td><td data-i18n="lens.meadows.base">시스템 사고</td><td data-i18n="lens.meadows.q">피드백 루프 · 레버리지 포인트</td></tr>
+      <tr><td>Clausewitz</td><td data-i18n="lens.claus.base">전쟁론</td><td data-i18n="lens.claus.q">목적 · 수단 · 마찰 (옵션)</td></tr>
+      <tr><td>Darwin</td><td data-i18n="lens.darwin.base">진화론</td><td data-i18n="lens.darwin.q">적응 · 선택 압력 (옵션)</td></tr>
+      <tr><td colspan="3" style="color:var(--text-muted);font-style:italic;" data-i18n="lens.legacy">+ 3 legacy lenses (Porter's Five Forces, SWOT, PEST)</td></tr>
     </table>
 
-    <h2 id="web-ui">웹 UI</h2>
-    <p>Next.js 16 기반 React 앱. 분석 실행, 결과 조회, 렌즈별 Q&amp;A, 리포트 다운로드.</p>
+    <h2 id="web-ui" data-i18n="web.h2">웹 UI</h2>
+    <p data-i18n-html="web.p1">Next.js 16 기반 React 앱. 분석 실행, 결과 조회, 렌즈별 Q&amp;A, 리포트 다운로드.</p>
 
     <figure class="shot">
       <img src="assets/img/eye-qa.png" alt="Eye Q&A">
-      <figcaption>렌즈별 Q&amp;A — 생성된 그래프에 대해 특정 렌즈 관점으로 자연어 질의.</figcaption>
+      <figcaption data-i18n-html="web.fig1">렌즈별 Q&amp;A — 생성된 그래프에 대해 특정 렌즈 관점으로 자연어 질의.</figcaption>
     </figure>
 
     <figure class="shot">
       <img src="assets/img/eye-report.png" alt="Eye report">
-      <figcaption>종합 보고서 — 각 렌즈의 핵심 발견, 전파 경로, 예측 타임라인.</figcaption>
+      <figcaption data-i18n="web.fig2">종합 보고서 — 각 렌즈의 핵심 발견, 전파 경로, 예측 타임라인.</figcaption>
     </figure>
 
-    <h2 id="ai-readable">AI 크롤러 대응 (v1.1, 2026-04-13)</h2>
-    <p>초기 프런트엔드는 모든 페이지를 <code>"use client"</code> + <code>useEffect</code>로 구성했기에, AI에게 <code>/analysis?job=…</code>나 <code>/report?job=…</code> 링크를 던지면 빈 스켈레톤만 보고 "이 링크 못 읽어요"라고 답했습니다. 사용자 피드백을 받아 다음과 같이 전환했습니다.</p>
+    <h2 id="ai-readable" data-i18n="ai.h2">AI 크롤러 대응 (v1.1, 2026-04-13)</h2>
+    <p data-i18n-html="ai.p1">초기 프런트엔드는 모든 페이지를 <code>"use client"</code> + <code>useEffect</code>로 구성했기에, AI에게 <code>/analysis?job=…</code>나 <code>/report?job=…</code> 링크를 던지면 빈 스켈레톤만 보고 "이 링크 못 읽어요"라고 답했습니다. 사용자 피드백을 받아 다음과 같이 전환했습니다.</p>
     <ul>
-      <li><strong>서버 컴포넌트 전환</strong> — <code>/analysis</code>, <code>/report</code>가 server component가 되어 FastAPI에서 분석 데이터를 SSR 시점에 직접 가져옵니다.</li>
-      <li><strong>sr-only SSR preview</strong> — 시각적으로는 숨긴 <code>&lt;section class="sr-only"&gt;</code> 안에 key_findings·공간별 요약·전체 보고서 마크다운을 HTML에 그대로 인라인. AI 크롤러는 JS 실행 없이도 내용을 읽습니다.</li>
-      <li><strong>per-page <code>generateMetadata</code></strong> — title·description을 실제 분석 결과에서 생성. <code>/report?job=abc</code>의 description은 보고서 상위 280자, <code>/analysis?job=abc</code>는 key_findings 상위 3개.</li>
-      <li><strong>OpenGraph · Twitter Card · JSON-LD</strong> — <code>app/layout.tsx</code>에서 <code>SoftwareApplication</code> 스키마 주입.</li>
-      <li><strong><code>public/robots.txt</code></strong> — <code>GPTBot</code>, <code>ChatGPT-User</code>, <code>ClaudeBot</code>, <code>Claude-Web</code>, <code>PerplexityBot</code>, <code>Google-Extended</code>를 명시적으로 <code>Allow</code>.</li>
-      <li><strong>Graceful fallback</strong> — <code>lib/server-api.ts</code>에 <code>server-only</code> 가드, 30초 <code>revalidate</code>, 백엔드가 죽어도 <code>null</code> 반환으로 클라이언트만 렌더.</li>
+      <li data-i18n-html="ai.li1"><strong>서버 컴포넌트 전환</strong> — <code>/analysis</code>, <code>/report</code>가 server component가 되어 FastAPI에서 분석 데이터를 SSR 시점에 직접 가져옵니다.</li>
+      <li data-i18n-html="ai.li2"><strong>sr-only SSR preview</strong> — 시각적으로는 숨긴 <code>&lt;section class="sr-only"&gt;</code> 안에 key_findings·공간별 요약·전체 보고서 마크다운을 HTML에 그대로 인라인. AI 크롤러는 JS 실행 없이도 내용을 읽습니다.</li>
+      <li data-i18n-html="ai.li3"><strong>per-page <code>generateMetadata</code></strong> — title·description을 실제 분석 결과에서 생성. <code>/report?job=abc</code>의 description은 보고서 상위 280자, <code>/analysis?job=abc</code>는 key_findings 상위 3개.</li>
+      <li data-i18n-html="ai.li4"><strong>OpenGraph · Twitter Card · JSON-LD</strong> — <code>app/layout.tsx</code>에서 <code>SoftwareApplication</code> 스키마 주입.</li>
+      <li data-i18n-html="ai.li5"><strong><code>public/robots.txt</code></strong> — <code>GPTBot</code>, <code>ChatGPT-User</code>, <code>ClaudeBot</code>, <code>Claude-Web</code>, <code>PerplexityBot</code>, <code>Google-Extended</code>를 명시적으로 <code>Allow</code>.</li>
+      <li data-i18n-html="ai.li6"><strong>Graceful fallback</strong> — <code>lib/server-api.ts</code>에 <code>server-only</code> 가드, 30초 <code>revalidate</code>, 백엔드가 죽어도 <code>null</code> 반환으로 클라이언트만 렌더.</li>
     </ul>
 
-    <p>E2E 실측 (jobId <code>7c2a5e33a138</code>, 실제 Neo4j + API 가동):</p>
+    <p data-i18n-html="ai.p2">E2E 실측 (jobId <code>7c2a5e33a138</code>, 실제 Neo4j + API 가동):</p>
     <table>
-      <tr><th>경로</th><th>main body (before)</th><th>main body (after)</th><th>배수</th></tr>
+      <tr><th data-i18n="ai.th.path">경로</th><th data-i18n="ai.th.before">main body (before)</th><th data-i18n="ai.th.after">main body (after)</th><th data-i18n="ai.th.mult">배수</th></tr>
       <tr><td><code>/report?job=…</code></td><td>18 B</td><td><strong>32,297 B</strong></td><td>×1,794</td></tr>
       <tr><td><code>/analysis?job=…</code></td><td>34 B</td><td><strong>353 B</strong></td><td>×10</td></tr>
-      <tr><td>title 중복</td><td>5/5 페이지 동일</td><td>5/5 페이지 고유</td><td>—</td></tr>
-      <tr><td>OG / JSON-LD</td><td>0 / 0</td><td>per-page / 전 페이지</td><td>—</td></tr>
+      <tr><td data-i18n="ai.row.title">title 중복</td><td data-i18n="ai.row.title.before">5/5 페이지 동일</td><td data-i18n="ai.row.title.after">5/5 페이지 고유</td><td>—</td></tr>
+      <tr><td>OG / JSON-LD</td><td>0 / 0</td><td data-i18n="ai.row.og.after">per-page / 전 페이지</td><td>—</td></tr>
     </table>
 
-    <p class="dim">이제 사용자가 AI에게 <code>/report?job=xxx</code> URL 하나만 던져도 전체 보고서가 요약됩니다. 세부 지침을 따로 주지 않아도 됩니다.</p>
+    <p class="dim" data-i18n-html="ai.p3">이제 사용자가 AI에게 <code>/report?job=xxx</code> URL 하나만 던져도 전체 보고서가 요약됩니다. 세부 지침을 따로 주지 않아도 됩니다.</p>
 
-    <h2 id="mcp">MCP 도구 (7개)</h2>
-    <p>Claude Code에서 자연어로 호출 가능.</p>
+    <h2 id="mcp" data-i18n="mcp.h2">MCP 도구 (7개)</h2>
+    <p data-i18n="mcp.p1">Claude Code에서 자연어로 호출 가능.</p>
     <table>
-      <tr><th>도구</th><th>역할</th></tr>
-      <tr><td><code>comad_eye_analyze</code></td><td>텍스트 제출 → 파이프라인 실행 → 분석 ID 반환</td></tr>
-      <tr><td><code>comad_eye_preflight</code></td><td>입력 검증 · 예상 처리 시간 · 비용 estimate</td></tr>
-      <tr><td><code>comad_eye_ask</code></td><td>특정 분석에 대해 렌즈별 Q&amp;A</td></tr>
-      <tr><td><code>comad_eye_jobs</code></td><td>진행 중인 분석 목록 · 상태 (queued/running/done)</td></tr>
-      <tr><td><code>comad_eye_report</code></td><td>완료된 분석 리포트 조회</td></tr>
-      <tr><td><code>comad_eye_lenses</code></td><td>사용 가능한 렌즈 목록 + 설명</td></tr>
-      <tr><td><code>comad_eye_status</code></td><td>Eye 서비스 헬스 체크</td></tr>
+      <tr><th data-i18n="mcp.th.tool">도구</th><th data-i18n="mcp.th.role">역할</th></tr>
+      <tr><td><code>comad_eye_analyze</code></td><td data-i18n="mcp.analyze">텍스트 제출 → 파이프라인 실행 → 분석 ID 반환</td></tr>
+      <tr><td><code>comad_eye_preflight</code></td><td data-i18n="mcp.preflight">입력 검증 · 예상 처리 시간 · 비용 estimate</td></tr>
+      <tr><td><code>comad_eye_ask</code></td><td data-i18n-html="mcp.ask">특정 분석에 대해 렌즈별 Q&amp;A</td></tr>
+      <tr><td><code>comad_eye_jobs</code></td><td data-i18n="mcp.jobs">진행 중인 분석 목록 · 상태 (queued/running/done)</td></tr>
+      <tr><td><code>comad_eye_report</code></td><td data-i18n="mcp.report">완료된 분석 리포트 조회</td></tr>
+      <tr><td><code>comad_eye_lenses</code></td><td data-i18n="mcp.lenses">사용 가능한 렌즈 목록 + 설명</td></tr>
+      <tr><td><code>comad_eye_status</code></td><td data-i18n="mcp.status">Eye 서비스 헬스 체크</td></tr>
     </table>
 
-    <h2 id="predictions">예측 추적 (Closed-Loop Learning)</h2>
-    <p>분석 결과에 포함된 예측은 verification deadline과 함께 저장됩니다. 시간이 지난 후 실제 결과를 입력하면 정확도가 측정되고, 그 피드백이 다음 분석에 반영됩니다.</p>
-<pre><code>Prediction: "GPU 가격이 Q4까지 15% 상승할 것"
+    <h2 id="predictions" data-i18n="pred.h2">예측 추적 (Closed-Loop Learning)</h2>
+    <p data-i18n="pred.p1">분석 결과에 포함된 예측은 verification deadline과 함께 저장됩니다. 시간이 지난 후 실제 결과를 입력하면 정확도가 측정되고, 그 피드백이 다음 분석에 반영됩니다.</p>
+<pre><code><span data-i18n="pred.code.pred">Prediction: "GPU 가격이 Q4까지 15% 상승할 것"</span>
 verification_deadline: 2026-12-31
-<span class="dim">...시간 경과...</span>
-Actual: 12% (input via web UI)
-→ 해당 유형 예측 정확도: <span class="hl">0.73 → 0.71</span>  (다음 예측 신뢰도 조정)</code></pre>
+<span class="dim" data-i18n="pred.code.lapse">...시간 경과...</span>
+<span data-i18n="pred.code.actual">Actual: 12% (input via web UI)</span>
+<span data-i18n="pred.code.accuracy">→ 해당 유형 예측 정확도: </span><span class="hl">0.73 → 0.71</span>  <span data-i18n="pred.code.note">(다음 예측 신뢰도 조정)</span></code></pre>
 
-    <h2 id="cors">배포 설정</h2>
-    <p>프로덕션 배포 시 CORS allowlist를 환경변수로 주입합니다 (하드코딩 해제됨).</p>
+    <h2 id="cors" data-i18n="cors.h2">배포 설정</h2>
+    <p data-i18n="cors.p1">프로덕션 배포 시 CORS allowlist를 환경변수로 주입합니다 (하드코딩 해제됨).</p>
 
-<pre><code><span class="dim"># .env</span>
+<pre><code><span class="dim" data-i18n="cors.cmt1"># .env</span>
 CORS_ALLOW_ORIGINS=https://eye.example.com,https://app.example.com
 
-<span class="dim"># 또는 구버전 호환 이름</span>
+<span class="dim" data-i18n="cors.cmt2"># 또는 구버전 호환 이름</span>
 COMADEYE_CORS_ALLOW_ORIGINS=...</code></pre>
 
-    <div class="callout">
+    <div class="callout" data-i18n-html="cors.callout">
       값이 비면 <code>http://localhost:3000</code>이 기본값. 여러 오리진은 쉼표로 구분.
     </div>
 
-    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);">관련 파일: <code>eye/api/</code>, <code>eye/pipeline/</code>, <code>eye/simulation/</code>, <code>eye/lenses/</code>, <code>eye/web/</code>, <code>eye/.env.example</code></p>
+    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);" data-i18n-html="related"><span data-i18n="related.label">관련 파일</span>: <code>eye/api/</code>, <code>eye/pipeline/</code>, <code>eye/simulation/</code>, <code>eye/lenses/</code>, <code>eye/web/</code>, <code>eye/.env.example</code></p>
 
   </main>
 </div>
 
 <footer class="page-foot">
-  <a href="ear.html">← Ear</a> · <a href="index.html">가이드 홈</a> · <a href="search.html">다음: Search →</a>
+  <a href="ear.html" data-i18n="foot.prev">← Ear</a> · <a href="index.html" data-i18n="foot.home">가이드 홈</a> · <a href="search.html" data-i18n="foot.next">다음: Search →</a>
 </footer>
 
 <script src="assets/js/guide.js"></script>
+<script src="assets/js/i18n.js"></script>
+<script>
+window.I18N_DICT = {
+  en: {
+    'meta.title': 'Eye — Comad Guide',
+    'brand.sub': 'Guide',
+    'nav.home': 'Home',
+    'nav.scheduler': 'Scheduler',
+    'toc.overview': 'Overview',
+    'toc.install': 'Install',
+    'toc.pipeline': '6-stage pipeline',
+    'toc.lenses': 'Analysis lenses (10)',
+    'toc.web': 'Web UI',
+    'toc.ai': 'AI crawler support',
+    'toc.mcp': 'MCP tools (7)',
+    'toc.pred': 'Prediction tracking',
+    'toc.cors': 'Deployment config',
+    'h1': 'Eye — <em>Prediction simulation engine</em>',
+    'page.desc': 'Convert text (news / reports / papers) into an ontology graph, run propagation simulations through 10 analysis lenses, and generate a synthesis report. FastAPI backend + Next.js UI + 7 MCP tools.',
+    'ov.h2': 'Overview',
+    'ov.p1': 'If Brain is "what exists", Eye is "what happens if X changes". It extracts entities from input text into a separate Eye Neo4j instance (port 7687) and simulates how changes to each node propagate to its neighbors.',
+    'ov.fig': 'Eye dashboard — analysis list, lens selector, sidebar navigation.',
+    'inst.h2': 'Install',
+    'inst.cmt1': '# Python venv + deps',
+    'inst.cmt2': '# Env vars (normalized in @kht2199\'s 2026-04-12 PR)',
+    'inst.cmt3': '# NEO4J_URI=bolt://localhost:7687  ← 7687, not 7688 (separate DB from brain)',
+    'inst.cmt4': '# CORS_ALLOW_ORIGINS=http://localhost:3000',
+    'inst.cmt5': '# Neo4j container',
+    'inst.cmt6': '# FastAPI',
+    'inst.cmt7': '# http://localhost:8000',
+    'inst.cmt8': '# Next.js frontend',
+    'inst.cmt9': '# http://localhost:3000',
+    'inst.callout': 'Eye and Brain use <strong>separate Neo4j instances</strong> — eye:7687, brain:7688. They aren\'t shared because the schemas differ (Eye has an analysis-space layer) and to avoid transaction-memory contention.',
+    'pipe.h2': '6-stage pipeline',
+    'pipe.li1': '<strong>Ingestion</strong> — accept text (file / URL), chunk + embed (BGE-M3)',
+    'pipe.li2': '<strong>Entity Extraction</strong> — entities, relations, claims via Ollama (or Haiku)',
+    'pipe.li3': '<strong>Graph Construction</strong> — MERGE nodes/edges into Eye Neo4j, tag with analysis_space',
+    'pipe.li4': '<strong>Community Detection</strong> — 3-level hierarchy via Leiden',
+    'pipe.li5': '<strong>Propagation Simulation</strong> — change-propagation probability sim per lens (N rounds)',
+    'pipe.li6': '<strong>Report Generation</strong> — per-lens interpretation + synthesis forecast report',
+    'pipe.fig': 'New analysis — paste text, pick lenses, set simulation parameters (rounds, threshold).',
+    'lens.h2': 'Analysis lenses (10)',
+    'lens.p1': '10 analytical frameworks grounded in real thinkers / theories. Each lens reads the graph along a different axis.',
+    'lens.th1': 'Lens',
+    'lens.th2': 'Basis',
+    'lens.th3': 'Question',
+    'lens.suntzu.base': 'The Art of War',
+    'lens.suntzu.q': 'Opponent\'s weaknesses · strengths · points of concentration?',
+    'lens.smith.base': 'The invisible hand',
+    'lens.smith.q': 'Market equilibrium from the sum of self-interests',
+    'lens.taleb.base': 'Antifragile',
+    'lens.taleb.q': 'Tail risk · asymmetric exposure · black swans',
+    'lens.kahneman.q': 'Decision biases · System 1/2',
+    'lens.meadows.base': 'Systems thinking',
+    'lens.meadows.q': 'Feedback loops · leverage points',
+    'lens.claus.base': 'On War',
+    'lens.claus.q': 'Ends · means · friction (optional)',
+    'lens.darwin.base': 'Evolution',
+    'lens.darwin.q': 'Adaptation · selection pressure (optional)',
+    'lens.legacy': '+ 3 legacy lenses (Porter\'s Five Forces, SWOT, PEST)',
+    'web.h2': 'Web UI',
+    'web.p1': 'Next.js 16 React app. Run analyses, browse results, per-lens Q&A, download reports.',
+    'web.fig1': 'Per-lens Q&A — natural-language query on the generated graph through a specific lens.',
+    'web.fig2': 'Synthesis report — each lens\'s key findings, propagation paths, forecast timeline.',
+    'ai.h2': 'AI crawler support (v1.1, 2026-04-13)',
+    'ai.p1': 'The original frontend used <code>"use client"</code> + <code>useEffect</code> for every page, so handing an AI a <code>/analysis?job=…</code> or <code>/report?job=…</code> link got you "I can\'t read this link" — it only saw empty skeletons. Based on user feedback we switched to:',
+    'ai.li1': '<strong>Server-component conversion</strong> — <code>/analysis</code> and <code>/report</code> became server components, fetching analysis data from FastAPI at SSR time.',
+    'ai.li2': '<strong>sr-only SSR preview</strong> — a visually-hidden <code>&lt;section class="sr-only"&gt;</code> inlines key_findings, per-space summaries, and the full report Markdown straight into the HTML. AI crawlers can read it without running JS.',
+    'ai.li3': '<strong>per-page <code>generateMetadata</code></strong> — title and description are generated from the actual analysis. <code>/report?job=abc</code>\'s description is the top 280 chars of the report; <code>/analysis?job=abc</code>\'s is the top 3 key_findings.',
+    'ai.li4': '<strong>OpenGraph · Twitter Card · JSON-LD</strong> — <code>SoftwareApplication</code> schema injected via <code>app/layout.tsx</code>.',
+    'ai.li5': '<strong><code>public/robots.txt</code></strong> — explicitly <code>Allow</code>s <code>GPTBot</code>, <code>ChatGPT-User</code>, <code>ClaudeBot</code>, <code>Claude-Web</code>, <code>PerplexityBot</code>, <code>Google-Extended</code>.',
+    'ai.li6': '<strong>Graceful fallback</strong> — <code>lib/server-api.ts</code> uses a <code>server-only</code> guard, 30s <code>revalidate</code>, and returns <code>null</code> when the backend is down so the client still renders.',
+    'ai.p2': 'E2E measurements (jobId <code>7c2a5e33a138</code>, live Neo4j + API):',
+    'ai.th.path': 'Path',
+    'ai.th.before': 'main body (before)',
+    'ai.th.after': 'main body (after)',
+    'ai.th.mult': 'Ratio',
+    'ai.row.title': 'Duplicate title',
+    'ai.row.title.before': '5/5 pages identical',
+    'ai.row.title.after': '5/5 pages unique',
+    'ai.row.og.after': 'per-page / all pages',
+    'ai.p3': 'Now handing an AI a single <code>/report?job=xxx</code> URL is enough — it will summarize the full report without additional instructions.',
+    'mcp.h2': 'MCP tools (7)',
+    'mcp.p1': 'Callable by natural language from Claude Code.',
+    'mcp.th.tool': 'Tool',
+    'mcp.th.role': 'Role',
+    'mcp.analyze': 'Submit text → run pipeline → return analysis ID',
+    'mcp.preflight': 'Input validation · expected runtime · cost estimate',
+    'mcp.ask': 'Per-lens Q&A on a specific analysis',
+    'mcp.jobs': 'Active analysis list · status (queued / running / done)',
+    'mcp.report': 'Retrieve a completed analysis report',
+    'mcp.lenses': 'List available lenses + descriptions',
+    'mcp.status': 'Eye service health check',
+    'pred.h2': 'Prediction tracking (closed-loop learning)',
+    'pred.p1': 'Predictions in analyses are stored with a verification deadline. Later, when you enter the actual outcome, accuracy is measured and fed back into future analyses.',
+    'pred.code.pred': 'Prediction: "GPU prices will rise 15% by Q4"',
+    'pred.code.lapse': '...time passes...',
+    'pred.code.actual': 'Actual: 12% (input via web UI)',
+    'pred.code.accuracy': '→ accuracy for this prediction type: ',
+    'pred.code.note': '(confidence for next prediction adjusted)',
+    'cors.h2': 'Deployment config',
+    'cors.p1': 'In production, inject the CORS allowlist via env var (no longer hardcoded).',
+    'cors.cmt1': '# .env',
+    'cors.cmt2': '# or legacy-compatible name',
+    'cors.callout': 'If empty, defaults to <code>http://localhost:3000</code>. Multiple origins are comma-separated.',
+    'related.label': 'Related files',
+    'foot.prev': '← Ear',
+    'foot.home': 'Guide home',
+    'foot.next': 'Next: Search →'
+  },
+  ko: {
+    'meta.title': 'Eye — Comad 가이드',
+    'brand.sub': '가이드',
+    'nav.home': '홈',
+    'nav.scheduler': '스케줄러',
+    'toc.overview': '개요',
+    'toc.install': '설치',
+    'toc.pipeline': '파이프라인 6단계',
+    'toc.lenses': '분석 렌즈 (10개)',
+    'toc.web': '웹 UI',
+    'toc.ai': 'AI 크롤러 대응',
+    'toc.mcp': 'MCP 도구 (7개)',
+    'toc.pred': '예측 추적',
+    'toc.cors': '배포 설정',
+    'h1': 'Eye — <em>예측 시뮬레이션 엔진</em>',
+    'page.desc': '텍스트 입력(뉴스·보고서·논문)을 온톨로지 그래프로 변환하고, 10개 분석 렌즈를 통해 전파 시뮬레이션을 돌려 종합 보고서를 생성합니다. FastAPI 백엔드 + Next.js UI + 7 MCP 도구.',
+    'ov.h2': '개요',
+    'ov.p1': 'Brain이 "무엇이 있는가"를 다룬다면, Eye는 "만약 X가 바뀌면 무슨 일이 일어나는가"를 다룹니다. 입력 텍스트에서 엔티티를 뽑아 별도의 Eye Neo4j 인스턴스(port 7687)에 그래프를 만들고, 각 노드의 변화가 이웃 노드에 얼마나 전파되는지 시뮬레이션합니다.',
+    'ov.fig': 'Eye 대시보드 — 분석 목록, 렌즈 선택, 사이드바 네비게이션.',
+    'inst.h2': '설치',
+    'inst.cmt1': '# Python venv + 의존성',
+    'inst.cmt2': '# 환경 변수 (2026-04-12 @kht2199 PR로 정규화)',
+    'inst.cmt3': '# NEO4J_URI=bolt://localhost:7687  ← 7688이 아닌 7687 (brain과 분리된 DB)',
+    'inst.cmt4': '# CORS_ALLOW_ORIGINS=http://localhost:3000',
+    'inst.cmt5': '# Neo4j 컨테이너',
+    'inst.cmt6': '# FastAPI',
+    'inst.cmt7': '# http://localhost:8000',
+    'inst.cmt8': '# Next.js 프론트엔드',
+    'inst.cmt9': '# http://localhost:3000',
+    'inst.callout': 'Eye와 Brain은 <strong>별도 Neo4j 인스턴스</strong>를 씁니다 — eye:7687, brain:7688. 공유하지 않는 이유는 스키마가 다르고 (Eye는 분석 공간 레이어 포함) 트랜잭션 메모리 경쟁 때문입니다.',
+    'pipe.h2': '파이프라인 6단계',
+    'pipe.li1': '<strong>Ingestion</strong> — 텍스트 입력(파일/URL) 받아 청킹 + 임베딩(BGE-M3)',
+    'pipe.li2': '<strong>Entity Extraction</strong> — Ollama(또는 Haiku) 기반 엔티티·관계·Claim 추출',
+    'pipe.li3': '<strong>Graph Construction</strong> — Eye Neo4j에 노드/엣지 MERGE, analysis_space 태깅',
+    'pipe.li4': '<strong>Community Detection</strong> — Leiden 기반 3단계 계층',
+    'pipe.li5': '<strong>Propagation Simulation</strong> — 각 렌즈별로 변화 전파 확률 시뮬레이션 (N round)',
+    'pipe.li6': '<strong>Report Generation</strong> — 렌즈별 해석 + 종합 예측 보고서 생성',
+    'pipe.fig': '새 분석 생성 — 텍스트 붙여넣기, 렌즈 선택, 시뮬레이션 파라미터(round, threshold).',
+    'lens.h2': '분석 렌즈 (10개)',
+    'lens.p1': '실존 인물/이론에 기반한 10개 분석 프레임워크. 각 렌즈는 서로 다른 축으로 그래프를 해석합니다.',
+    'lens.th1': '렌즈',
+    'lens.th2': '기반',
+    'lens.th3': '질문',
+    'lens.suntzu.base': '손자병법',
+    'lens.suntzu.q': '상대 조직의 약점·강점·집중 포인트는?',
+    'lens.smith.base': '보이지 않는 손',
+    'lens.smith.q': '자기 이익 추구의 집합이 만드는 시장 균형',
+    'lens.taleb.base': '안티프래질',
+    'lens.taleb.q': '꼬리 리스크 · 비대칭 노출 · 블랙스완',
+    'lens.kahneman.q': '의사결정 편향 · System 1/2',
+    'lens.meadows.base': '시스템 사고',
+    'lens.meadows.q': '피드백 루프 · 레버리지 포인트',
+    'lens.claus.base': '전쟁론',
+    'lens.claus.q': '목적 · 수단 · 마찰 (옵션)',
+    'lens.darwin.base': '진화론',
+    'lens.darwin.q': '적응 · 선택 압력 (옵션)',
+    'lens.legacy': '+ 3 legacy lenses (Porter\'s Five Forces, SWOT, PEST)',
+    'web.h2': '웹 UI',
+    'web.p1': 'Next.js 16 기반 React 앱. 분석 실행, 결과 조회, 렌즈별 Q&A, 리포트 다운로드.',
+    'web.fig1': '렌즈별 Q&A — 생성된 그래프에 대해 특정 렌즈 관점으로 자연어 질의.',
+    'web.fig2': '종합 보고서 — 각 렌즈의 핵심 발견, 전파 경로, 예측 타임라인.',
+    'ai.h2': 'AI 크롤러 대응 (v1.1, 2026-04-13)',
+    'ai.p1': '초기 프런트엔드는 모든 페이지를 <code>"use client"</code> + <code>useEffect</code>로 구성했기에, AI에게 <code>/analysis?job=…</code>나 <code>/report?job=…</code> 링크를 던지면 빈 스켈레톤만 보고 "이 링크 못 읽어요"라고 답했습니다. 사용자 피드백을 받아 다음과 같이 전환했습니다.',
+    'ai.li1': '<strong>서버 컴포넌트 전환</strong> — <code>/analysis</code>, <code>/report</code>가 server component가 되어 FastAPI에서 분석 데이터를 SSR 시점에 직접 가져옵니다.',
+    'ai.li2': '<strong>sr-only SSR preview</strong> — 시각적으로는 숨긴 <code>&lt;section class="sr-only"&gt;</code> 안에 key_findings·공간별 요약·전체 보고서 마크다운을 HTML에 그대로 인라인. AI 크롤러는 JS 실행 없이도 내용을 읽습니다.',
+    'ai.li3': '<strong>per-page <code>generateMetadata</code></strong> — title·description을 실제 분석 결과에서 생성. <code>/report?job=abc</code>의 description은 보고서 상위 280자, <code>/analysis?job=abc</code>는 key_findings 상위 3개.',
+    'ai.li4': '<strong>OpenGraph · Twitter Card · JSON-LD</strong> — <code>app/layout.tsx</code>에서 <code>SoftwareApplication</code> 스키마 주입.',
+    'ai.li5': '<strong><code>public/robots.txt</code></strong> — <code>GPTBot</code>, <code>ChatGPT-User</code>, <code>ClaudeBot</code>, <code>Claude-Web</code>, <code>PerplexityBot</code>, <code>Google-Extended</code>를 명시적으로 <code>Allow</code>.',
+    'ai.li6': '<strong>Graceful fallback</strong> — <code>lib/server-api.ts</code>에 <code>server-only</code> 가드, 30초 <code>revalidate</code>, 백엔드가 죽어도 <code>null</code> 반환으로 클라이언트만 렌더.',
+    'ai.p2': 'E2E 실측 (jobId <code>7c2a5e33a138</code>, 실제 Neo4j + API 가동):',
+    'ai.th.path': '경로',
+    'ai.th.before': 'main body (before)',
+    'ai.th.after': 'main body (after)',
+    'ai.th.mult': '배수',
+    'ai.row.title': 'title 중복',
+    'ai.row.title.before': '5/5 페이지 동일',
+    'ai.row.title.after': '5/5 페이지 고유',
+    'ai.row.og.after': 'per-page / 전 페이지',
+    'ai.p3': '이제 사용자가 AI에게 <code>/report?job=xxx</code> URL 하나만 던져도 전체 보고서가 요약됩니다. 세부 지침을 따로 주지 않아도 됩니다.',
+    'mcp.h2': 'MCP 도구 (7개)',
+    'mcp.p1': 'Claude Code에서 자연어로 호출 가능.',
+    'mcp.th.tool': '도구',
+    'mcp.th.role': '역할',
+    'mcp.analyze': '텍스트 제출 → 파이프라인 실행 → 분석 ID 반환',
+    'mcp.preflight': '입력 검증 · 예상 처리 시간 · 비용 estimate',
+    'mcp.ask': '특정 분석에 대해 렌즈별 Q&A',
+    'mcp.jobs': '진행 중인 분석 목록 · 상태 (queued/running/done)',
+    'mcp.report': '완료된 분석 리포트 조회',
+    'mcp.lenses': '사용 가능한 렌즈 목록 + 설명',
+    'mcp.status': 'Eye 서비스 헬스 체크',
+    'pred.h2': '예측 추적 (Closed-Loop Learning)',
+    'pred.p1': '분석 결과에 포함된 예측은 verification deadline과 함께 저장됩니다. 시간이 지난 후 실제 결과를 입력하면 정확도가 측정되고, 그 피드백이 다음 분석에 반영됩니다.',
+    'pred.code.pred': 'Prediction: "GPU 가격이 Q4까지 15% 상승할 것"',
+    'pred.code.lapse': '...시간 경과...',
+    'pred.code.actual': 'Actual: 12% (input via web UI)',
+    'pred.code.accuracy': '→ 해당 유형 예측 정확도: ',
+    'pred.code.note': '(다음 예측 신뢰도 조정)',
+    'cors.h2': '배포 설정',
+    'cors.p1': '프로덕션 배포 시 CORS allowlist를 환경변수로 주입합니다 (하드코딩 해제됨).',
+    'cors.cmt1': '# .env',
+    'cors.cmt2': '# 또는 구버전 호환 이름',
+    'cors.callout': '값이 비면 <code>http://localhost:3000</code>이 기본값. 여러 오리진은 쉼표로 구분.',
+    'related.label': '관련 파일',
+    'foot.prev': '← Ear',
+    'foot.home': '가이드 홈',
+    'foot.next': '다음: Search →'
+  }
+};
+</script>
 </body>
 </html>

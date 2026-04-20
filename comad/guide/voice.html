@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Voice — Comad 가이드</title>
+<title data-i18n="meta.title">Voice — Comad 가이드</title>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="assets/css/guide.css">
+<link rel="stylesheet" href="/comad/assets/css/comad-shared.css">
 </head>
 <body>
 
 <header class="topbar">
-  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub">가이드</span></a>
+  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub" data-i18n="brand.sub">가이드</span></a>
   <nav>
-    <a href="index.html">홈</a>
-    <a href="scheduler.html">스케줄러</a>
+    <a href="index.html" data-i18n="nav.home">홈</a>
+    <a href="scheduler.html" data-i18n="nav.scheduler">스케줄러</a>
     <a href="brain.html">Brain</a>
     <a href="ear.html">Ear</a>
     <a href="eye.html">Eye</a>
@@ -23,24 +24,25 @@
     <a href="voice.html" class="active">Voice</a>
     <a href="browse.html">Browse</a>
   </nav>
+  <button class="lang-toggle" onclick="toggleLang()"><span id="langEn">EN</span> / <span id="langKo">KO</span></button>
 </header>
 
 <div class="layout">
   <aside class="toc">
     <div class="toc-title">Voice</div>
-    <a href="#overview">개요</a>
-    <a href="#claudemd">CLAUDE.md 트리거</a>
-    <a href="#triggers">트리거 목록</a>
-    <a href="#t5-session">T5 — 세션 저장 & 인수인계</a>
-    <a href="#t15-review">T15 — 상황 검토</a>
-    <a href="#chaining">Brain/Ear/Eye 연동</a>
-    <a href="#customize">커스터마이징</a>
+    <a href="#overview" data-i18n="toc.overview">개요</a>
+    <a href="#claudemd" data-i18n="toc.claudemd">CLAUDE.md 트리거</a>
+    <a href="#triggers" data-i18n="toc.triggers">트리거 목록</a>
+    <a href="#t5-session" data-i18n="toc.t5">T5 — 세션 저장 & 인수인계</a>
+    <a href="#t15-review" data-i18n="toc.t15">T15 — 상황 검토</a>
+    <a href="#chaining" data-i18n="toc.chain">Brain/Ear/Eye 연동</a>
+    <a href="#customize" data-i18n="toc.custom">커스터마이징</a>
   </aside>
 
   <main>
     <div class="page-hero">
-      <h1>Voice — <em>워크플로우 하네스</em></h1>
-      <p class="page-desc">
+      <h1 data-i18n-html="h1">Voice — <em>워크플로우 하네스</em></h1>
+      <p class="page-desc" data-i18n-html="page.desc">
         Claude Code의 루트 <code>CLAUDE.md</code>에 정의된 트리거들이 특정 키워드를 감지해 자동 워크플로우를 발동합니다.
         "상황 검토해봐" 한마디로 코드베이스 진단이 실행되고, "저장해줘"로 세션 인수인계 문서가 만들어집니다.
       </p>
@@ -52,57 +54,57 @@
       </div>
     </div>
 
-    <h2 id="overview">개요</h2>
-    <p>Claude Code는 작업 시작 시 루트 <code>CLAUDE.md</code>를 읽고 그 내용을 시스템 프롬프트로 내재화합니다. Voice는 이 메커니즘을 활용해 <strong>자주 쓰는 워크플로우를 한국어 트리거 키워드로 자동화</strong>합니다.</p>
+    <h2 id="overview" data-i18n="ov.h2">개요</h2>
+    <p data-i18n-html="ov.p1">Claude Code는 작업 시작 시 루트 <code>CLAUDE.md</code>를 읽고 그 내용을 시스템 프롬프트로 내재화합니다. Voice는 이 메커니즘을 활용해 <strong>자주 쓰는 워크플로우를 한국어 트리거 키워드로 자동화</strong>합니다.</p>
 
-<pre><code><span class="dim">동작 모델:</span>
+<pre><code><span class="dim" data-i18n="ov.model">동작 모델:</span>
 
-Claude Code 시작
+<span data-i18n="ov.flow.1">Claude Code 시작</span>
   ↓
-CLAUDE.md 로드 (Nexus + OMC + comad Voice)
+<span data-i18n="ov.flow.2">CLAUDE.md 로드 (Nexus + OMC + comad Voice)</span>
   ↓
-사용자 입력
+<span data-i18n="ov.flow.3">사용자 입력</span>
   ↓
-키워드 매칭 검사
+<span data-i18n="ov.flow.4">키워드 매칭 검사</span>
   ↓
-  매칭 → 해당 트리거 skill/agent 자동 실행
-  미매칭 → 일반 대화</code></pre>
+  <span data-i18n="ov.flow.5">매칭 → 해당 트리거 skill/agent 자동 실행</span>
+  <span data-i18n="ov.flow.6">미매칭 → 일반 대화</span></code></pre>
 
-    <h2 id="claudemd">CLAUDE.md 트리거</h2>
-    <p>Voice의 트리거 정의는 <code>~/.claude/CLAUDE.md</code>의 <strong>Comad Voice</strong> 섹션에 있습니다. 현재 Nexus autonomous trigger(#14~16)와 중복되지 않는 3개만 활성.</p>
+    <h2 id="claudemd" data-i18n="cmd.h2">CLAUDE.md 트리거</h2>
+    <p data-i18n-html="cmd.p1">Voice의 트리거 정의는 <code>~/.claude/CLAUDE.md</code>의 <strong>Comad Voice</strong> 섹션에 있습니다. 현재 Nexus autonomous trigger(#14~16)와 중복되지 않는 3개만 활성.</p>
 
-<pre><code><span class="dim"># ~/.claude/CLAUDE.md (발췌)</span>
+<pre><code><span class="dim" data-i18n="cmd.hdr"># ~/.claude/CLAUDE.md (발췌)</span>
 
-## T0. 온보딩 (첫 세션 감지)
+<span data-i18n="cmd.t0">## T0. 온보딩 (첫 세션 감지)
 감지 조건: .comad/ 폴더 없음 + 첫 대화 시작 시
-→ 프로젝트 자동 탐색 + 환영 메시지
+→ 프로젝트 자동 탐색 + 환영 메시지</span>
 
-## T4. 레포 광택 (Repo Polish)
+<span data-i18n="cmd.t4">## T4. 레포 광택 (Repo Polish)
 감지: "광택", "레포 정리", "repo polish"
-→ SCAN → DIAGNOSE → GENERATE → RELEASE → VERIFY 5단계
+→ SCAN → DIAGNOSE → GENERATE → RELEASE → VERIFY 5단계</span>
 
-## T5. 세션 저장 & 인수인계
+<span data-i18n="cmd.t5">## T5. 세션 저장 & 인수인계
 감지: "저장해줘", "여기까지", "다음에 이어서"
-→ git diff 추적 + 세션 요약 파일 생성</code></pre>
+→ git diff 추적 + 세션 요약 파일 생성</span></code></pre>
 
-    <h2 id="triggers">트리거 목록</h2>
+    <h2 id="triggers" data-i18n="trig.h2">트리거 목록</h2>
 
     <table>
-      <tr><th>코드</th><th>트리거</th><th>역할</th></tr>
-      <tr><td><strong>T0</strong></td><td>(자동 감지)</td><td>온보딩 — 프로젝트 자동 탐색 + 가능한 명령 안내</td></tr>
-      <tr><td><strong>T4</strong></td><td>"광택", "레포 정리"</td><td>GitHub 레포를 인기 오픈소스 수준으로 포장 (README 뱃지, CHANGELOG, Issue/PR 템플릿, Social Preview, CI 게이트)</td></tr>
-      <tr><td><strong>T5</strong></td><td>"저장해줘", "여기까지"</td><td>세션 요약 + 인수인계 문서 생성</td></tr>
-      <tr><td><strong>T15</strong></td><td>"상황 검토", "검토해봐", "개선 가능성"</td><td>코드베이스 진단 + 3-5개 개선 카드 제시 (난이도/효과 표기)</td></tr>
-      <tr><td>(Nexus #14)</td><td>"풀사이클", "end-to-end"</td><td>RESEARCH → DECOMPOSE → EXPERIMENT → INTEGRATE → POLISH → DELIVER 6-stage</td></tr>
-      <tr><td>(Nexus #16)</td><td>(자동)</td><td>멀티-AI 병렬 가능 감지 (5-Point 체크리스트)</td></tr>
+      <tr><th data-i18n="trig.th1">코드</th><th data-i18n="trig.th2">트리거</th><th data-i18n="trig.th3">역할</th></tr>
+      <tr><td><strong>T0</strong></td><td data-i18n="trig.t0.key">(자동 감지)</td><td data-i18n="trig.t0.role">온보딩 — 프로젝트 자동 탐색 + 가능한 명령 안내</td></tr>
+      <tr><td><strong>T4</strong></td><td data-i18n="trig.t4.key">"광택", "레포 정리"</td><td data-i18n="trig.t4.role">GitHub 레포를 인기 오픈소스 수준으로 포장 (README 뱃지, CHANGELOG, Issue/PR 템플릿, Social Preview, CI 게이트)</td></tr>
+      <tr><td><strong>T5</strong></td><td data-i18n="trig.t5.key">"저장해줘", "여기까지"</td><td data-i18n="trig.t5.role">세션 요약 + 인수인계 문서 생성</td></tr>
+      <tr><td><strong>T15</strong></td><td data-i18n="trig.t15.key">"상황 검토", "검토해봐", "개선 가능성"</td><td data-i18n="trig.t15.role">코드베이스 진단 + 3-5개 개선 카드 제시 (난이도/효과 표기)</td></tr>
+      <tr><td>(Nexus #14)</td><td data-i18n="trig.n14.key">"풀사이클", "end-to-end"</td><td data-i18n="trig.n14.role">RESEARCH → DECOMPOSE → EXPERIMENT → INTEGRATE → POLISH → DELIVER 6-stage</td></tr>
+      <tr><td>(Nexus #16)</td><td data-i18n="trig.n16.key">(자동)</td><td data-i18n="trig.n16.role">멀티-AI 병렬 가능 감지 (5-Point 체크리스트)</td></tr>
     </table>
 
-    <h2 id="t5-session">T5 — 세션 저장 & 인수인계</h2>
+    <h2 id="t5-session" data-i18n="t5.h2">T5 — 세션 저장 & 인수인계</h2>
 
-<pre><code><span class="kw">You:</span> 저장해줘
+<pre><code><span class="kw" data-i18n="t5.you">You:</span> <span data-i18n="t5.request">저장해줘</span>
 
-<span class="hl">Claude (T5):</span>
-git diff --stat 추적:
+<span class="hl" data-i18n="t5.claude">Claude (T5):</span>
+<span data-i18n="t5.report">git diff --stat 추적:
   · 수정 파일: 8개 (brain/packages/graphrag/src/*, 문서 3건)
   · 실험 결과: benchmark recall 83→93%, latency 20.7→13.8s
   · 발견 문제: Discord 봇 OAuth 이슈 (메모리 파일로 저장)
@@ -120,82 +122,275 @@ MEMORY.md 업데이트:
 상태 파일 업데이트:
   ✓ .comad/state.json (lastSession, pendingTasks)
 
-다음 세션에서 "이어서 해줘" 또는 "어디까지 했어?"로 재개 가능.</code></pre>
+다음 세션에서 "이어서 해줘" 또는 "어디까지 했어?"로 재개 가능.</span></code></pre>
 
-    <h2 id="t15-review">T15 — 상황 검토</h2>
+    <h2 id="t15-review" data-i18n="t15.h2">T15 — 상황 검토</h2>
 
-<pre><code><span class="kw">You:</span> 검토해봐
+<pre><code><span class="kw" data-i18n="t15.you">You:</span> <span data-i18n="t15.request">검토해봐</span>
 
-<span class="hl">Claude (T15):</span>
-코드베이스 탐색 + 최근 커밋 분석 중...
+<span class="hl" data-i18n="t15.claude">Claude (T15):</span>
+<span data-i18n="t15.scan">코드베이스 탐색 + 최근 커밋 분석 중...</span>
 
-── 현재 상태 ──────────────
-  · 커밋: 최근 2주 23건, 주로 graphrag 개선
-  · 테스트: 197 pass, 0 fail
-  · 타입체크: 깨끗
-  · 객관적 스코어: 91/100
+── <span data-i18n="t15.state">현재 상태</span> ──────────────
+  · <span data-i18n="t15.state.c1">커밋: 최근 2주 23건, 주로 graphrag 개선</span>
+  · <span data-i18n="t15.state.c2">테스트: 197 pass, 0 fail</span>
+  · <span data-i18n="t15.state.c3">타입체크: 깨끗</span>
+  · <span data-i18n="t15.state.c4">객관적 스코어: 91/100</span>
 
-── 개선 카드 (5개) ────────
+── <span data-i18n="t15.cards">개선 카드 (5개)</span> ────────
 
-[1] <span class="hl">Scalability 71→80</span>  ★★☆ (effort: medium)
-    그래프 27K → 50K 노드로 성장 필요
+[1] <span class="hl" data-i18n="t15.c1.h">Scalability 71→80</span>  ★★☆ <span data-i18n="t15.c1.eff">(effort: medium)</span>
+    <span data-i18n="t15.c1.p">그래프 27K → 50K 노드로 성장 필요
     실행: crawl-arxiv --limit 300 × N회 (cron 누적)
-    예상: 2-3주
+    예상: 2-3주</span>
 
-[2] <span class="hl">Simplicity 94→96</span>  ★☆☆ (effort: low)
-    analysis-tools.ts 444 LOC, resume-ingest.ts 451 LOC 분할
+[2] <span class="hl" data-i18n="t15.c2.h">Simplicity 94→96</span>  ★☆☆ <span data-i18n="t15.c2.eff">(effort: low)</span>
+    <span data-i18n="t15.c2.p">analysis-tools.ts 444 LOC, resume-ingest.ts 451 LOC 분할
     실행: 각 파일을 3-4 모듈로 쪼갬
-    예상: 1-2시간
+    예상: 1-2시간</span>
 
-[3] <span class="hl">Performance 91→95</span>  ★★☆ (effort: medium)
-    GraphRAG latency 13.8s → 10s
+[3] <span class="hl" data-i18n="t15.c3.h">Performance 91→95</span>  ★★☆ <span data-i18n="t15.c3.eff">(effort: medium)</span>
+    <span data-i18n="t15.c3.p">GraphRAG latency 13.8s → 10s
     실행: subgraph retriever 쿼리 최적화, synth cache TTL 확대
-    예상: 4-6시간
+    예상: 4-6시간</span>
 
-[4] ear-ingest 쿼리 품질     ★★★ (effort: high)
-[5] 벤치마크 3회 평균화       ★☆☆ (effort: low)
+[4] <span data-i18n="t15.c4">ear-ingest 쿼리 품질</span>     ★★★ <span data-i18n="t15.c4.eff">(effort: high)</span>
+[5] <span data-i18n="t15.c5">벤치마크 3회 평균화</span>       ★☆☆ <span data-i18n="t15.c5.eff">(effort: low)</span>
 
-어느 카드부터 진행할까요?</code></pre>
+<span data-i18n="t15.ask">어느 카드부터 진행할까요?</span></code></pre>
 
-    <div class="callout">
+    <div class="callout" data-i18n-html="t15.callout">
       T15의 힘은 <strong>구체적 실행 방법</strong>과 <strong>예상 소요 시간</strong>을 같이 제시한다는 것.
       "더 좋게 만들 수 있을까?"라는 막연한 질문을 실행 가능한 선택지로 바꿉니다.
     </div>
 
-    <h2 id="chaining">Brain/Ear/Eye 연동</h2>
-    <p>Voice 트리거는 다른 comad 모듈을 호출할 수 있습니다:</p>
+    <h2 id="chaining" data-i18n="chain.h2">Brain/Ear/Eye 연동</h2>
+    <p data-i18n="chain.p1">Voice 트리거는 다른 comad 모듈을 호출할 수 있습니다:</p>
 
     <ul>
-      <li>T15 검토 시 <code>comad_brain_impact</code>로 레퍼런스 엔티티 영향도 분석</li>
-      <li>T5 세션 저장 시 주요 결정을 Brain Neo4j의 <code>Claim</code> 노드로 자동 저장</li>
-      <li>T0 온보딩 시 <code>comad_brain_search</code>로 유사 프로젝트 기존 패턴 조회</li>
+      <li data-i18n-html="chain.li1">T15 검토 시 <code>comad_brain_impact</code>로 레퍼런스 엔티티 영향도 분석</li>
+      <li data-i18n-html="chain.li2">T5 세션 저장 시 주요 결정을 Brain Neo4j의 <code>Claim</code> 노드로 자동 저장</li>
+      <li data-i18n-html="chain.li3">T0 온보딩 시 <code>comad_brain_search</code>로 유사 프로젝트 기존 패턴 조회</li>
     </ul>
 
-    <h2 id="customize">커스터마이징</h2>
-    <p>새 트리거를 만들려면 <code>~/.claude/CLAUDE.md</code>의 <strong>Comad Voice</strong> 섹션을 편집합니다.</p>
+    <h2 id="customize" data-i18n="cust.h2">커스터마이징</h2>
+    <p data-i18n-html="cust.p1">새 트리거를 만들려면 <code>~/.claude/CLAUDE.md</code>의 <strong>Comad Voice</strong> 섹션을 편집합니다.</p>
 
-<pre><code>## T&lt;N&gt;. &lt;이름&gt;
+<pre><code>## T&lt;N&gt;. &lt;<span data-i18n="cust.name">이름</span>&gt;
 
-**감지 키워드:** "단어1", "단어2", "문장 형태 3", ...
+<span data-i18n-html="cust.keys">**감지 키워드:** "단어1", "단어2", "문장 형태 3", ...</span>
 
-1. &lt;단계 1 설명&gt;
-2. &lt;단계 2 설명&gt;
+1. &lt;<span data-i18n="cust.step">단계 1 설명</span>&gt;
+2. &lt;<span data-i18n="cust.step2">단계 2 설명</span>&gt;
    ...
 </code></pre>
 
-    <div class="callout warm">
+    <div class="callout warm" data-i18n-html="cust.callout">
       <strong>Nexus autonomous trigger와 중복되지 않게</strong> — Nexus 시스템(CLAUDE.md 상단)이 이미 많은 자동 행동을 정의합니다. 새 트리거는 Nexus에서 커버 안 되는 도메인 특화 작업에만 추가하세요.
     </div>
 
-    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);">관련 파일: <code>~/.claude/CLAUDE.md</code> (Comad Voice 섹션), <code>voice/</code>, <code>.comad/sessions/</code>, <code>.comad/state.json</code></p>
+    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);" data-i18n-html="related"><span data-i18n="related.label">관련 파일</span>: <code>~/.claude/CLAUDE.md</code> <span data-i18n="related.voice">(Comad Voice 섹션)</span>, <code>voice/</code>, <code>.comad/sessions/</code>, <code>.comad/state.json</code></p>
 
   </main>
 </div>
 
 <footer class="page-foot">
-  <a href="sleep.html">← Sleep</a> · <a href="index.html">가이드 홈</a> · <a href="browse.html">다음: Browse →</a>
+  <a href="sleep.html" data-i18n="foot.prev">← Sleep</a> · <a href="index.html" data-i18n="foot.home">가이드 홈</a> · <a href="browse.html" data-i18n="foot.next">다음: Browse →</a>
 </footer>
 
 <script src="assets/js/guide.js"></script>
+<script src="assets/js/i18n.js"></script>
+<script>
+window.I18N_DICT = {
+  en: {
+    'meta.title': 'Voice — Comad Guide',
+    'brand.sub': 'Guide',
+    'nav.home': 'Home',
+    'nav.scheduler': 'Scheduler',
+    'toc.overview': 'Overview',
+    'toc.claudemd': 'CLAUDE.md triggers',
+    'toc.triggers': 'Trigger list',
+    'toc.t5': 'T5 — Session save & handoff',
+    'toc.t15': 'T15 — Status review',
+    'toc.chain': 'Chaining with Brain/Ear/Eye',
+    'toc.custom': 'Customization',
+    'h1': 'Voice — <em>Workflow harness</em>',
+    'page.desc': 'Triggers defined in the root <code>CLAUDE.md</code> detect specific keywords and fire auto workflows. One "review the status" runs a codebase diagnosis; one "save it" generates a session handoff doc.',
+    'ov.h2': 'Overview',
+    'ov.p1': 'At startup Claude Code reads the root <code>CLAUDE.md</code> and internalizes it as a system prompt. Voice leverages this to <strong>automate frequent workflows via natural-language trigger keywords</strong>.',
+    'ov.model': 'Behavior model:',
+    'ov.flow.1': 'Claude Code starts',
+    'ov.flow.2': 'Load CLAUDE.md (Nexus + OMC + comad Voice)',
+    'ov.flow.3': 'User input',
+    'ov.flow.4': 'Keyword match check',
+    'ov.flow.5': 'match → run the corresponding trigger skill/agent',
+    'ov.flow.6': 'no match → normal conversation',
+    'cmd.h2': 'CLAUDE.md triggers',
+    'cmd.p1': 'Voice trigger definitions live in the <strong>Comad Voice</strong> section of <code>~/.claude/CLAUDE.md</code>. Currently only 3 that don\'t overlap with Nexus autonomous triggers (#14~16) are active.',
+    'cmd.hdr': '# ~/.claude/CLAUDE.md (excerpt)',
+    'cmd.t0': '## T0. Onboarding (first-session detection)\nCondition: no .comad/ folder + first conversation\n→ auto-explore project + welcome message',
+    'cmd.t4': '## T4. Repo Polish\nKeywords: "polish", "tidy repo", "repo polish"\n→ SCAN → DIAGNOSE → GENERATE → RELEASE → VERIFY (5 stages)',
+    'cmd.t5': '## T5. Session save & handoff\nKeywords: "save it", "that\'s enough", "continue next time"\n→ git diff tracking + session summary file',
+    'trig.h2': 'Trigger list',
+    'trig.th1': 'Code',
+    'trig.th2': 'Trigger',
+    'trig.th3': 'Role',
+    'trig.t0.key': '(auto-detected)',
+    'trig.t0.role': 'Onboarding — auto-explore project + list available commands',
+    'trig.t4.key': '"polish", "tidy repo"',
+    'trig.t4.role': 'Package the GitHub repo to popular-OSS level (README badges, CHANGELOG, Issue/PR templates, Social Preview, CI gate)',
+    'trig.t5.key': '"save it", "that\'s enough"',
+    'trig.t5.role': 'Generate session summary + handoff doc',
+    'trig.t15.key': '"status review", "check it", "improvement possibilities"',
+    'trig.t15.role': 'Codebase diagnosis + 3-5 improvement cards (with difficulty / impact)',
+    'trig.n14.key': '"full cycle", "end-to-end"',
+    'trig.n14.role': 'RESEARCH → DECOMPOSE → EXPERIMENT → INTEGRATE → POLISH → DELIVER (6 stages)',
+    'trig.n16.key': '(auto)',
+    'trig.n16.role': 'Detect multi-AI parallelization opportunities (5-point checklist)',
+    't5.h2': 'T5 — Session save & handoff',
+    't5.you': 'You:',
+    't5.request': 'save it',
+    't5.claude': 'Claude (T5):',
+    't5.report': 'git diff --stat tracking:\n  · modified files: 8 (brain/packages/graphrag/src/*, 3 docs)\n  · experiment results: benchmark recall 83→93%, latency 20.7→13.8s\n  · issues discovered: Discord bot OAuth issue (saved to memory file)\n\nSession summary saved:\n  .comad/sessions/2026-04-13-1537.md\n  ✓ 6 completed tasks\n  ✓ 2 pending tasks (meta-edge split, graph 50K)\n  ✓ 3 key decisions\n  ✓ 1 caveat\n\nMEMORY.md updated:\n  ✓ link added: Session 2026-04-13\n\nState file updated:\n  ✓ .comad/state.json (lastSession, pendingTasks)\n\nNext session: resume with "continue" or "where were we?".',
+    't15.h2': 'T15 — Status review',
+    't15.you': 'You:',
+    't15.request': 'review it',
+    't15.claude': 'Claude (T15):',
+    't15.scan': 'Exploring the codebase + analyzing recent commits...',
+    't15.state': 'Current state',
+    't15.state.c1': 'commits: 23 in the last 2 weeks, mostly graphrag improvements',
+    't15.state.c2': 'tests: 197 pass, 0 fail',
+    't15.state.c3': 'typecheck: clean',
+    't15.state.c4': 'objective score: 91/100',
+    't15.cards': 'Improvement cards (5)',
+    't15.c1.h': 'Scalability 71→80',
+    't15.c1.eff': '(effort: medium)',
+    't15.c1.p': 'Graph needs to grow from 27K → 50K nodes\nAction: crawl-arxiv --limit 300 × N (accumulated via cron)\nETA: 2-3 weeks',
+    't15.c2.h': 'Simplicity 94→96',
+    't15.c2.eff': '(effort: low)',
+    't15.c2.p': 'Split analysis-tools.ts (444 LOC), resume-ingest.ts (451 LOC)\nAction: break each file into 3-4 modules\nETA: 1-2 hours',
+    't15.c3.h': 'Performance 91→95',
+    't15.c3.eff': '(effort: medium)',
+    't15.c3.p': 'GraphRAG latency 13.8s → 10s\nAction: optimize subgraph retriever query, extend synth cache TTL\nETA: 4-6 hours',
+    't15.c4': 'ear-ingest query quality',
+    't15.c4.eff': '(effort: high)',
+    't15.c5': 'Average benchmark across 3 runs',
+    't15.c5.eff': '(effort: low)',
+    't15.ask': 'Which card shall we start with?',
+    't15.callout': 'T15\'s strength is pairing a <strong>concrete execution method</strong> with an <strong>estimated duration</strong>. Turns "can we make this better?" into an actionable menu.',
+    'chain.h2': 'Chaining with Brain/Ear/Eye',
+    'chain.p1': 'Voice triggers can call other comad modules:',
+    'chain.li1': 'During a T15 review, call <code>comad_brain_impact</code> to analyze reference-entity impact',
+    'chain.li2': 'When T5 saves a session, key decisions are auto-stored as <code>Claim</code> nodes in Brain\'s Neo4j',
+    'chain.li3': 'During T0 onboarding, call <code>comad_brain_search</code> to retrieve existing patterns from similar projects',
+    'cust.h2': 'Customization',
+    'cust.p1': 'To add a new trigger, edit the <strong>Comad Voice</strong> section of <code>~/.claude/CLAUDE.md</code>.',
+    'cust.name': 'name',
+    'cust.keys': '**Keywords:** "word1", "word2", "sentence-form 3", ...',
+    'cust.step': 'step 1 description',
+    'cust.step2': 'step 2 description',
+    'cust.callout': '<strong>Don\'t duplicate Nexus autonomous triggers</strong> — the Nexus system (top of CLAUDE.md) already defines many auto behaviors. Add new triggers only for domain-specific work Nexus doesn\'t cover.',
+    'related.label': 'Related files',
+    'related.voice': '(Comad Voice section)',
+    'foot.prev': '← Sleep',
+    'foot.home': 'Guide home',
+    'foot.next': 'Next: Browse →'
+  },
+  ko: {
+    'meta.title': 'Voice — Comad 가이드',
+    'brand.sub': '가이드',
+    'nav.home': '홈',
+    'nav.scheduler': '스케줄러',
+    'toc.overview': '개요',
+    'toc.claudemd': 'CLAUDE.md 트리거',
+    'toc.triggers': '트리거 목록',
+    'toc.t5': 'T5 — 세션 저장 & 인수인계',
+    'toc.t15': 'T15 — 상황 검토',
+    'toc.chain': 'Brain/Ear/Eye 연동',
+    'toc.custom': '커스터마이징',
+    'h1': 'Voice — <em>워크플로우 하네스</em>',
+    'page.desc': 'Claude Code의 루트 <code>CLAUDE.md</code>에 정의된 트리거들이 특정 키워드를 감지해 자동 워크플로우를 발동합니다. "상황 검토해봐" 한마디로 코드베이스 진단이 실행되고, "저장해줘"로 세션 인수인계 문서가 만들어집니다.',
+    'ov.h2': '개요',
+    'ov.p1': 'Claude Code는 작업 시작 시 루트 <code>CLAUDE.md</code>를 읽고 그 내용을 시스템 프롬프트로 내재화합니다. Voice는 이 메커니즘을 활용해 <strong>자주 쓰는 워크플로우를 한국어 트리거 키워드로 자동화</strong>합니다.',
+    'ov.model': '동작 모델:',
+    'ov.flow.1': 'Claude Code 시작',
+    'ov.flow.2': 'CLAUDE.md 로드 (Nexus + OMC + comad Voice)',
+    'ov.flow.3': '사용자 입력',
+    'ov.flow.4': '키워드 매칭 검사',
+    'ov.flow.5': '매칭 → 해당 트리거 skill/agent 자동 실행',
+    'ov.flow.6': '미매칭 → 일반 대화',
+    'cmd.h2': 'CLAUDE.md 트리거',
+    'cmd.p1': 'Voice의 트리거 정의는 <code>~/.claude/CLAUDE.md</code>의 <strong>Comad Voice</strong> 섹션에 있습니다. 현재 Nexus autonomous trigger(#14~16)와 중복되지 않는 3개만 활성.',
+    'cmd.hdr': '# ~/.claude/CLAUDE.md (발췌)',
+    'cmd.t0': '## T0. 온보딩 (첫 세션 감지)\n감지 조건: .comad/ 폴더 없음 + 첫 대화 시작 시\n→ 프로젝트 자동 탐색 + 환영 메시지',
+    'cmd.t4': '## T4. 레포 광택 (Repo Polish)\n감지: "광택", "레포 정리", "repo polish"\n→ SCAN → DIAGNOSE → GENERATE → RELEASE → VERIFY 5단계',
+    'cmd.t5': '## T5. 세션 저장 & 인수인계\n감지: "저장해줘", "여기까지", "다음에 이어서"\n→ git diff 추적 + 세션 요약 파일 생성',
+    'trig.h2': '트리거 목록',
+    'trig.th1': '코드',
+    'trig.th2': '트리거',
+    'trig.th3': '역할',
+    'trig.t0.key': '(자동 감지)',
+    'trig.t0.role': '온보딩 — 프로젝트 자동 탐색 + 가능한 명령 안내',
+    'trig.t4.key': '"광택", "레포 정리"',
+    'trig.t4.role': 'GitHub 레포를 인기 오픈소스 수준으로 포장 (README 뱃지, CHANGELOG, Issue/PR 템플릿, Social Preview, CI 게이트)',
+    'trig.t5.key': '"저장해줘", "여기까지"',
+    'trig.t5.role': '세션 요약 + 인수인계 문서 생성',
+    'trig.t15.key': '"상황 검토", "검토해봐", "개선 가능성"',
+    'trig.t15.role': '코드베이스 진단 + 3-5개 개선 카드 제시 (난이도/효과 표기)',
+    'trig.n14.key': '"풀사이클", "end-to-end"',
+    'trig.n14.role': 'RESEARCH → DECOMPOSE → EXPERIMENT → INTEGRATE → POLISH → DELIVER 6-stage',
+    'trig.n16.key': '(자동)',
+    'trig.n16.role': '멀티-AI 병렬 가능 감지 (5-Point 체크리스트)',
+    't5.h2': 'T5 — 세션 저장 & 인수인계',
+    't5.you': 'You:',
+    't5.request': '저장해줘',
+    't5.claude': 'Claude (T5):',
+    't5.report': 'git diff --stat 추적:\n  · 수정 파일: 8개 (brain/packages/graphrag/src/*, 문서 3건)\n  · 실험 결과: benchmark recall 83→93%, latency 20.7→13.8s\n  · 발견 문제: Discord 봇 OAuth 이슈 (메모리 파일로 저장)\n\n세션 요약 저장:\n  .comad/sessions/2026-04-13-1537.md\n  ✓ 완료 작업 6건\n  ✓ 미완료 작업 2건 (meta-edge 분할, 그래프 50K)\n  ✓ 핵심 결정 3건\n  ✓ 주의점 1건\n\nMEMORY.md 업데이트:\n  ✓ 링크 추가: Session 2026-04-13\n\n상태 파일 업데이트:\n  ✓ .comad/state.json (lastSession, pendingTasks)\n\n다음 세션에서 "이어서 해줘" 또는 "어디까지 했어?"로 재개 가능.',
+    't15.h2': 'T15 — 상황 검토',
+    't15.you': 'You:',
+    't15.request': '검토해봐',
+    't15.claude': 'Claude (T15):',
+    't15.scan': '코드베이스 탐색 + 최근 커밋 분석 중...',
+    't15.state': '현재 상태',
+    't15.state.c1': '커밋: 최근 2주 23건, 주로 graphrag 개선',
+    't15.state.c2': '테스트: 197 pass, 0 fail',
+    't15.state.c3': '타입체크: 깨끗',
+    't15.state.c4': '객관적 스코어: 91/100',
+    't15.cards': '개선 카드 (5개)',
+    't15.c1.h': 'Scalability 71→80',
+    't15.c1.eff': '(effort: medium)',
+    't15.c1.p': '그래프 27K → 50K 노드로 성장 필요\n실행: crawl-arxiv --limit 300 × N회 (cron 누적)\n예상: 2-3주',
+    't15.c2.h': 'Simplicity 94→96',
+    't15.c2.eff': '(effort: low)',
+    't15.c2.p': 'analysis-tools.ts 444 LOC, resume-ingest.ts 451 LOC 분할\n실행: 각 파일을 3-4 모듈로 쪼갬\n예상: 1-2시간',
+    't15.c3.h': 'Performance 91→95',
+    't15.c3.eff': '(effort: medium)',
+    't15.c3.p': 'GraphRAG latency 13.8s → 10s\n실행: subgraph retriever 쿼리 최적화, synth cache TTL 확대\n예상: 4-6시간',
+    't15.c4': 'ear-ingest 쿼리 품질',
+    't15.c4.eff': '(effort: high)',
+    't15.c5': '벤치마크 3회 평균화',
+    't15.c5.eff': '(effort: low)',
+    't15.ask': '어느 카드부터 진행할까요?',
+    't15.callout': 'T15의 힘은 <strong>구체적 실행 방법</strong>과 <strong>예상 소요 시간</strong>을 같이 제시한다는 것. "더 좋게 만들 수 있을까?"라는 막연한 질문을 실행 가능한 선택지로 바꿉니다.',
+    'chain.h2': 'Brain/Ear/Eye 연동',
+    'chain.p1': 'Voice 트리거는 다른 comad 모듈을 호출할 수 있습니다:',
+    'chain.li1': 'T15 검토 시 <code>comad_brain_impact</code>로 레퍼런스 엔티티 영향도 분석',
+    'chain.li2': 'T5 세션 저장 시 주요 결정을 Brain Neo4j의 <code>Claim</code> 노드로 자동 저장',
+    'chain.li3': 'T0 온보딩 시 <code>comad_brain_search</code>로 유사 프로젝트 기존 패턴 조회',
+    'cust.h2': '커스터마이징',
+    'cust.p1': '새 트리거를 만들려면 <code>~/.claude/CLAUDE.md</code>의 <strong>Comad Voice</strong> 섹션을 편집합니다.',
+    'cust.name': '이름',
+    'cust.keys': '**감지 키워드:** "단어1", "단어2", "문장 형태 3", ...',
+    'cust.step': '단계 1 설명',
+    'cust.step2': '단계 2 설명',
+    'cust.callout': '<strong>Nexus autonomous trigger와 중복되지 않게</strong> — Nexus 시스템(CLAUDE.md 상단)이 이미 많은 자동 행동을 정의합니다. 새 트리거는 Nexus에서 커버 안 되는 도메인 특화 작업에만 추가하세요.',
+    'related.label': '관련 파일',
+    'related.voice': '(Comad Voice 섹션)',
+    'foot.prev': '← Sleep',
+    'foot.home': '가이드 홈',
+    'foot.next': '다음: Browse →'
+  }
+};
+</script>
 </body>
 </html>

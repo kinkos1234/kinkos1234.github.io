@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ear — Comad 가이드</title>
+<title data-i18n="meta.title">Ear — Comad 가이드</title>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="assets/css/guide.css">
+<link rel="stylesheet" href="/comad/assets/css/comad-shared.css">
 </head>
 <body>
 
 <header class="topbar">
-  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub">가이드</span></a>
+  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub" data-i18n="brand.sub">가이드</span></a>
   <nav>
-    <a href="index.html">홈</a>
-    <a href="scheduler.html">스케줄러</a>
+    <a href="index.html" data-i18n="nav.home">홈</a>
+    <a href="scheduler.html" data-i18n="nav.scheduler">스케줄러</a>
     <a href="brain.html">Brain</a>
     <a href="ear.html" class="active">Ear</a>
     <a href="eye.html">Eye</a>
@@ -23,205 +24,447 @@
     <a href="voice.html">Voice</a>
     <a href="browse.html">Browse</a>
   </nav>
+  <button class="lang-toggle" onclick="toggleLang()"><span id="langEn">EN</span> / <span id="langKo">KO</span></button>
 </header>
 
 <div class="layout">
   <aside class="toc">
     <div class="toc-title">Ear</div>
-    <a href="#overview">개요 & 동작 방식</a>
-    <a href="#bot-setup">Discord 봇 설정</a>
-    <a href="#modes">운영 모드</a>
-    <a href="#archive">아카이브 포맷</a>
-    <a href="#digest">일일 digest HTML</a>
-    <a href="#ingest-brain">Brain 인제스트</a>
-    <a href="#feed-search">/search 자동 피드</a>
-    <a href="#config">관심사 프로필</a>
+    <a href="#overview" data-i18n="toc.overview">개요 & 동작 방식</a>
+    <a href="#bot-setup" data-i18n="toc.bot">Discord 봇 설정</a>
+    <a href="#modes" data-i18n="toc.modes">운영 모드</a>
+    <a href="#archive" data-i18n="toc.archive">아카이브 포맷</a>
+    <a href="#digest" data-i18n="toc.digest">일일 digest HTML</a>
+    <a href="#ingest-brain" data-i18n="toc.ingest">Brain 인제스트</a>
+    <a href="#feed-search" data-i18n="toc.feed">/search 자동 피드</a>
+    <a href="#config" data-i18n="toc.config">관심사 프로필</a>
   </aside>
 
   <main>
     <div class="page-hero">
-      <h1>Ear — <em>뉴스 큐레이터</em></h1>
-      <p class="page-desc">
+      <h1 data-i18n-html="h1">Ear — <em>뉴스 큐레이터</em></h1>
+      <p class="page-desc" data-i18n-html="page.desc">
         Discord 채널에 공유된 기사 링크를 자동 감지하여, 관련성을 3단계(필독/추천/참고)로 분류하고
         마크다운으로 아카이브합니다. 매일 아침 digest HTML로 요약되고, 필독 기사는
         <code>/search</code>로 자동 투입되어 자가진화 루프를 완성합니다.
       </p>
       <div class="tag-row">
-        <span class="tag">Claude Code 세션</span>
+        <span class="tag" data-i18n="tag.session">Claude Code 세션</span>
         <span class="tag">Discord MCP</span>
-        <span class="tag accent">필독 13%</span>
-        <span class="tag warm">일일 digest</span>
-        <span class="tag lime">→ /search 피드</span>
+        <span class="tag accent" data-i18n="tag.must">필독 13%</span>
+        <span class="tag warm" data-i18n="tag.digest">일일 digest</span>
+        <span class="tag lime" data-i18n="tag.feed">→ /search 피드</span>
       </div>
     </div>
 
-    <h2 id="overview">개요 & 동작 방식</h2>
-    <p>Ear는 하나의 <strong>롱런닝 Claude Code 세션</strong>입니다. 자체 MCP 도구(<code>discord2</code> 채널)로 메시지를 받아 기사 링크를 감지하고, <code>WebFetch</code>로 원문을 가져와 분석·분류한 뒤 파일로 저장합니다.</p>
+    <h2 id="overview" data-i18n="ov.h2">개요 & 동작 방식</h2>
+    <p data-i18n-html="ov.p1">Ear는 하나의 <strong>롱런닝 Claude Code 세션</strong>입니다. 자체 MCP 도구(<code>discord2</code> 채널)로 메시지를 받아 기사 링크를 감지하고, <code>WebFetch</code>로 원문을 가져와 분석·분류한 뒤 파일로 저장합니다.</p>
 
-<pre><code><span class="dim">Discord 메시지</span>
-  ↓ (discord2 MCP 채널)
-Ear 세션이 수신 감지
+<pre><code><span class="dim" data-i18n="ov.flow.1">Discord 메시지</span>
+  ↓ <span data-i18n="ov.flow.2">(discord2 MCP 채널)</span>
+<span data-i18n="ov.flow.3">Ear 세션이 수신 감지</span>
   ↓ WebFetch
-원문 기사 fetch
-  ↓ Claude (이 세션 자체가 분석)
-관련성 3단계 분류
+<span data-i18n="ov.flow.4">원문 기사 fetch</span>
+  ↓ <span data-i18n="ov.flow.5">Claude (이 세션 자체가 분석)</span>
+<span data-i18n="ov.flow.6">관련성 3단계 분류</span>
   ↓
-<span class="hl">ear/archive/YYYY-MM-DD-slug.md</span>  ← YAML frontmatter + 요약
+<span class="hl">ear/archive/YYYY-MM-DD-slug.md</span>  ← <span data-i18n="ov.flow.7">YAML frontmatter + 요약</span>
   ↓
-Discord에 "아카이브 완료!" 짧게 응답</code></pre>
+<span data-i18n="ov.flow.8">Discord에 "아카이브 완료!" 짧게 응답</span></code></pre>
 
-    <div class="callout">
+    <div class="callout" data-i18n-html="ov.callout">
       Ear 세션은 <code>ccd</code>라는 alias로 기동됩니다 — 별도의 Discord 토큰/채널을 쓰는 두 번째 bot입니다. 관리용 ccc와 분리되어 있어 큐레이션만 담당합니다.
     </div>
 
-    <h2 id="bot-setup">Discord 봇 설정 (초회 1회)</h2>
+    <h2 id="bot-setup" data-i18n="bot.h2">Discord 봇 설정 (초회 1회)</h2>
     <ol>
-      <li><a href="https://discord.com/developers/applications" target="_blank">Discord Developer Portal</a>에서 Application 생성 → Bot 추가 → Token 복사</li>
-      <li>Bot → <strong>Privileged Gateway Intents</strong>에서 <code>Message Content Intent</code> 활성화 (필수)</li>
-      <li>OAuth2 → URL Generator에서 scope=<code>bot</code>, 권한=Send/Read/Attach 체크 → 생성된 URL로 봇을 서버에 초대</li>
-      <li>토큰을 <code>~/.claude/channels/discord2/.env</code>에 저장:
+      <li data-i18n-html="bot.li1"><a href="https://discord.com/developers/applications" target="_blank">Discord Developer Portal</a>에서 Application 생성 → Bot 추가 → Token 복사</li>
+      <li data-i18n-html="bot.li2">Bot → <strong>Privileged Gateway Intents</strong>에서 <code>Message Content Intent</code> 활성화 (필수)</li>
+      <li data-i18n-html="bot.li3">OAuth2 → URL Generator에서 scope=<code>bot</code>, 권한=Send/Read/Attach 체크 → 생성된 URL로 봇을 서버에 초대</li>
+      <li><span data-i18n-html="bot.li4">토큰을 <code>~/.claude/channels/discord2/.env</code>에 저장:</span>
 <pre><code>DISCORD_BOT_TOKEN=MTQ4...</code></pre></li>
     </ol>
 
-    <h2 id="modes">운영 모드</h2>
-    <p>Ear는 두 가지 실행 방식을 지원합니다. 기본은 <strong>Mode B</strong>(LaunchAgent REST 폴링)입니다 — 터미널을 닫아도 24/7 동작하고 Discord IDENTIFY 쿼터를 소비하지 않습니다. Mode A(인터랙티브 ccd)는 실시간 반응이 필요할 때만 사용합니다.</p>
+    <h2 id="modes" data-i18n="modes.h2">운영 모드</h2>
+    <p data-i18n-html="modes.p1">Ear는 두 가지 실행 방식을 지원합니다. 기본은 <strong>Mode B</strong>(LaunchAgent REST 폴링)입니다 — 터미널을 닫아도 24/7 동작하고 Discord IDENTIFY 쿼터를 소비하지 않습니다. Mode A(인터랙티브 ccd)는 실시간 반응이 필요할 때만 사용합니다.</p>
 
     <table>
-      <tr><th></th><th>Mode A — 인터랙티브 <code>ccd</code></th><th>Mode B — <code>ear-poll</code> LaunchAgent <strong>(기본)</strong></th></tr>
-      <tr><td>실행 방식</td><td>터미널에서 <code>ccd</code> alias 실행</td><td><code>install.sh</code>가 자동 등록 (15분마다 REST 폴링)</td></tr>
-      <tr><td>지연</td><td>실시간 (gateway push)</td><td>최대 15분</td></tr>
-      <tr><td>가용성</td><td>터미널 창이 열려 있는 동안만</td><td>24/7 (launchd가 관리)</td></tr>
-      <tr><td>IDENTIFY 쿼터</td><td>세션당 1회</td><td><strong>0회</strong> (gateway 미사용)</td></tr>
-      <tr><td>MCP 로딩</td><td>discord2 MCP 상주</td><td>메시지 처리 시점에만 one-shot <code>claude -p</code> (MCP 미로드)</td></tr>
+      <tr><th></th><th data-i18n-html="modes.th.a">Mode A — 인터랙티브 <code>ccd</code></th><th data-i18n-html="modes.th.b">Mode B — <code>ear-poll</code> LaunchAgent <strong>(기본)</strong></th></tr>
+      <tr><td data-i18n="modes.r1">실행 방식</td><td data-i18n-html="modes.r1a">터미널에서 <code>ccd</code> alias 실행</td><td data-i18n-html="modes.r1b"><code>install.sh</code>가 자동 등록 (15분마다 REST 폴링)</td></tr>
+      <tr><td data-i18n="modes.r2">지연</td><td data-i18n="modes.r2a">실시간 (gateway push)</td><td data-i18n="modes.r2b">최대 15분</td></tr>
+      <tr><td data-i18n="modes.r3">가용성</td><td data-i18n="modes.r3a">터미널 창이 열려 있는 동안만</td><td data-i18n="modes.r3b">24/7 (launchd가 관리)</td></tr>
+      <tr><td data-i18n="modes.r4">IDENTIFY 쿼터</td><td data-i18n="modes.r4a">세션당 1회</td><td data-i18n-html="modes.r4b"><strong>0회</strong> (gateway 미사용)</td></tr>
+      <tr><td data-i18n="modes.r5">MCP 로딩</td><td data-i18n="modes.r5a">discord2 MCP 상주</td><td data-i18n-html="modes.r5b">메시지 처리 시점에만 one-shot <code>claude -p</code> (MCP 미로드)</td></tr>
     </table>
 
-    <h3>Mode A — 인터랙티브 ccd</h3>
-    <p><code>ccd</code> alias는 Ear 전용 Claude 세션을 시작합니다. <code>~/.zshrc</code>에 다음과 같이 정의됩니다:</p>
+    <h3 data-i18n-html="modeA.h3">Mode A — 인터랙티브 ccd</h3>
+    <p data-i18n-html="modeA.p1"><code>ccd</code> alias는 Ear 전용 Claude 세션을 시작합니다. <code>~/.zshrc</code>에 다음과 같이 정의됩니다:</p>
 <pre><code>alias ccd='claude --dangerously-skip-permissions \
   --dangerously-load-development-channels server:discord2 \
   --append-system-prompt "$(cat ~/Programmer/01-comad/comad-world/ear/CLAUDE.md)"'</code></pre>
 
-    <p>실행하면 상단에 다음과 같이 뜹니다:</p>
-<pre><code><span class="dim">  Listening for channel messages from: server:discord2
+    <p data-i18n="modeA.p2">실행하면 상단에 다음과 같이 뜹니다:</p>
+<pre><code><span class="dim" data-i18n="modeA.listen">  Listening for channel messages from: server:discord2
   Experimental · inbound messages will be pushed into this session...</span></code></pre>
 
-    <div class="callout warm">
+    <div class="callout warm" data-i18n-html="modeA.callout">
       <strong>OAuth 주의 (Mode A에 한함)</strong> — 인터랙티브 <code>ccd</code>는 반드시 GUI 세션(터미널 앱)에서 실행. launchd/cron에서 기동하면 OAuth keychain 잠금으로 실패합니다 (<a href="scheduler.html#why">스케줄러 가이드 참고</a>). Mode B는 launchd <code>gui/&lt;uid&gt;</code> 도메인에서 정상 동작합니다 — REST 호출만 하고 OAuth-기반 <code>claude -p</code>는 메시지가 도착했을 때만 invoke하기 때문입니다.
     </div>
 
-    <h3>Mode B — ear-poll LaunchAgent <strong>(기본·권장)</strong></h3>
-    <p><code>~/.claude/channels/discord2/.env</code>에 <code>DISCORD_BOT_TOKEN</code>만 저장해두면 <code>install.sh</code>가 자동으로 <code>com.comad.ear-poll</code>을 등록합니다 (토큰이 없으면 조용히 skip). 15분 간격으로 <code>/channels/:id/messages?after=&lt;last&gt;</code>를 polling해서 새 메시지에 대해서만 <code>claude -p</code>를 one-shot 실행합니다.</p>
+    <h3 data-i18n-html="modeB.h3">Mode B — ear-poll LaunchAgent <strong>(기본·권장)</strong></h3>
+    <p data-i18n-html="modeB.p1"><code>~/.claude/channels/discord2/.env</code>에 <code>DISCORD_BOT_TOKEN</code>만 저장해두면 <code>install.sh</code>가 자동으로 <code>com.comad.ear-poll</code>을 등록합니다 (토큰이 없으면 조용히 skip). 15분 간격으로 <code>/channels/:id/messages?after=&lt;last&gt;</code>를 polling해서 새 메시지에 대해서만 <code>claude -p</code>를 one-shot 실행합니다.</p>
 
-<pre><code><span class="dim"># 설치 (Mode B는 환경파일만 있으면 자동 등록)</span>
+<pre><code><span class="dim" data-i18n="modeB.cmt1"># 설치 (Mode B는 환경파일만 있으면 자동 등록)</span>
 zsh brain/scripts/launchd/install.sh
 
-<span class="dim"># 상태 확인</span>
+<span class="dim" data-i18n="modeB.cmt2"># 상태 확인</span>
 launchctl list | grep com.comad.ear-poll
 
-<span class="dim"># 즉시 실행 (다음 15분을 기다리지 않고)</span>
+<span class="dim" data-i18n="modeB.cmt3"># 즉시 실행 (다음 15분을 기다리지 않고)</span>
 launchctl kickstart gui/$(id -u)/com.comad.ear-poll
 
-<span class="dim"># 로그</span>
+<span class="dim" data-i18n="modeB.cmt4"># 로그</span>
 tail -f ear/poll-ear.log</code></pre>
 
-    <p>핵심: 매 메시지마다 <code>claude -p --strict-mcp-config --mcp-config ear/poll-no-mcp.json</code>으로 호출하므로 <strong>MCP가 절대 로드되지 않습니다</strong> — Discord IDENTIFY 쿼터 소비량은 0입니다.</p>
+    <p data-i18n-html="modeB.p2">핵심: 매 메시지마다 <code>claude -p --strict-mcp-config --mcp-config ear/poll-no-mcp.json</code>으로 호출하므로 <strong>MCP가 절대 로드되지 않습니다</strong> — Discord IDENTIFY 쿼터 소비량은 0입니다.</p>
 
-    <div class="callout warm">
+    <div class="callout warm" data-i18n-html="modeB.callout">
       <strong>⚠ Discord IDENTIFY 함정</strong> — Discord gateway는 bot당 <strong>1000/day</strong> IDENTIFY 쿼터가 있습니다. 과거 <code>ccd</code>를 <code>KeepAlive=true</code> LaunchAgent로 감싸서 상시 실행하려 시도했다가 TTY 없는 launchd 환경에서 즉시 crash → 30초마다 재시작 → 매 재시작이 discord2 MCP를 spawn → <strong>8시간 만에 1000/1000 소진</strong>하는 사고가 있었습니다 (2026-04-16). 교훈: <em>절대</em> 인터랙티브 <code>ccd</code>를 launchd/systemd에서 감싸지 마세요. 24/7 운영은 Mode B(REST 폴링)가 유일한 정답입니다. 응급 복구는 Discord Developer Portal에서 <strong>토큰 회전</strong>(쿼터 즉시 리셋).
     </div>
 
-    <h2 id="archive">아카이브 포맷</h2>
-    <p>저장 경로: <code>ear/archive/YYYY-MM-DD-slug.md</code> — 슬러그는 기사 제목의 영문 kebab-case. 모든 기사는 동일한 frontmatter 구조를 엄격히 유지합니다.</p>
+    <h2 id="archive" data-i18n="arch.h2">아카이브 포맷</h2>
+    <p data-i18n-html="arch.p1">저장 경로: <code>ear/archive/YYYY-MM-DD-slug.md</code> — 슬러그는 기사 제목의 영문 kebab-case. 모든 기사는 동일한 frontmatter 구조를 엄격히 유지합니다.</p>
 
 <pre><code>---
 date: <span class="hl">2026-04-12</span>
-relevance: <span class="hl">필독</span>
+relevance: <span class="hl" data-i18n="arch.relevance">필독</span>
 categories: [<span class="hl">AI/LLM</span>, <span class="hl">Tool</span>, <span class="hl">OpenSource</span>]
 geeknews: https://news.hada.io/topic?id=28419
 source: https://github.com/example/repo
 ---
 
-# Claude Code Auto Mode를 설계한 방법
+# <span data-i18n="arch.title">Claude Code Auto Mode를 설계한 방법</span>
 
-## 핵심 요약
-- (3~5개 핵심 포인트)
+## <span data-i18n="arch.h.summary">핵심 요약</span>
+<span data-i18n="arch.summary">- (3~5개 핵심 포인트)</span>
 
-## 왜 알아야 하는가
-(2~3문장 — 실무 영향)
+## <span data-i18n="arch.h.why">왜 알아야 하는가</span>
+<span data-i18n="arch.why">(2~3문장 — 실무 영향)</span>
 
-## 추가 리소스
-- [공식 문서](URL)
-- [관련 GitHub](URL)</code></pre>
+## <span data-i18n="arch.h.more">추가 리소스</span>
+- [<span data-i18n="arch.more.doc">공식 문서</span>](URL)
+- [<span data-i18n="arch.more.gh">관련 GitHub</span>](URL)</code></pre>
 
-    <h3>3단 관련성 기준</h3>
+    <h3 data-i18n="arch.h3">3단 관련성 기준</h3>
     <table>
-      <tr><th>등급</th><th>비율</th><th>기준</th></tr>
-      <tr><td><strong>필독</strong> 🔴</td><td>~13%</td><td>현재 스택(Claude Code/MCP/Neo4j/Bun) 직접 영향 · 보안 위협 · 패러다임 변화 · 자기 프로젝트 언급</td></tr>
-      <tr><td><strong>추천</strong> 🟡</td><td>~65%</td><td>핵심 관심 분야지만 당장 영향 없는 기사</td></tr>
-      <tr><td><strong>참고</strong> 🔵</td><td>~22%</td><td>트렌드 가치는 있으나 관련성 낮음</td></tr>
+      <tr><th data-i18n="arch.th.grade">등급</th><th data-i18n="arch.th.pct">비율</th><th data-i18n="arch.th.rule">기준</th></tr>
+      <tr><td data-i18n-html="arch.must"><strong>필독</strong> 🔴</td><td>~13%</td><td data-i18n-html="arch.must.rule">현재 스택(Claude Code/MCP/Neo4j/Bun) 직접 영향 · 보안 위협 · 패러다임 변화 · 자기 프로젝트 언급</td></tr>
+      <tr><td data-i18n-html="arch.rec"><strong>추천</strong> 🟡</td><td>~65%</td><td data-i18n="arch.rec.rule">핵심 관심 분야지만 당장 영향 없는 기사</td></tr>
+      <tr><td data-i18n-html="arch.ref"><strong>참고</strong> 🔵</td><td>~22%</td><td data-i18n="arch.ref.rule">트렌드 가치는 있으나 관련성 낮음</td></tr>
     </table>
 
-    <h2 id="digest">일일 digest HTML</h2>
-    <p>매일 08:00 (스케줄러에 의해 자동 실행) <code>ear/generate-digest.js</code>가 <em>어제</em> 아카이브된 모든 기사를 모아 <code>ear/digests/YYYY-MM-DD-digest.html</code>로 생성합니다.</p>
+    <h2 id="digest" data-i18n="dig.h2">일일 digest HTML</h2>
+    <p data-i18n-html="dig.p1">매일 08:00 (스케줄러에 의해 자동 실행) <code>ear/generate-digest.js</code>가 <em>어제</em> 아카이브된 모든 기사를 모아 <code>ear/digests/YYYY-MM-DD-digest.html</code>로 생성합니다.</p>
 
-<pre><code><span class="dim"># 수동 실행</span>
-node ear/generate-digest.js              <span class="dim"># 어제 기준</span>
-node ear/generate-digest.js 2026-04-12   <span class="dim"># 특정 날짜</span></code></pre>
+<pre><code><span class="dim" data-i18n="dig.cmt1"># 수동 실행</span>
+node ear/generate-digest.js              <span class="dim" data-i18n="dig.cmt2"># 어제 기준</span>
+node ear/generate-digest.js 2026-04-12   <span class="dim" data-i18n="dig.cmt3"># 특정 날짜</span></code></pre>
 
-    <div class="callout warm">
+    <div class="callout warm" data-i18n-html="dig.callout">
       <strong>버그 수정 이력 (2026-04-13)</strong> — 이전에는 <code>toISOString()</code>이 UTC 반환이라 KST 08:00 cron에서 "이틀 전"을 타겟했었음. 로컬 컴포넌트 조립으로 수정 + 누락분 백필.
     </div>
 
-    <h2 id="ingest-brain">Brain 인제스트</h2>
-    <p>Ear의 아카이브는 <code>ingest-geeknews.sh</code> cron(매일 09:30)이 Brain Neo4j로 임포트합니다. GeekNews 외 일반 블로그 포스트도 동일한 frontmatter 구조면 함께 처리됩니다.</p>
+    <h2 id="ingest-brain" data-i18n="ing.h2">Brain 인제스트</h2>
+    <p data-i18n-html="ing.p1">Ear의 아카이브는 <code>ingest-geeknews.sh</code> cron(매일 09:30)이 Brain Neo4j로 임포트합니다. GeekNews 외 일반 블로그 포스트도 동일한 frontmatter 구조면 함께 처리됩니다.</p>
 
 <pre><code>bun run packages/ingester/src/geeknews-importer.ts
-<span class="dim"># → ~/Programmer/01-comad/comad-world/ear/archive/*.md 스캔
+<span class="dim" data-i18n="ing.cmt"># → ~/Programmer/01-comad/comad-world/ear/archive/*.md 스캔
 # → Article / Topic / Technology 노드 MERGE
 # → 엔티티 추출(Haiku) + Claim 추출</span></code></pre>
 
-    <h2 id="feed-search">/search 자동 피드 (2026-04-13 추가)</h2>
-    <p><code>ear-ingest</code>가 매일 07:00 돌면서 <strong>필독</strong> + 핵심 카테고리(AI/LLM, Tool, OpenSource, Backend, Frontend, DevOps, Database, Language) 기사를 골라 기술 토큰을 추출하고 <code>/search</code>에 쿼리로 투입합니다.</p>
+    <h2 id="feed-search" data-i18n="feed.h2">/search 자동 피드 (2026-04-13 추가)</h2>
+    <p data-i18n-html="feed.p1"><code>ear-ingest</code>가 매일 07:00 돌면서 <strong>필독</strong> + 핵심 카테고리(AI/LLM, Tool, OpenSource, Backend, Frontend, DevOps, Database, Language) 기사를 골라 기술 토큰을 추출하고 <code>/search</code>에 쿼리로 투입합니다.</p>
 
-<pre><code>bun run packages/search/src/ear-ingest.ts --since 1     <span class="dim"># 어제만</span>
-bun run packages/search/src/ear-ingest.ts --since 7     <span class="dim"># 지난 1주</span>
-bun run packages/search/src/ear-ingest.ts --dry-run     <span class="dim"># 쿼리만 미리보기</span></code></pre>
+<pre><code>bun run packages/search/src/ear-ingest.ts --since 1     <span class="dim" data-i18n="feed.cmt1"># 어제만</span>
+bun run packages/search/src/ear-ingest.ts --since 7     <span class="dim" data-i18n="feed.cmt2"># 지난 1주</span>
+bun run packages/search/src/ear-ingest.ts --dry-run     <span class="dim" data-i18n="feed.cmt3"># 쿼리만 미리보기</span></code></pre>
 
-    <h3>실제 동작 예</h3>
-<pre><code>ear-ingest: 5 article(s) pass filter (relevance=필독, since=3d)
+    <h3 data-i18n="feed.h3">실제 동작 예</h3>
+<pre><code><span data-i18n="feed.log.1">ear-ingest: 5 article(s) pass filter (relevance=필독, since=3d)</span>
  <span class="hl">✓</span> 2026-04-12-managed-agents-brain-hands-separation — 4 queries, <span class="hl">47 adopts</span>
  <span class="hl">✓</span> 2026-04-10-advisor-strategy-opus-sonnet         — 4 queries, 1 adopt
  <span class="hl">✓</span> 2026-04-12-meta-hyperagents-self-referential    — 4 queries, 1 adopt
 
-ear-ingest: 5 articles, 12 queries, 49 adopt hits
+<span data-i18n="feed.log.2">ear-ingest: 5 articles, 12 queries, 49 adopt hits</span>
 log: brain/data/ear-to-search.jsonl</code></pre>
 
-    <div class="callout lime">
+    <div class="callout lime" data-i18n-html="feed.callout">
       <strong>자가진화 루프 폐쇄</strong> — Ear가 읽은 기사 → Brain에 노드로 저장 → 매일 아침 /search 쿼리로 변환 → 오프토픽 게이트 통과한 레포를 adoption 후보로 축적. 사람은 아침 digest HTML과 adoption 결과만 확인.
     </div>
 
-    <h2 id="config">관심사 프로필</h2>
-    <p>Ear의 분류 기준은 <code>ear/CLAUDE.md</code>의 시스템 프롬프트와 <code>comad.config.yaml</code>의 <code>interests</code> 블록으로 구성됩니다. 프리셋 전환 시 자동 재구성.</p>
+    <h2 id="config" data-i18n="conf.h2">관심사 프로필</h2>
+    <p data-i18n-html="conf.p1">Ear의 분류 기준은 <code>ear/CLAUDE.md</code>의 시스템 프롬프트와 <code>comad.config.yaml</code>의 <code>interests</code> 블록으로 구성됩니다. 프리셋 전환 시 자동 재구성.</p>
 
     <div class="feature">
-      <h4>커스터마이징 포인트</h4>
+      <h4 data-i18n="conf.h4">커스터마이징 포인트</h4>
       <ul>
-        <li><code>interests.high.keywords</code> — "필독" 판정에 가중치</li>
-        <li><code>must_read_stack</code> — 현재 스택 (직접 영향 기준)</li>
-        <li><code>categories</code> — 분류 태그 화이트리스트</li>
-        <li>봇 응답 말투 — <code>ear/CLAUDE.md</code> "Voice & Tone" 섹션</li>
+        <li data-i18n-html="conf.li1"><code>interests.high.keywords</code> — "필독" 판정에 가중치</li>
+        <li data-i18n-html="conf.li2"><code>must_read_stack</code> — 현재 스택 (직접 영향 기준)</li>
+        <li data-i18n-html="conf.li3"><code>categories</code> — 분류 태그 화이트리스트</li>
+        <li data-i18n-html="conf.li4">봇 응답 말투 — <code>ear/CLAUDE.md</code> "Voice & Tone" 섹션</li>
       </ul>
     </div>
 
-    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);">관련 파일: <code>ear/CLAUDE.md</code>, <code>ear/archive/</code>, <code>ear/digests/</code>, <code>ear/generate-digest.js</code>, <code>brain/packages/search/src/ear-ingest.ts</code></p>
+    <p style="margin-top:3rem;font-size:0.85rem;color:var(--text-dim);" data-i18n-html="related"><span data-i18n="related.label">관련 파일</span>: <code>ear/CLAUDE.md</code>, <code>ear/archive/</code>, <code>ear/digests/</code>, <code>ear/generate-digest.js</code>, <code>brain/packages/search/src/ear-ingest.ts</code></p>
 
   </main>
 </div>
 
 <footer class="page-foot">
-  <a href="brain.html">← Brain</a> · <a href="index.html">가이드 홈</a> · <a href="eye.html">다음: Eye →</a>
+  <a href="brain.html" data-i18n="foot.prev">← Brain</a> · <a href="index.html" data-i18n="foot.home">가이드 홈</a> · <a href="eye.html" data-i18n="foot.next">다음: Eye →</a>
 </footer>
 
 <script src="assets/js/guide.js"></script>
+<script src="assets/js/i18n.js"></script>
+<script>
+window.I18N_DICT = {
+  en: {
+    'meta.title': 'Ear — Comad Guide',
+    'brand.sub': 'Guide',
+    'nav.home': 'Home',
+    'nav.scheduler': 'Scheduler',
+    'toc.overview': 'Overview',
+    'toc.bot': 'Discord bot setup',
+    'toc.modes': 'Operation modes',
+    'toc.archive': 'Archive format',
+    'toc.digest': 'Daily HTML digest',
+    'toc.ingest': 'Brain ingest',
+    'toc.feed': '/search auto-feed',
+    'toc.config': 'Interest profile',
+    'h1': 'Ear — <em>News curator</em>',
+    'page.desc': 'Auto-detects article links shared on Discord, classifies them into 3 relevance tiers (must-read / recommended / reference), and archives them as Markdown. An HTML digest summarizes each morning\'s batch, and must-reads are auto-fed into <code>/search</code> to close the self-evolution loop.',
+    'tag.session': 'Claude Code session',
+    'tag.must': 'Must-read 13%',
+    'tag.digest': 'Daily digest',
+    'tag.feed': '→ /search feed',
+    'ov.h2': 'Overview',
+    'ov.p1': 'Ear is a single <strong>long-running Claude Code session</strong>. It receives messages via its own MCP tool (<code>discord2</code> channel), detects article links, fetches the source with <code>WebFetch</code>, analyzes and classifies, and writes the result to disk.',
+    'ov.flow.1': 'Discord message',
+    'ov.flow.2': '(discord2 MCP channel)',
+    'ov.flow.3': 'Ear session receives',
+    'ov.flow.4': 'Fetch source article',
+    'ov.flow.5': 'Claude (this session analyzes)',
+    'ov.flow.6': 'Classify into 3 relevance tiers',
+    'ov.flow.7': 'YAML frontmatter + summary',
+    'ov.flow.8': 'Brief "archived!" reply on Discord',
+    'ov.callout': 'The Ear session is launched via the <code>ccd</code> alias — a second bot using a separate Discord token / channel. Separated from the admin ccc session so it handles curation only.',
+    'bot.h2': 'Discord bot setup (one-time)',
+    'bot.li1': 'Create an Application in the <a href="https://discord.com/developers/applications" target="_blank">Discord Developer Portal</a> → add a Bot → copy the Token.',
+    'bot.li2': 'Bot → <strong>Privileged Gateway Intents</strong> → enable <code>Message Content Intent</code> (required).',
+    'bot.li3': 'OAuth2 → URL Generator: scope=<code>bot</code>, permissions=Send/Read/Attach → open the URL to invite the bot.',
+    'bot.li4': 'Save the token to <code>~/.claude/channels/discord2/.env</code>:',
+    'modes.h2': 'Operation modes',
+    'modes.p1': 'Ear supports two run modes. The default is <strong>Mode B</strong> (LaunchAgent REST polling) — works 24/7 even with the terminal closed, and does not consume Discord IDENTIFY quota. Use Mode A (interactive ccd) only when you need real-time reactions.',
+    'modes.th.a': 'Mode A — interactive <code>ccd</code>',
+    'modes.th.b': 'Mode B — <code>ear-poll</code> LaunchAgent <strong>(default)</strong>',
+    'modes.r1': 'How it runs',
+    'modes.r1a': 'Run the <code>ccd</code> alias in a terminal',
+    'modes.r1b': 'Auto-registered by <code>install.sh</code> (REST poll every 15 min)',
+    'modes.r2': 'Latency',
+    'modes.r2a': 'Real-time (gateway push)',
+    'modes.r2b': 'Up to 15 min',
+    'modes.r3': 'Availability',
+    'modes.r3a': 'Only while the terminal window is open',
+    'modes.r3b': '24/7 (managed by launchd)',
+    'modes.r4': 'IDENTIFY quota',
+    'modes.r4a': '1 per session',
+    'modes.r4b': '<strong>0</strong> (gateway unused)',
+    'modes.r5': 'MCP load',
+    'modes.r5a': 'discord2 MCP stays resident',
+    'modes.r5b': 'One-shot <code>claude -p</code> only when processing a message (MCP not loaded)',
+    'modeA.h3': 'Mode A — interactive ccd',
+    'modeA.p1': 'The <code>ccd</code> alias starts an Ear-dedicated Claude session. Define it in <code>~/.zshrc</code>:',
+    'modeA.p2': 'On launch you\'ll see:',
+    'modeA.listen': '  Listening for channel messages from: server:discord2\n  Experimental · inbound messages will be pushed into this session...',
+    'modeA.callout': '<strong>OAuth caveat (Mode A only)</strong> — interactive <code>ccd</code> must run inside a GUI session (terminal app). Launching from launchd/cron fails due to keychain locks (<a href="scheduler.html#why">see scheduler guide</a>). Mode B works fine in the launchd <code>gui/&lt;uid&gt;</code> domain because it only makes REST calls and only invokes the OAuth-based <code>claude -p</code> when a message actually arrives.',
+    'modeB.h3': 'Mode B — ear-poll LaunchAgent <strong>(default · recommended)</strong>',
+    'modeB.p1': 'As long as <code>~/.claude/channels/discord2/.env</code> contains <code>DISCORD_BOT_TOKEN</code>, <code>install.sh</code> auto-registers <code>com.comad.ear-poll</code> (silently skipped if missing). It polls <code>/channels/:id/messages?after=&lt;last&gt;</code> every 15 min and only one-shots <code>claude -p</code> for new messages.',
+    'modeB.cmt1': '# Install (Mode B auto-registers if the env file exists)',
+    'modeB.cmt2': '# Check status',
+    'modeB.cmt3': '# Run now (without waiting 15 min)',
+    'modeB.cmt4': '# Log',
+    'modeB.p2': 'Key point: each message is handled via <code>claude -p --strict-mcp-config --mcp-config ear/poll-no-mcp.json</code> so <strong>MCP is never loaded</strong> — zero Discord IDENTIFY quota consumed.',
+    'modeB.callout': '<strong>⚠ Discord IDENTIFY trap</strong> — Discord gateway has a <strong>1000/day</strong> IDENTIFY quota per bot. We once tried to wrap <code>ccd</code> in a <code>KeepAlive=true</code> LaunchAgent for 24/7 uptime. Without a TTY it crashed instantly, restarted every 30s, spawned discord2 MCP each time, and <strong>burned 1000/1000 in 8 hours</strong> (2026-04-16). Lesson: <em>never</em> wrap interactive <code>ccd</code> in launchd/systemd. Mode B (REST polling) is the only safe path for 24/7. Emergency recovery: rotate the token in the Discord Developer Portal (quota resets immediately).',
+    'arch.h2': 'Archive format',
+    'arch.p1': 'Path: <code>ear/archive/YYYY-MM-DD-slug.md</code> — slug is the English kebab-case of the article title. Every article keeps the same strict frontmatter.',
+    'arch.relevance': 'must-read',
+    'arch.title': 'How Claude Code Auto Mode was designed',
+    'arch.h.summary': 'Key summary',
+    'arch.summary': '- (3~5 key points)',
+    'arch.h.why': 'Why it matters',
+    'arch.why': '(2~3 sentences — practical impact)',
+    'arch.h.more': 'Further reading',
+    'arch.more.doc': 'Official docs',
+    'arch.more.gh': 'Related GitHub',
+    'arch.h3': '3-tier relevance criteria',
+    'arch.th.grade': 'Grade',
+    'arch.th.pct': 'Share',
+    'arch.th.rule': 'Criteria',
+    'arch.must': '<strong>Must-read</strong> 🔴',
+    'arch.must.rule': 'Direct impact on the current stack (Claude Code / MCP / Neo4j / Bun) · security threat · paradigm shift · mentions your projects',
+    'arch.rec': '<strong>Recommended</strong> 🟡',
+    'arch.rec.rule': 'In your focus areas but no immediate impact',
+    'arch.ref': '<strong>Reference</strong> 🔵',
+    'arch.ref.rule': 'Trend-worthy but low relevance',
+    'dig.h2': 'Daily HTML digest',
+    'dig.p1': 'Every day at 08:00 (scheduled), <code>ear/generate-digest.js</code> collects <em>yesterday\'s</em> archived articles into <code>ear/digests/YYYY-MM-DD-digest.html</code>.',
+    'dig.cmt1': '# Manual run',
+    'dig.cmt2': '# yesterday',
+    'dig.cmt3': '# specific date',
+    'dig.callout': '<strong>Bug fix history (2026-04-13)</strong> — <code>toISOString()</code> used to return UTC, so the KST 08:00 cron targeted "two days ago". Fixed via local component assembly + backfilled missing days.',
+    'ing.h2': 'Brain ingest',
+    'ing.p1': 'The Ear archive is imported into Brain\'s Neo4j by the <code>ingest-geeknews.sh</code> cron (daily 09:30). Any blog post with the same frontmatter structure is picked up, not just GeekNews.',
+    'ing.cmt': '# → scans ~/Programmer/01-comad/comad-world/ear/archive/*.md\n# → MERGE Article / Topic / Technology nodes\n# → entity extraction (Haiku) + claim extraction',
+    'feed.h2': '/search auto-feed (added 2026-04-13)',
+    'feed.p1': '<code>ear-ingest</code> runs daily at 07:00, picks <strong>must-read</strong> + core-category articles (AI/LLM, Tool, OpenSource, Backend, Frontend, DevOps, Database, Language), extracts tech tokens, and submits them as queries to <code>/search</code>.',
+    'feed.cmt1': '# yesterday only',
+    'feed.cmt2': '# last 7 days',
+    'feed.cmt3': '# preview queries only',
+    'feed.h3': 'Sample run',
+    'feed.log.1': 'ear-ingest: 5 article(s) pass filter (relevance=must-read, since=3d)',
+    'feed.log.2': 'ear-ingest: 5 articles, 12 queries, 49 adopt hits',
+    'feed.callout': '<strong>Self-evolution loop closed</strong> — articles Ear reads → stored as Brain nodes → converted to /search queries every morning → repos that pass the off-topic gate are accumulated as adoption candidates. Humans only review the morning digest HTML and adoption results.',
+    'conf.h2': 'Interest profile',
+    'conf.p1': 'Ear\'s classification rules live in the <code>ear/CLAUDE.md</code> system prompt plus the <code>interests</code> block of <code>comad.config.yaml</code>. A preset switch reconfigures them automatically.',
+    'conf.h4': 'Customization points',
+    'conf.li1': '<code>interests.high.keywords</code> — weights for the "must-read" decision',
+    'conf.li2': '<code>must_read_stack</code> — your current stack (direct-impact baseline)',
+    'conf.li3': '<code>categories</code> — classification tag whitelist',
+    'conf.li4': 'Bot reply voice — the "Voice & Tone" section of <code>ear/CLAUDE.md</code>',
+    'related.label': 'Related files',
+    'foot.prev': '← Brain',
+    'foot.home': 'Guide home',
+    'foot.next': 'Next: Eye →'
+  },
+  ko: {
+    'meta.title': 'Ear — Comad 가이드',
+    'brand.sub': '가이드',
+    'nav.home': '홈',
+    'nav.scheduler': '스케줄러',
+    'toc.overview': '개요 & 동작 방식',
+    'toc.bot': 'Discord 봇 설정',
+    'toc.modes': '운영 모드',
+    'toc.archive': '아카이브 포맷',
+    'toc.digest': '일일 digest HTML',
+    'toc.ingest': 'Brain 인제스트',
+    'toc.feed': '/search 자동 피드',
+    'toc.config': '관심사 프로필',
+    'h1': 'Ear — <em>뉴스 큐레이터</em>',
+    'page.desc': 'Discord 채널에 공유된 기사 링크를 자동 감지하여, 관련성을 3단계(필독/추천/참고)로 분류하고 마크다운으로 아카이브합니다. 매일 아침 digest HTML로 요약되고, 필독 기사는 <code>/search</code>로 자동 투입되어 자가진화 루프를 완성합니다.',
+    'tag.session': 'Claude Code 세션',
+    'tag.must': '필독 13%',
+    'tag.digest': '일일 digest',
+    'tag.feed': '→ /search 피드',
+    'ov.h2': '개요 & 동작 방식',
+    'ov.p1': 'Ear는 하나의 <strong>롱런닝 Claude Code 세션</strong>입니다. 자체 MCP 도구(<code>discord2</code> 채널)로 메시지를 받아 기사 링크를 감지하고, <code>WebFetch</code>로 원문을 가져와 분석·분류한 뒤 파일로 저장합니다.',
+    'ov.flow.1': 'Discord 메시지',
+    'ov.flow.2': '(discord2 MCP 채널)',
+    'ov.flow.3': 'Ear 세션이 수신 감지',
+    'ov.flow.4': '원문 기사 fetch',
+    'ov.flow.5': 'Claude (이 세션 자체가 분석)',
+    'ov.flow.6': '관련성 3단계 분류',
+    'ov.flow.7': 'YAML frontmatter + 요약',
+    'ov.flow.8': 'Discord에 "아카이브 완료!" 짧게 응답',
+    'ov.callout': 'Ear 세션은 <code>ccd</code>라는 alias로 기동됩니다 — 별도의 Discord 토큰/채널을 쓰는 두 번째 bot입니다. 관리용 ccc와 분리되어 있어 큐레이션만 담당합니다.',
+    'bot.h2': 'Discord 봇 설정 (초회 1회)',
+    'bot.li1': '<a href="https://discord.com/developers/applications" target="_blank">Discord Developer Portal</a>에서 Application 생성 → Bot 추가 → Token 복사',
+    'bot.li2': 'Bot → <strong>Privileged Gateway Intents</strong>에서 <code>Message Content Intent</code> 활성화 (필수)',
+    'bot.li3': 'OAuth2 → URL Generator에서 scope=<code>bot</code>, 권한=Send/Read/Attach 체크 → 생성된 URL로 봇을 서버에 초대',
+    'bot.li4': '토큰을 <code>~/.claude/channels/discord2/.env</code>에 저장:',
+    'modes.h2': '운영 모드',
+    'modes.p1': 'Ear는 두 가지 실행 방식을 지원합니다. 기본은 <strong>Mode B</strong>(LaunchAgent REST 폴링)입니다 — 터미널을 닫아도 24/7 동작하고 Discord IDENTIFY 쿼터를 소비하지 않습니다. Mode A(인터랙티브 ccd)는 실시간 반응이 필요할 때만 사용합니다.',
+    'modes.th.a': 'Mode A — 인터랙티브 <code>ccd</code>',
+    'modes.th.b': 'Mode B — <code>ear-poll</code> LaunchAgent <strong>(기본)</strong>',
+    'modes.r1': '실행 방식',
+    'modes.r1a': '터미널에서 <code>ccd</code> alias 실행',
+    'modes.r1b': '<code>install.sh</code>가 자동 등록 (15분마다 REST 폴링)',
+    'modes.r2': '지연',
+    'modes.r2a': '실시간 (gateway push)',
+    'modes.r2b': '최대 15분',
+    'modes.r3': '가용성',
+    'modes.r3a': '터미널 창이 열려 있는 동안만',
+    'modes.r3b': '24/7 (launchd가 관리)',
+    'modes.r4': 'IDENTIFY 쿼터',
+    'modes.r4a': '세션당 1회',
+    'modes.r4b': '<strong>0회</strong> (gateway 미사용)',
+    'modes.r5': 'MCP 로딩',
+    'modes.r5a': 'discord2 MCP 상주',
+    'modes.r5b': '메시지 처리 시점에만 one-shot <code>claude -p</code> (MCP 미로드)',
+    'modeA.h3': 'Mode A — 인터랙티브 ccd',
+    'modeA.p1': '<code>ccd</code> alias는 Ear 전용 Claude 세션을 시작합니다. <code>~/.zshrc</code>에 다음과 같이 정의됩니다:',
+    'modeA.p2': '실행하면 상단에 다음과 같이 뜹니다:',
+    'modeA.listen': '  Listening for channel messages from: server:discord2\n  Experimental · inbound messages will be pushed into this session...',
+    'modeA.callout': '<strong>OAuth 주의 (Mode A에 한함)</strong> — 인터랙티브 <code>ccd</code>는 반드시 GUI 세션(터미널 앱)에서 실행. launchd/cron에서 기동하면 OAuth keychain 잠금으로 실패합니다 (<a href="scheduler.html#why">스케줄러 가이드 참고</a>). Mode B는 launchd <code>gui/&lt;uid&gt;</code> 도메인에서 정상 동작합니다 — REST 호출만 하고 OAuth-기반 <code>claude -p</code>는 메시지가 도착했을 때만 invoke하기 때문입니다.',
+    'modeB.h3': 'Mode B — ear-poll LaunchAgent <strong>(기본·권장)</strong>',
+    'modeB.p1': '<code>~/.claude/channels/discord2/.env</code>에 <code>DISCORD_BOT_TOKEN</code>만 저장해두면 <code>install.sh</code>가 자동으로 <code>com.comad.ear-poll</code>을 등록합니다 (토큰이 없으면 조용히 skip). 15분 간격으로 <code>/channels/:id/messages?after=&lt;last&gt;</code>를 polling해서 새 메시지에 대해서만 <code>claude -p</code>를 one-shot 실행합니다.',
+    'modeB.cmt1': '# 설치 (Mode B는 환경파일만 있으면 자동 등록)',
+    'modeB.cmt2': '# 상태 확인',
+    'modeB.cmt3': '# 즉시 실행 (다음 15분을 기다리지 않고)',
+    'modeB.cmt4': '# 로그',
+    'modeB.p2': '핵심: 매 메시지마다 <code>claude -p --strict-mcp-config --mcp-config ear/poll-no-mcp.json</code>으로 호출하므로 <strong>MCP가 절대 로드되지 않습니다</strong> — Discord IDENTIFY 쿼터 소비량은 0입니다.',
+    'modeB.callout': '<strong>⚠ Discord IDENTIFY 함정</strong> — Discord gateway는 bot당 <strong>1000/day</strong> IDENTIFY 쿼터가 있습니다. 과거 <code>ccd</code>를 <code>KeepAlive=true</code> LaunchAgent로 감싸서 상시 실행하려 시도했다가 TTY 없는 launchd 환경에서 즉시 crash → 30초마다 재시작 → 매 재시작이 discord2 MCP를 spawn → <strong>8시간 만에 1000/1000 소진</strong>하는 사고가 있었습니다 (2026-04-16). 교훈: <em>절대</em> 인터랙티브 <code>ccd</code>를 launchd/systemd에서 감싸지 마세요. 24/7 운영은 Mode B(REST 폴링)가 유일한 정답입니다. 응급 복구는 Discord Developer Portal에서 <strong>토큰 회전</strong>(쿼터 즉시 리셋).',
+    'arch.h2': '아카이브 포맷',
+    'arch.p1': '저장 경로: <code>ear/archive/YYYY-MM-DD-slug.md</code> — 슬러그는 기사 제목의 영문 kebab-case. 모든 기사는 동일한 frontmatter 구조를 엄격히 유지합니다.',
+    'arch.relevance': '필독',
+    'arch.title': 'Claude Code Auto Mode를 설계한 방법',
+    'arch.h.summary': '핵심 요약',
+    'arch.summary': '- (3~5개 핵심 포인트)',
+    'arch.h.why': '왜 알아야 하는가',
+    'arch.why': '(2~3문장 — 실무 영향)',
+    'arch.h.more': '추가 리소스',
+    'arch.more.doc': '공식 문서',
+    'arch.more.gh': '관련 GitHub',
+    'arch.h3': '3단 관련성 기준',
+    'arch.th.grade': '등급',
+    'arch.th.pct': '비율',
+    'arch.th.rule': '기준',
+    'arch.must': '<strong>필독</strong> 🔴',
+    'arch.must.rule': '현재 스택(Claude Code/MCP/Neo4j/Bun) 직접 영향 · 보안 위협 · 패러다임 변화 · 자기 프로젝트 언급',
+    'arch.rec': '<strong>추천</strong> 🟡',
+    'arch.rec.rule': '핵심 관심 분야지만 당장 영향 없는 기사',
+    'arch.ref': '<strong>참고</strong> 🔵',
+    'arch.ref.rule': '트렌드 가치는 있으나 관련성 낮음',
+    'dig.h2': '일일 digest HTML',
+    'dig.p1': '매일 08:00 (스케줄러에 의해 자동 실행) <code>ear/generate-digest.js</code>가 <em>어제</em> 아카이브된 모든 기사를 모아 <code>ear/digests/YYYY-MM-DD-digest.html</code>로 생성합니다.',
+    'dig.cmt1': '# 수동 실행',
+    'dig.cmt2': '# 어제 기준',
+    'dig.cmt3': '# 특정 날짜',
+    'dig.callout': '<strong>버그 수정 이력 (2026-04-13)</strong> — 이전에는 <code>toISOString()</code>이 UTC 반환이라 KST 08:00 cron에서 "이틀 전"을 타겟했었음. 로컬 컴포넌트 조립으로 수정 + 누락분 백필.',
+    'ing.h2': 'Brain 인제스트',
+    'ing.p1': 'Ear의 아카이브는 <code>ingest-geeknews.sh</code> cron(매일 09:30)이 Brain Neo4j로 임포트합니다. GeekNews 외 일반 블로그 포스트도 동일한 frontmatter 구조면 함께 처리됩니다.',
+    'ing.cmt': '# → ~/Programmer/01-comad/comad-world/ear/archive/*.md 스캔\n# → Article / Topic / Technology 노드 MERGE\n# → 엔티티 추출(Haiku) + Claim 추출',
+    'feed.h2': '/search 자동 피드 (2026-04-13 추가)',
+    'feed.p1': '<code>ear-ingest</code>가 매일 07:00 돌면서 <strong>필독</strong> + 핵심 카테고리(AI/LLM, Tool, OpenSource, Backend, Frontend, DevOps, Database, Language) 기사를 골라 기술 토큰을 추출하고 <code>/search</code>에 쿼리로 투입합니다.',
+    'feed.cmt1': '# 어제만',
+    'feed.cmt2': '# 지난 1주',
+    'feed.cmt3': '# 쿼리만 미리보기',
+    'feed.h3': '실제 동작 예',
+    'feed.log.1': 'ear-ingest: 5 article(s) pass filter (relevance=필독, since=3d)',
+    'feed.log.2': 'ear-ingest: 5 articles, 12 queries, 49 adopt hits',
+    'feed.callout': '<strong>자가진화 루프 폐쇄</strong> — Ear가 읽은 기사 → Brain에 노드로 저장 → 매일 아침 /search 쿼리로 변환 → 오프토픽 게이트 통과한 레포를 adoption 후보로 축적. 사람은 아침 digest HTML과 adoption 결과만 확인.',
+    'conf.h2': '관심사 프로필',
+    'conf.p1': 'Ear의 분류 기준은 <code>ear/CLAUDE.md</code>의 시스템 프롬프트와 <code>comad.config.yaml</code>의 <code>interests</code> 블록으로 구성됩니다. 프리셋 전환 시 자동 재구성.',
+    'conf.h4': '커스터마이징 포인트',
+    'conf.li1': '<code>interests.high.keywords</code> — "필독" 판정에 가중치',
+    'conf.li2': '<code>must_read_stack</code> — 현재 스택 (직접 영향 기준)',
+    'conf.li3': '<code>categories</code> — 분류 태그 화이트리스트',
+    'conf.li4': '봇 응답 말투 — <code>ear/CLAUDE.md</code> "Voice & Tone" 섹션',
+    'related.label': '관련 파일',
+    'foot.prev': '← Brain',
+    'foot.home': '가이드 홈',
+    'foot.next': '다음: Eye →'
+  }
+};
+</script>
 </body>
 </html>

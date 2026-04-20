@@ -3,18 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Comad World — 사용법 가이드</title>
-<meta name="description" content="Comad World의 8개 모듈별 상세 사용 가이드. 설치부터 기능별 시연까지.">
+<title data-i18n="meta.title">Comad World — 사용법 가이드</title>
+<meta name="description" content="Comad World의 8개 모듈별 상세 사용 가이드. 설치부터 기능별 시연까지." data-i18n-meta="meta.desc">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="assets/css/guide.css">
+<link rel="stylesheet" href="/comad/assets/css/comad-shared.css">
 </head>
 <body>
 
 <header class="topbar">
-  <a href="/comad" class="brand" style="text-decoration:none;color:var(--text-bright)">Comad World <span class="sub">가이드</span></a>
+  <a href="/comad" class="brand" style="text-decoration:none;color:var(--text-bright)">Comad World <span class="sub" data-i18n="brand.sub">가이드</span></a>
   <nav>
-    <a href="index.html" class="active">홈</a>
-    <a href="scheduler.html">스케줄러</a>
+    <a href="index.html" class="active" data-i18n="nav.home">홈</a>
+    <a href="scheduler.html" data-i18n="nav.scheduler">스케줄러</a>
     <a href="brain.html">Brain</a>
     <a href="ear.html">Ear</a>
     <a href="eye.html">Eye</a>
@@ -24,18 +25,19 @@
     <a href="voice.html">Voice</a>
     <a href="browse.html">Browse</a>
   </nav>
+  <button class="lang-toggle" onclick="toggleLang()"><span id="langEn">EN</span> / <span id="langKo">KO</span></button>
 </header>
 
 <div style="max-width:1100px;margin:0 auto;padding:0 1.5rem;">
 
 <section class="hub-hero">
-  <h1>Comad World <em>사용법 가이드</em></h1>
-  <p class="page-desc">
+  <h1 data-i18n-html="hero.h1">Comad World <em>사용법 가이드</em></h1>
+  <p class="page-desc" data-i18n="hero.desc">
     각 모듈의 핵심 기능, 실행 명령, 예상 출력을 스크린샷과 함께 단계별로 정리합니다.
     상단 탭 또는 아래 카드에서 관심 있는 모듈을 선택하세요. 영문 번역은 순차적으로 추가됩니다.
   </p>
 
-  <div class="callout teal" style="max-width:720px;">
+  <div class="callout teal" style="max-width:720px;" data-i18n-html="hero.callout">
     <strong>처음 오신 분</strong>이라면 <a href="scheduler.html">스케줄러 설치</a> → <a href="brain.html">Brain (지식 그래프)</a> 순서를 추천합니다. 모든 모듈은 독립적으로도 동작합니다.
   </div>
 </section>
@@ -43,64 +45,64 @@
 <div class="hub-grid">
 
   <a href="scheduler.html" class="hub-card">
-    <span class="kb">0. 공통</span>
-    <h3>스케줄러 <span class="ko">Scheduler</span></h3>
-    <p>macOS LaunchAgents · Linux cron · Windows Task Scheduler. <code>schedule-install.sh</code> 한 번으로 OS 자동 감지.</p>
+    <span class="kb" data-i18n="card.sch.kb">0. 공통</span>
+    <h3 data-i18n-html="card.sch.h3">스케줄러 <span class="ko">Scheduler</span></h3>
+    <p data-i18n-html="card.sch.p">macOS LaunchAgents · Linux cron · Windows Task Scheduler. <code>schedule-install.sh</code> 한 번으로 OS 자동 감지.</p>
   </a>
 
   <a href="brain.html" class="hub-card">
-    <span class="kb">1. 지식 그래프</span>
-    <h3>Brain <span class="ko">지식 그래프 · GraphRAG</span></h3>
-    <p>크롤링 → 엔티티 추출 → Neo4j → 20+ MCP 도구. GraphRAG 벤치마크 recall 93%, latency 13.8s.</p>
+    <span class="kb" data-i18n="card.brain.kb">1. 지식 그래프</span>
+    <h3 data-i18n-html="card.brain.h3">Brain <span class="ko">지식 그래프 · GraphRAG</span></h3>
+    <p data-i18n="card.brain.p">크롤링 → 엔티티 추출 → Neo4j → 20+ MCP 도구. GraphRAG 벤치마크 recall 93%, latency 13.8s.</p>
   </a>
 
   <a href="ear.html" class="hub-card">
-    <span class="kb">2. 수집</span>
-    <h3>Ear <span class="ko">뉴스 큐레이터</span></h3>
-    <p>Discord 기사 자동 아카이브 · 3단 관련성 분류 · 일일 digest HTML · 필독 기사 자동 /search 피드.</p>
+    <span class="kb" data-i18n="card.ear.kb">2. 수집</span>
+    <h3 data-i18n-html="card.ear.h3">Ear <span class="ko">뉴스 큐레이터</span></h3>
+    <p data-i18n="card.ear.p">Discord 기사 자동 아카이브 · 3단 관련성 분류 · 일일 digest HTML · 필독 기사 자동 /search 피드.</p>
   </a>
 
   <a href="eye.html" class="hub-card">
-    <span class="kb">3. 예측</span>
-    <h3>Eye <span class="ko">시뮬레이션 엔진</span></h3>
-    <p>텍스트 → 온톨로지 → 10 분석 렌즈 → 전파 시뮬레이션 → 예측 보고서. Next.js UI + 7 MCP 도구.</p>
+    <span class="kb" data-i18n="card.eye.kb">3. 예측</span>
+    <h3 data-i18n-html="card.eye.h3">Eye <span class="ko">시뮬레이션 엔진</span></h3>
+    <p data-i18n="card.eye.p">텍스트 → 온톨로지 → 10 분석 렌즈 → 전파 시뮬레이션 → 예측 보고서. Next.js UI + 7 MCP 도구.</p>
   </a>
 
   <a href="search.html" class="hub-card">
-    <span class="kb">4. 자기진화</span>
-    <h3>Search <span class="ko">레퍼런스 파이프라인</span></h3>
-    <p>GitHub · npm · PyPI · arXiv 병렬 탐색 · 오프토픽 게이트 · sandbox 검증 · 채택 이력 추적.</p>
+    <span class="kb" data-i18n="card.search.kb">4. 자기진화</span>
+    <h3 data-i18n-html="card.search.h3">Search <span class="ko">레퍼런스 파이프라인</span></h3>
+    <p data-i18n="card.search.p">GitHub · npm · PyPI · arXiv 병렬 탐색 · 오프토픽 게이트 · sandbox 검증 · 채택 이력 추적.</p>
   </a>
 
   <a href="photo.html" class="hub-card">
-    <span class="kb">5. 창작</span>
-    <h3>Photo <span class="ko">AI 사진 보정</span></h3>
-    <p>이미지 분석 → 보정 계획 → Photoshop MCP 비파괴 편집. MAE 가드, 배치 모드.</p>
+    <span class="kb" data-i18n="card.photo.kb">5. 창작</span>
+    <h3 data-i18n-html="card.photo.h3">Photo <span class="ko">AI 사진 보정</span></h3>
+    <p data-i18n="card.photo.p">이미지 분석 → 보정 계획 → Photoshop MCP 비파괴 편집. MAE 가드, 배치 모드.</p>
   </a>
 
   <a href="sleep.html" class="hub-card">
-    <span class="kb">6. 기억</span>
-    <h3>Sleep <span class="ko">메모리 정리</span></h3>
-    <p>Claude Code 프로젝트별 auto memory 전수 스캔 · 중복 감지 · 통합 · MCP 서버로 조회.</p>
+    <span class="kb" data-i18n="card.sleep.kb">6. 기억</span>
+    <h3 data-i18n-html="card.sleep.h3">Sleep <span class="ko">메모리 정리</span></h3>
+    <p data-i18n="card.sleep.p">Claude Code 프로젝트별 auto memory 전수 스캔 · 중복 감지 · 통합 · MCP 서버로 조회.</p>
   </a>
 
   <a href="voice.html" class="hub-card">
-    <span class="kb">7. 오케스트레이션</span>
-    <h3>Voice <span class="ko">워크플로우 하네스</span></h3>
-    <p>CLAUDE.md 트리거 6개. "상황 검토해봐" 한마디로 코드베이스 진단 → 개선 카드 제시.</p>
+    <span class="kb" data-i18n="card.voice.kb">7. 오케스트레이션</span>
+    <h3 data-i18n-html="card.voice.h3">Voice <span class="ko">워크플로우 하네스</span></h3>
+    <p data-i18n="card.voice.p">CLAUDE.md 트리거 6개. "상황 검토해봐" 한마디로 코드베이스 진단 → 개선 카드 제시.</p>
   </a>
 
   <a href="browse.html" class="hub-card">
-    <span class="kb">8. 브라우저</span>
-    <h3>Browse <span class="ko">헤드리스 브라우저 · 토큰 최적화</span></h3>
-    <p>Playwright Chromium 래퍼 + @ref 기반 상호작용. <code>find</code>·<code>batch</code>·세션 영속화로 로그인 플로우를 1 round-trip으로 압축.</p>
+    <span class="kb" data-i18n="card.browse.kb">8. 브라우저</span>
+    <h3 data-i18n-html="card.browse.h3">Browse <span class="ko">헤드리스 브라우저 · 토큰 최적화</span></h3>
+    <p data-i18n-html="card.browse.p">Playwright Chromium 래퍼 + @ref 기반 상호작용. <code>find</code>·<code>batch</code>·세션 영속화로 로그인 플로우를 1 round-trip으로 압축.</p>
   </a>
 
 </div>
 
 <div style="margin:3rem 0 1.2rem;">
-  <h2 style="font-size:1.2rem;margin:0 0 0.8rem;">업그레이드 <span class="ko" style="font-weight:400;color:var(--text-dim);">Upgrading</span></h2>
-  <p style="color:var(--text-dim);margin:0 0 1rem;">이미 설치했다면 <code>comad</code> 한 명령으로 main + 6개 모듈 + deps + agents를 한 번에 업데이트합니다. Dirty tree abort · 자동 스냅샷 · 롤백 지원.</p>
+  <h2 style="font-size:1.2rem;margin:0 0 0.8rem;" data-i18n-html="upgrade.h2">업그레이드 <span class="ko" style="font-weight:400;color:var(--text-dim);">Upgrading</span></h2>
+  <p style="color:var(--text-dim);margin:0 0 1rem;" data-i18n-html="upgrade.intro">이미 설치했다면 <code>comad</code> 한 명령으로 main + 6개 모듈 + deps + agents를 한 번에 업데이트합니다. Dirty tree abort · 자동 스냅샷 · 롤백 지원.</p>
   <pre style="background:var(--surface);padding:1rem 1.2rem;border-radius:8px;overflow-x:auto;font-size:0.88rem;line-height:1.6;"><code><span style="color:var(--text-dim)"># Any directory (symlinked to ~/.local/bin/comad by install.sh)</span>
 comad status              <span style="color:var(--text-dim)"># VERSION + module SHAs (dirty flagged)</span>
 comad upgrade --dry-run   <span style="color:var(--text-dim)"># preview changes</span>
@@ -114,19 +116,114 @@ make clean                <span style="color:var(--text-dim)"># dry-run: preview
 make clean-apply          <span style="color:var(--text-dim)"># actually delete them</span>
 make clean-deep           <span style="color:var(--text-dim)"># also nuke node_modules / .venv (~3.6 GB)</span>
 make validate-config      <span style="color:var(--text-dim)"># comad.config.yaml + presets vs JSON Schema</span></code></pre>
-  <p style="color:var(--text-dim);font-size:0.82rem;margin-top:0.8rem;">루트 <code>VERSION</code> (semver) + <code>comad.lock</code> (6개 모듈 branch+SHA 고정)으로 package-lock.json처럼 조합을 재현 가능. 기존 설치 사용자는 한 번 <code>git pull origin main &amp;&amp; ./install.sh</code> 하면 <code>comad</code> 명령이 생깁니다. 세부: <a href="https://github.com/kinkos1234/comad-world#upgrading" style="color:var(--accent)">README § Upgrading</a>.</p>
-  <p style="color:var(--text-dim);font-size:0.82rem;margin-top:0.4rem;">📄 <strong>Config 계약</strong> — <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/adr/0002-config-contract.md" style="color:var(--accent)">ADR 0002</a>: <code>comad.config.yaml</code>의 JSON Schema(<code>schema/comad.config.schema.json</code>)를 기준으로 필수·선택 섹션, 타입, URL 패턴, Neo4j URI 등 자동 검증. 오타나 잘못된 타입은 CI의 <strong>config-schema-validation</strong> 잡이 2초 안에 잡아냅니다. <code>make validate-config</code>로 로컬에서도 실행.</p>
-  <p style="color:var(--text-dim);font-size:0.82rem;margin-top:0.4rem;">📐 <strong>저장소 전략</strong> — <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/adr/0001-repository-strategy.md" style="color:var(--accent)">ADR 0001</a>: umbrella는 배선(installer / scripts / Makefile / VERSION / comad.lock)을 소유, 각 모듈 디렉터리는 자기 <code>.git</code>이 오너. <strong>Structure Guard CI</strong>가 PR마다 모듈 경계를 자동 검증 — 중복 파일·빌드 산출물 트래킹·VERSION 형식 오류를 막아줍니다.</p>
-  <p style="color:var(--text-dim);font-size:0.82rem;margin-top:0.4rem;">📂 <strong>경로 무관</strong> — 어느 폴더, 어느 이름으로 클론해도 동작합니다. <code>scripts/comad</code>가 자기 심링크를 따라 repo root를 찾고, <code>scripts/render-templates.sh</code>가 <code>{{COMAD_ROOT}}</code> 플레이스홀더를 install/upgrade 시점에 절대경로로 치환합니다. <code>~/Desktop/내-에이전트</code>, <code>/opt/comad</code> 어디든 OK.</p>
+  <p style="color:var(--text-dim);font-size:0.82rem;margin-top:0.8rem;" data-i18n-html="upgrade.p1">루트 <code>VERSION</code> (semver) + <code>comad.lock</code> (6개 모듈 branch+SHA 고정)으로 package-lock.json처럼 조합을 재현 가능. 기존 설치 사용자는 한 번 <code>git pull origin main &amp;&amp; ./install.sh</code> 하면 <code>comad</code> 명령이 생깁니다. 세부: <a href="https://github.com/kinkos1234/comad-world#upgrading" style="color:var(--accent)">README § Upgrading</a>.</p>
+  <p style="color:var(--text-dim);font-size:0.82rem;margin-top:0.4rem;" data-i18n-html="upgrade.p2">📄 <strong>Config 계약</strong> — <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/adr/0002-config-contract.md" style="color:var(--accent)">ADR 0002</a>: <code>comad.config.yaml</code>의 JSON Schema(<code>schema/comad.config.schema.json</code>)를 기준으로 필수·선택 섹션, 타입, URL 패턴, Neo4j URI 등 자동 검증. 오타나 잘못된 타입은 CI의 <strong>config-schema-validation</strong> 잡이 2초 안에 잡아냅니다. <code>make validate-config</code>로 로컬에서도 실행.</p>
+  <p style="color:var(--text-dim);font-size:0.82rem;margin-top:0.4rem;" data-i18n-html="upgrade.p3">📐 <strong>저장소 전략</strong> — <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/adr/0001-repository-strategy.md" style="color:var(--accent)">ADR 0001</a>: umbrella는 배선(installer / scripts / Makefile / VERSION / comad.lock)을 소유, 각 모듈 디렉터리는 자기 <code>.git</code>이 오너. <strong>Structure Guard CI</strong>가 PR마다 모듈 경계를 자동 검증 — 중복 파일·빌드 산출물 트래킹·VERSION 형식 오류를 막아줍니다.</p>
+  <p style="color:var(--text-dim);font-size:0.82rem;margin-top:0.4rem;" data-i18n-html="upgrade.p4">📂 <strong>경로 무관</strong> — 어느 폴더, 어느 이름으로 클론해도 동작합니다. <code>scripts/comad</code>가 자기 심링크를 따라 repo root를 찾고, <code>scripts/render-templates.sh</code>가 <code>{{COMAD_ROOT}}</code> 플레이스홀더를 install/upgrade 시점에 절대경로로 치환합니다. <code>~/Desktop/내-에이전트</code>, <code>/opt/comad</code> 어디든 OK.</p>
 </div>
 
 </div>
 
 <footer style="text-align:center;color:var(--text-dim);font-size:0.78rem;padding:3rem 1rem 4rem;border-top:1px solid var(--border);margin-top:4rem;">
-  <div>Comad World · <a href="https://github.com/kinkos1234/comad-world" style="color:var(--teal)">GitHub</a> · <a href="/comad">소개 페이지</a></div>
-  <div style="margin-top:0.5rem;">MIT License · Claude Code + Neo4j + TypeScript/Bun</div>
+  <div data-i18n-html="footer.links">Comad World · <a href="https://github.com/kinkos1234/comad-world" style="color:var(--teal)">GitHub</a> · <a href="/comad">소개 페이지</a></div>
+  <div style="margin-top:0.5rem;" data-i18n="footer.sub">MIT License · Claude Code + Neo4j + TypeScript/Bun</div>
 </footer>
 
 <script src="assets/js/guide.js"></script>
+<script src="assets/js/i18n.js"></script>
+<script>
+window.I18N_DICT = {
+  en: {
+    'meta.title': 'Comad World — User Guide',
+    'meta.desc': 'Detailed user guides for each of Comad World\'s 8 modules. From install to feature walkthroughs.',
+    'brand.sub': 'Guide',
+    'nav.home': 'Home',
+    'nav.scheduler': 'Scheduler',
+    'hero.h1': 'Comad World <em>User Guide</em>',
+    'hero.desc': 'Each module\'s core features, commands, and expected output — organized step by step with screenshots. Pick a module from the top nav or the cards below.',
+    'hero.callout': '<strong>New here?</strong> We recommend <a href="scheduler.html">Scheduler install</a> → <a href="brain.html">Brain (knowledge graph)</a> in that order. Every module works independently too.',
+    'card.sch.kb': '0. Common',
+    'card.sch.h3': 'Scheduler',
+    'card.sch.p': 'macOS LaunchAgents · Linux cron · Windows Task Scheduler. One <code>schedule-install.sh</code> auto-detects your OS.',
+    'card.brain.kb': '1. Knowledge graph',
+    'card.brain.h3': 'Brain <span class="ko">Knowledge graph · GraphRAG</span>',
+    'card.brain.p': 'Crawl → entity extraction → Neo4j → 20+ MCP tools. GraphRAG benchmark: recall 93%, latency 13.8s.',
+    'card.ear.kb': '2. Curation',
+    'card.ear.h3': 'Ear <span class="ko">News curator</span>',
+    'card.ear.p': 'Discord article auto-archive · 3-tier relevance · daily HTML digest · must-read auto-feed to /search.',
+    'card.eye.kb': '3. Prediction',
+    'card.eye.h3': 'Eye <span class="ko">Simulation engine</span>',
+    'card.eye.p': 'Text → ontology → 10 lenses → propagation sim → forecast report. Next.js UI + 7 MCP tools.',
+    'card.search.kb': '4. Self-evolution',
+    'card.search.h3': 'Search <span class="ko">Reference pipeline</span>',
+    'card.search.p': 'GitHub · npm · PyPI · arXiv parallel discovery · off-topic gate · sandbox verification · adoption history.',
+    'card.photo.kb': '5. Creation',
+    'card.photo.h3': 'Photo <span class="ko">AI photo correction</span>',
+    'card.photo.p': 'Image analysis → correction plan → non-destructive Photoshop MCP edit. MAE guardrail, batch mode.',
+    'card.sleep.kb': '6. Memory',
+    'card.sleep.h3': 'Sleep <span class="ko">Memory consolidation</span>',
+    'card.sleep.p': 'Full scan of every Claude Code project\'s auto memory · dedupe · consolidate · query via MCP server.',
+    'card.voice.kb': '7. Orchestration',
+    'card.voice.h3': 'Voice <span class="ko">Workflow harness</span>',
+    'card.voice.p': '6 CLAUDE.md triggers. "Give me a status review" → codebase diagnosis + improvement cards.',
+    'card.browse.kb': '8. Browser',
+    'card.browse.h3': 'Browse <span class="ko">Headless browser · token-efficient</span>',
+    'card.browse.p': 'Playwright Chromium wrapper with @ref-based interaction. <code>find</code>, <code>batch</code>, and session persistence compress a full login flow into one round-trip.',
+    'upgrade.h2': 'Upgrading',
+    'upgrade.intro': 'Already installed? The single <code>comad</code> command updates main + 6 modules + deps + agents at once. Dirty-tree abort · auto-snapshot · rollback supported.',
+    'upgrade.p1': '<code>VERSION</code> (semver) + <code>comad.lock</code> (6-module branch+SHA pin) reproduces a combination like a package-lock.json. Existing installs: run <code>git pull origin main &amp;&amp; ./install.sh</code> once and the <code>comad</code> command appears. Details: <a href="https://github.com/kinkos1234/comad-world#upgrading" style="color:var(--accent)">README § Upgrading</a>.',
+    'upgrade.p2': '📄 <strong>Config contract</strong> — <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/adr/0002-config-contract.md" style="color:var(--accent)">ADR 0002</a>: <code>comad.config.yaml</code> is validated against <code>schema/comad.config.schema.json</code> — required/optional sections, types, URL patterns, Neo4j URI, and more. Typos or bad types are caught in 2s by CI\'s <strong>config-schema-validation</strong> job. Run locally with <code>make validate-config</code>.',
+    'upgrade.p3': '📐 <strong>Repository strategy</strong> — <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/adr/0001-repository-strategy.md" style="color:var(--accent)">ADR 0001</a>: the umbrella owns the wiring (installer / scripts / Makefile / VERSION / comad.lock); each module directory is owned by its own <code>.git</code>. <strong>Structure Guard CI</strong> validates module boundaries on every PR — rejecting duplicate files, tracked build artifacts, and bad VERSION formats.',
+    'upgrade.p4': '📂 <strong>Path-agnostic</strong> — clone to any folder, any name. <code>scripts/comad</code> follows its own symlink to find the repo root, and <code>scripts/render-templates.sh</code> replaces <code>{{COMAD_ROOT}}</code> placeholders with absolute paths at install/upgrade time. <code>~/Desktop/my-agents</code>, <code>/opt/comad</code> — anywhere works.',
+    'footer.links': 'Comad World · <a href="https://github.com/kinkos1234/comad-world" style="color:var(--teal)">GitHub</a> · <a href="/comad">Landing page</a>',
+    'footer.sub': 'MIT License · Claude Code + Neo4j + TypeScript/Bun'
+  },
+  ko: {
+    'meta.title': 'Comad World — 사용법 가이드',
+    'meta.desc': 'Comad World의 8개 모듈별 상세 사용 가이드. 설치부터 기능별 시연까지.',
+    'brand.sub': '가이드',
+    'nav.home': '홈',
+    'nav.scheduler': '스케줄러',
+    'hero.h1': 'Comad World <em>사용법 가이드</em>',
+    'hero.desc': '각 모듈의 핵심 기능, 실행 명령, 예상 출력을 스크린샷과 함께 단계별로 정리합니다. 상단 탭 또는 아래 카드에서 관심 있는 모듈을 선택하세요.',
+    'hero.callout': '<strong>처음 오신 분</strong>이라면 <a href="scheduler.html">스케줄러 설치</a> → <a href="brain.html">Brain (지식 그래프)</a> 순서를 추천합니다. 모든 모듈은 독립적으로도 동작합니다.',
+    'card.sch.kb': '0. 공통',
+    'card.sch.h3': '스케줄러 <span class="ko">Scheduler</span>',
+    'card.sch.p': 'macOS LaunchAgents · Linux cron · Windows Task Scheduler. <code>schedule-install.sh</code> 한 번으로 OS 자동 감지.',
+    'card.brain.kb': '1. 지식 그래프',
+    'card.brain.h3': 'Brain <span class="ko">지식 그래프 · GraphRAG</span>',
+    'card.brain.p': '크롤링 → 엔티티 추출 → Neo4j → 20+ MCP 도구. GraphRAG 벤치마크 recall 93%, latency 13.8s.',
+    'card.ear.kb': '2. 수집',
+    'card.ear.h3': 'Ear <span class="ko">뉴스 큐레이터</span>',
+    'card.ear.p': 'Discord 기사 자동 아카이브 · 3단 관련성 분류 · 일일 digest HTML · 필독 기사 자동 /search 피드.',
+    'card.eye.kb': '3. 예측',
+    'card.eye.h3': 'Eye <span class="ko">시뮬레이션 엔진</span>',
+    'card.eye.p': '텍스트 → 온톨로지 → 10 분석 렌즈 → 전파 시뮬레이션 → 예측 보고서. Next.js UI + 7 MCP 도구.',
+    'card.search.kb': '4. 자기진화',
+    'card.search.h3': 'Search <span class="ko">레퍼런스 파이프라인</span>',
+    'card.search.p': 'GitHub · npm · PyPI · arXiv 병렬 탐색 · 오프토픽 게이트 · sandbox 검증 · 채택 이력 추적.',
+    'card.photo.kb': '5. 창작',
+    'card.photo.h3': 'Photo <span class="ko">AI 사진 보정</span>',
+    'card.photo.p': '이미지 분석 → 보정 계획 → Photoshop MCP 비파괴 편집. MAE 가드, 배치 모드.',
+    'card.sleep.kb': '6. 기억',
+    'card.sleep.h3': 'Sleep <span class="ko">메모리 정리</span>',
+    'card.sleep.p': 'Claude Code 프로젝트별 auto memory 전수 스캔 · 중복 감지 · 통합 · MCP 서버로 조회.',
+    'card.voice.kb': '7. 오케스트레이션',
+    'card.voice.h3': 'Voice <span class="ko">워크플로우 하네스</span>',
+    'card.voice.p': 'CLAUDE.md 트리거 6개. "상황 검토해봐" 한마디로 코드베이스 진단 → 개선 카드 제시.',
+    'card.browse.kb': '8. 브라우저',
+    'card.browse.h3': 'Browse <span class="ko">헤드리스 브라우저 · 토큰 최적화</span>',
+    'card.browse.p': 'Playwright Chromium 래퍼 + @ref 기반 상호작용. <code>find</code>·<code>batch</code>·세션 영속화로 로그인 플로우를 1 round-trip으로 압축.',
+    'upgrade.h2': '업그레이드 <span class="ko" style="font-weight:400;color:var(--text-dim);">Upgrading</span>',
+    'upgrade.intro': '이미 설치했다면 <code>comad</code> 한 명령으로 main + 6개 모듈 + deps + agents를 한 번에 업데이트합니다. Dirty tree abort · 자동 스냅샷 · 롤백 지원.',
+    'upgrade.p1': '루트 <code>VERSION</code> (semver) + <code>comad.lock</code> (6개 모듈 branch+SHA 고정)으로 package-lock.json처럼 조합을 재현 가능. 기존 설치 사용자는 한 번 <code>git pull origin main &amp;&amp; ./install.sh</code> 하면 <code>comad</code> 명령이 생깁니다. 세부: <a href="https://github.com/kinkos1234/comad-world#upgrading" style="color:var(--accent)">README § Upgrading</a>.',
+    'upgrade.p2': '📄 <strong>Config 계약</strong> — <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/adr/0002-config-contract.md" style="color:var(--accent)">ADR 0002</a>: <code>comad.config.yaml</code>의 JSON Schema(<code>schema/comad.config.schema.json</code>)를 기준으로 필수·선택 섹션, 타입, URL 패턴, Neo4j URI 등 자동 검증. 오타나 잘못된 타입은 CI의 <strong>config-schema-validation</strong> 잡이 2초 안에 잡아냅니다. <code>make validate-config</code>로 로컬에서도 실행.',
+    'upgrade.p3': '📐 <strong>저장소 전략</strong> — <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/adr/0001-repository-strategy.md" style="color:var(--accent)">ADR 0001</a>: umbrella는 배선(installer / scripts / Makefile / VERSION / comad.lock)을 소유, 각 모듈 디렉터리는 자기 <code>.git</code>이 오너. <strong>Structure Guard CI</strong>가 PR마다 모듈 경계를 자동 검증 — 중복 파일·빌드 산출물 트래킹·VERSION 형식 오류를 막아줍니다.',
+    'upgrade.p4': '📂 <strong>경로 무관</strong> — 어느 폴더, 어느 이름으로 클론해도 동작합니다. <code>scripts/comad</code>가 자기 심링크를 따라 repo root를 찾고, <code>scripts/render-templates.sh</code>가 <code>{{COMAD_ROOT}}</code> 플레이스홀더를 install/upgrade 시점에 절대경로로 치환합니다. <code>~/Desktop/내-에이전트</code>, <code>/opt/comad</code> 어디든 OK.',
+    'footer.links': 'Comad World · <a href="https://github.com/kinkos1234/comad-world" style="color:var(--teal)">GitHub</a> · <a href="/comad">소개 페이지</a>',
+    'footer.sub': 'MIT License · Claude Code + Neo4j + TypeScript/Bun'
+  }
+};
+</script>
 </body>
 </html>
