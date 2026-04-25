@@ -58,7 +58,8 @@
   </div>
 
   <div class="hero-demo">
-    <img src="https://raw.githubusercontent.com/kinkos1234/comad-world/main/docs/demo.gif" alt="Comad World Demo — clone, configure, crawl, query" loading="lazy">
+    <img src="https://raw.githubusercontent.com/kinkos1234/comad-world/main/docs/demo.gif" alt="Comad World Demo — v0.3.0 promo · 5-beat narrative" loading="lazy">
+    <p style="font-size:0.78rem;color:var(--text-dim);margin-top:0.6rem;text-align:center;" data-i18n="hero.demo.cap">🎬 <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/promo-v0.3.0.mp4" style="color:var(--accent);">Full-quality 1080p MP4</a> &middot; <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/promo-v0.3.0-60fps.mp4" style="color:var(--accent);">60fps</a> &middot; 30s &middot; <a href="https://github.com/kinkos1234/comad-world/blob/main/STORY.md" style="color:var(--accent);">Origin story</a> &middot; <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/moat.md" style="color:var(--accent);">Why it&rsquo;s defensible (moat)</a></p>
   </div>
 </section>
 
@@ -154,7 +155,7 @@
         &nbsp;&nbsp;&darr;<br>
         <span class="dim">[Search]</span> Dual-Retriever: <span class="hl">Local + Global + Temporal</span><br>
         &nbsp;&nbsp;&darr;<br>
-        <span class="dim">[MCP]</span> <span class="hl">15</span> tools
+        <span class="dim">[MCP]</span> <span class="hl">21</span> tools
       </div>
     </div>
 
@@ -165,7 +166,7 @@
         <tr><td><code>crawler</code></td><td>HN/arXiv/GitHub crawlers, ingest pipeline</td></tr>
         <tr><td><code>graphrag</code></td><td>Dual-Retriever, subgraph exploration, answer synthesis</td></tr>
         <tr><td><code>ingester</code></td><td>ear archive &rarr; graph importer</td></tr>
-        <tr><td><code>mcp-server</code></td><td>MCP protocol server (15 tools)</td></tr>
+        <tr><td><code>mcp-server</code></td><td>MCP protocol server (21 tools)</td></tr>
       </table>
     </div>
 
@@ -465,8 +466,10 @@
     <div class="tl-item"><div class="tl-date">2026-04-13</div><div class="tl-title" data-i18n="tl.8">AI-readable Eye + comad CLI + path-agnostic install (v0.2.0)</div><div class="tl-detail" data-i18n="tl.8d">Server-side rendered <code>/analysis</code> &amp; <code>/report</code> (initial HTML 18 B &rarr; 32 KB) &middot; <code>comad upgrade/status/rollback</code> global command &middot; <code>VERSION</code> + <code>comad.lock</code> &middot; clone the repo to any folder, any name</div></div>
     <div class="tl-item"><div class="tl-date">2026-04-13</div><div class="tl-title" data-i18n="tl.9">Design system unified</div><div class="tl-detail" data-i18n="tl.9d">Landing &amp; guide site share <code>comad-shared.css</code> &middot; black background, blue + warm orange palette &middot; glassmorphic top bar across both</div></div>
     <div class="tl-item"><div class="tl-date">2026-04-14</div><div class="tl-title" data-i18n="tl.10">ADR 0002–0006 &middot; Eye package layout &middot; scheduled-job safety</div><div class="tl-detail" data-i18n="tl.10d">Per-module typed loaders (zod/pydantic) &middot; hybrid synth routing &middot; Search &rarr; Brain feedback loop &middot; 50 eye modules migrated to <code>comad_eye/</code> &middot; <code>fetchWithTimeout</code> + 45m job deadline unblock a 4h ear-ingest hang &middot; CI now runs the full 1,388-test suite</div></div>
+    <div class="tl-item"><div class="tl-date">2026-04-14</div><div class="tl-title" data-i18n="tl.13">v0.3.0 &middot; 27-angle luminary review &middot; mono-repo reversal</div><div class="tl-detail" data-i18n="tl.13d">12 gap-pack artifacts (~1,813 LOC) across <a href="https://github.com/kinkos1234/comad-world/blob/main/STORY.md">narrative</a>, <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/slo.md">observability</a> (3 SLIs + chaos drill), epistemic hygiene (Popper/O&rsquo;Neil/Gebru/Pearl), and <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/feedback-loops.md">ecosystem feedback loops</a> &middot; <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/adr/0011-mono-repo-reversal.md">ADR 0011</a> reverses ADR 0001 &mdash; 6 nested <code>.git</code> archived, single mono-repo restored &middot; ADR 0007&ndash;0010 promote each gap pack</div></div>
     <div class="tl-item"><div class="tl-date">2026-04-17</div><div class="tl-title" data-i18n="tl.11">Ear Mode B &middot; Discord quota-safe polling</div><div class="tl-detail" data-i18n="tl.11d">REST polling LaunchAgent (<code>com.comad.ear-poll</code>, 15 min) replaces the crash-looping <code>ccd</code> KeepAlive wrapper that was burning Discord&rsquo;s 1,000/day IDENTIFY quota in ~8h &middot; per-run <code>claude -p --strict-mcp-config</code> ensures zero MCP spawn</div></div>
     <div class="tl-item"><div class="tl-date">2026-04-19</div><div class="tl-title" data-i18n="tl.12">Launchd boot-time catch-up &middot; 11-job cron catalog</div><div class="tl-detail" data-i18n="tl.12d"><code>com.comad.cron-catchup</code> replays any LaunchAgent that would have fired while the laptop was asleep, so Monday analysis still runs even if you opened the lid at noon &middot; <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/cron-catalog.md">docs/cron-catalog.md</a> documents all 11 agents with dependencies and missing-run recovery</div></div>
+    <div class="tl-item"><div class="tl-date">2026-04-25</div><div class="tl-title" data-i18n="tl.14">v0.3.0 promo video &middot; 5-beat narrative</div><div class="tl-detail" data-i18n="tl.14d">30-second hero refresh: 720&times;405 GIF (4 MB) + <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/promo-v0.3.0.mp4">1080p MP4</a> + <a href="https://github.com/kinkos1234/comad-world/blob/main/docs/promo-v0.3.0-60fps.mp4">60fps</a> derivative &middot; Hook &rarr; Setup &rarr; Build &rarr; Climax &rarr; Rest &middot; HTML + Playwright + ffmpeg pipeline (comad-motion skill) &middot; BGM: &ldquo;Loneliness&rdquo; by Frozen Silence (CC-BY-NC-SA)</div></div>
   </div>
 </div>
 </section>
