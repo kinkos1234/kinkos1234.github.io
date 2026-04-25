@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n="meta.title">Studio — Comad 가이드</title>
+<meta name="description" content="comad-studio 가이드 — 5 visual/media 생성 스킬 (image, motion, pptx, infographic, app-prototype)" data-i18n-meta="meta.desc">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="assets/css/guide.css">
+<link rel="stylesheet" href="/comad/assets/css/comad-shared.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub" data-i18n="brand.sub">가이드</span></a>
+  <nav>
+    <a href="index.html" data-i18n="nav.home">홈</a>
+    <a href="scheduler.html" data-i18n="nav.scheduler">스케줄러</a>
+    <a href="brain.html">Brain</a>
+    <a href="ear.html">Ear</a>
+    <a href="eye.html">Eye</a>
+    <a href="search.html">Search</a>
+    <a href="photo.html">Photo</a>
+    <a href="sleep.html">Sleep</a>
+    <a href="voice.html">Voice</a>
+    <a href="browse.html">Browse</a>
+    <a href="extensions.html" style="color:var(--teal)">Extensions</a>
+    <a href="studio.html" class="active" style="color:var(--amber)">Studio</a>
+  </nav>
+  <button class="lang-toggle" onclick="toggleLang()"><span id="langEn">EN</span> / <span id="langKo">KO</span></button>
+</header>
+
+<div class="layout">
+
+  <aside class="toc">
+    <div class="toc-title">Studio</div>
+    <a href="#install" data-i18n="toc.install">설치 + doctor</a>
+    <a href="#deps" data-i18n="toc.deps">의존성 매트릭스</a>
+    <a href="#image" data-i18n="toc.image">comad-image</a>
+    <a href="#motion" data-i18n="toc.motion">comad-motion</a>
+    <a href="#pptx" data-i18n="toc.pptx">comad-pptx</a>
+    <a href="#infographic" data-i18n="toc.infographic">comad-infographic</a>
+    <a href="#prototype" data-i18n="toc.prototype">comad-app-prototype</a>
+    <a href="#repo" data-i18n="toc.repo">레포 / 라이선스</a>
+  </aside>
+
+  <main>
+
+    <div class="page-hero">
+      <h1 data-i18n-html="h1">Studio — <em>5 visual/media 생성 스킬</em></h1>
+      <p class="page-desc" data-i18n-html="page.desc">
+        Codex CLI 와 ffmpeg / Playwright / pptxgenjs 를 활용해서 한 문장 트리거로 이미지·영상·슬라이드·인포그래픽·앱 프로토타입을 뽑아내는 산출물 스튜디오.
+        능동적 생성기 (사용자/Claude 가 명시적 호출).
+      </p>
+      <div class="tag-row">
+        <span class="tag">Codex CLI</span>
+        <span class="tag">Node.js</span>
+        <span class="tag">Playwright</span>
+        <span class="tag">ffmpeg</span>
+        <span class="tag warm" data-i18n="tag.skills">5 skills</span>
+        <span class="tag lime">47 MB w/ assets</span>
+      </div>
+    </div>
+
+    <!-- ── 설치 ── -->
+    <section id="install">
+      <h2 data-i18n="install.h2">설치 + doctor</h2>
+      <pre><code><span style="color:var(--text-dim)"># Clone + install</span>
+git clone https://github.com/kinkos1234/comad-studio \
+  ~/Programmer/01-comad/comad-studio
+cd ~/Programmer/01-comad/comad-studio
+./install.sh
+
+<span style="color:var(--text-dim)"># 의존성 진단 (codex, node, ffmpeg, python3, playwright 자동 검사)</span>
+./doctor.sh</code></pre>
+      <p data-i18n-html="install.note">
+        <code>install.sh</code> 가 5종 스킬을 <code>~/.claude/skills/</code> 로 복사. 기존 파일은 <code>.bak-&lt;UTC&gt;</code> 백업 후 덮어쓰기. 재실행 안전. 47 MB 중 약 90% 는 BGM/SFX (CC-BY 4.0).
+      </p>
+    </section>
+
+    <!-- ── 의존성 매트릭스 ── -->
+    <section id="deps">
+      <h2 data-i18n="deps.h2">의존성 매트릭스</h2>
+      <p class="page-desc" data-i18n="deps.desc"><code>./doctor.sh</code> 가 자동 진단. 부족한 의존성 + 설치 명령 알려줌. 스킬마다 자체 deps check 도 트리거 시점에 동작.</p>
+      <table class="data-table">
+        <thead><tr>
+          <th data-i18n="th.dep">의존성</th>
+          <th>image</th>
+          <th>motion</th>
+          <th>pptx</th>
+          <th>infographic</th>
+          <th>app-prototype</th>
+          <th data-i18n="th.install">설치</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><code>codex</code> (CLI)</td><td>●</td><td></td><td>●</td><td></td><td></td><td><code>npm i -g @openai/codex</code></td></tr>
+          <tr><td><code>node</code> (≥18)</td><td></td><td>●</td><td>●</td><td></td><td>●</td><td><code>brew install node</code></td></tr>
+          <tr><td><code>playwright</code> (chromium)</td><td></td><td>●</td><td></td><td>●</td><td>●</td><td><code>npx playwright install chromium</code></td></tr>
+          <tr><td><code>ffmpeg</code></td><td></td><td>●</td><td></td><td></td><td></td><td><code>brew install ffmpeg</code></td></tr>
+          <tr><td><code>python3</code></td><td colspan="5" data-i18n="deps.py">(general — 다수 스크립트가 사용)</td><td><code>brew install python</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ── 5종 스킬 ── -->
+    <section id="image">
+      <h2><code>comad-image</code> — <span data-i18n="image.h2">7-mode 이미지 생성</span></h2>
+      <p data-i18n-html="image.p1">Codex CLI 의 <code>/imagen</code> 기능을 사용해서 7가지 모드를 자동 감지: <strong>portrait · landscape · object · illustration · thumbnail · logo · conceptual</strong>. image-studio 시스템 프롬프트가 내면화되어 있어 한 문장 트리거로 충분.</p>
+      <p data-i18n-html="image.p2"><strong>출력</strong> &mdash; <code>{git-root|pwd}/images/YYYY-MM-DD/{slug}-NN.png</code>. SHA1 검증으로 중복 방지. 후처리 금지 가드 (모델 출력 그대로 보존).</p>
+      <p data-i18n-html="image.trigger"><strong>트리거</strong> &mdash; "이미지 만들어줘", "썸네일 만들어", "로고 만들어줘", "포스터 만들어", "프로필 이미지" / "create image", "make thumbnail", "make logo", "render image"</p>
+      <div class="callout warm" data-i18n-html="image.note"><strong>코드 생성 트리거와 충돌 방지</strong> &mdash; "함수 만들어줘" 같은 코드 요청은 image 가 아닌 <code>parallel</code> 또는 일반 Claude 응답으로 라우팅됨.</div>
+    </section>
+
+    <section id="motion">
+      <h2><code>comad-motion</code> — <span data-i18n="motion.h2">한 문장 영상 생성</span></h2>
+      <p data-i18n-html="motion.p1">HTML 애니메이션 → Playwright 녹화 → ffmpeg 후처리 → SFX+BGM 믹싱 의 4-단계 파이프라인. <strong>Stage+Sprite</strong> 시간축 엔진 (inline React) 으로 5-beat 서사 (Hook → Setup → Build → Climax → Rest) 자동 구성.</p>
+      <p data-i18n-html="motion.p2"><strong>출력</strong> &mdash; 10-60초 MP4 (1920×1080 @ 25fps) + 선택적 GIF (720×405) + 60fps minterpolate 업스케일 derivative. 2-pass palette GIF.</p>
+      <p data-i18n-html="motion.audio"><strong>오디오</strong> &mdash; BGM 6곡 (Kevin MacLeod, CC-BY 4.0, incompetech.com) · SFX 16곡. 주파수 분리 (lowpass 4000 BGM / highpass 800 SFX / normalize=0).</p>
+      <p data-i18n-html="motion.trigger"><strong>트리거</strong> &mdash; "영상 만들어", "GIF 로 뽑아줘", "릴리스 영상", "스킬 소개 영상", "MP4 로 뽑아줘" / "motion design", "make video", "export MP4", "render GIF"</p>
+      <div class="callout teal" data-i18n-html="motion.attribution">
+        <strong>Attribution 필수</strong> &mdash; BGM/SFX 는 CC-BY 4.0. 상용 영상에서는 영상 크레딧/README/About 페이지에 attribution 문구 (각 <code>assets/{bgm,sfx}/LICENSES.md</code> 참고) 반드시 포함.
+      </div>
+    </section>
+
+    <section id="pptx">
+      <h2><code>comad-pptx</code> — <span data-i18n="pptx.h2">고품질 PPTX 생성</span></h2>
+      <p data-i18n-html="pptx.p1">Codex <code>/imagen</code> 으로 슬라이드를 한 장씩 이미지로 생성한 후 <strong>pptxgenjs</strong> 로 LAYOUT_WIDE (13.333×7.5") PPTX 조립. 디자인 품질은 Codex 이미지 그대로, 편집은 overlay 텍스트 또는 spec 수정 후 재생성.</p>
+      <p data-i18n-html="pptx.p2"><strong>출력</strong> &mdash; <code>{git-root|pwd}/slides/YYYY-MM-DD/{deck-name}.pptx</code>. 슬라이드별 PNG 도 별도 보존.</p>
+      <p data-i18n-html="pptx.trigger"><strong>트리거</strong> &mdash; "PPT 만들어줘", "슬라이드 만들어줘", "발표자료", "프리젠테이션", "deck 만들어줘", "마케팅 덱", "투자자 덱" / "create pptx", "make slides", "pitch deck", "investor deck"</p>
+    </section>
+
+    <section id="infographic">
+      <h2><code>comad-infographic</code> — <span data-i18n="info.h2">숫자 시각화 인포그래픽</span></h2>
+      <p data-i18n-html="info.p1">단일 숫자 강조 (metric hero), 비교 (before/after, A/B), 타임라인, 플로우 차트 4종 패턴 제공. <strong>Pretendard</strong> (본문) + <strong>Inter</strong> (숫자 전용) 하이브리드 타이포그래피.</p>
+      <p data-i18n-html="info.p2"><strong>출력</strong> &mdash; HTML (SVG 차트 + 폰트 임베드) + PNG (Playwright 스냅샷) + PDF.</p>
+      <p data-i18n-html="info.trigger"><strong>트리거</strong> &mdash; "인포그래픽 만들어줘", "수치 시각화", "통계 그래픽", "차트 만들어줘", "비교 그래픽", "타임라인 만들어줘", "before/after 시각화", "숫자 강조 포스터" / "infographic", "data visualization", "stats graphic", "metric hero"</p>
+    </section>
+
+    <section id="prototype">
+      <h2><code>comad-app-prototype</code> — <span data-i18n="proto.h2">앱 UI 프로토타입</span></h2>
+      <p data-i18n-html="proto.p1">모바일·웹·데스크톱 앱 UI 프로토타입을 HTML 로 생성. <strong>4종 프레임</strong>: iOS (iPhone 15 Pro Dynamic Island 재구현) · Android (Material You) · macOS (Sonoma 창) · 브라우저 (Chrome). Flow demo (탭 전환·스크롤) 와 Overview (평철 배치) 듀얼 라우팅.</p>
+      <p data-i18n-html="proto.p2"><strong>출력</strong> &mdash; HTML (CSS 재구현 프레임, 스펙 참고 재구현이라 외부 코드 의존성 0) + Playwright click-test.</p>
+      <p data-i18n-html="proto.trigger"><strong>트리거</strong> &mdash; "앱 프로토타입", "iPhone 화면", "iOS 화면", "Android 화면", "데스크톱 앱 UI", "브라우저 목업", "UI 프로토타입", "앱 플로우 만들어줘" / "app prototype", "iPhone mockup", "Android screen", "browser mockup"</p>
+    </section>
+
+    <!-- ── 레포 ── -->
+    <section id="repo">
+      <h2 data-i18n="repo.h2">레포 / 라이선스</h2>
+      <p data-i18n-html="repo.intro">
+        GitHub: <a href="https://github.com/kinkos1234/comad-studio" target="_blank" rel="noopener">kinkos1234/comad-studio</a>
+        &middot; 코드 라이선스: MIT &middot; BGM/SFX: CC-BY 4.0 (attribution 필요)
+      </p>
+      <div class="callout lime" data-i18n-html="repo.sister">
+        <strong>자매 레포</strong> &mdash;
+        <a href="https://github.com/kinkos1234/comad-world">comad-world</a> (8 핵심 모듈) +
+        <a href="https://github.com/kinkos1234/comad-world-extensions">comad-world-extensions</a> (9 hooks + 5 skills) 와 함께 한 시스템을 이룹니다.
+        설치 순서 권장: <strong>world → extensions → studio</strong>.
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer style="text-align:center;color:var(--text-dim);font-size:0.78rem;padding:3rem 1rem 4rem;border-top:1px solid var(--border);margin-top:4rem;">
+  <div data-i18n-html="footer.links">comad-studio · <a href="https://github.com/kinkos1234/comad-studio" style="color:var(--amber)">GitHub</a> · <a href="/comad">소개 페이지</a> · <a href="index.html">가이드 홈</a></div>
+  <div style="margin-top:0.5rem;" data-i18n="footer.sub">MIT (code) · CC-BY 4.0 (audio assets) · 5 visual/media generation skills</div>
+</footer>
+
+<script>
+window.I18N_DICT = {
+  en: {
+    'meta.title': 'Studio — Comad Guide',
+    'meta.desc': 'Guide for comad-studio — 5 visual/media generation skills (image, motion, pptx, infographic, app-prototype).',
+    'brand.sub': 'Guide',
+    'nav.home': 'Home',
+    'nav.scheduler': 'Scheduler',
+    'h1': 'Studio — <em>5 visual/media generation skills</em>',
+    'page.desc': 'A generation studio that uses Codex CLI + ffmpeg / Playwright / pptxgenjs to produce images, videos, slides, infographics, and app prototypes from one-sentence triggers. Active generators (explicitly invoked).',
+    'tag.skills': '5 skills',
+    'toc.install': 'Install + doctor',
+    'toc.deps': 'Dependency matrix',
+    'toc.image': 'comad-image',
+    'toc.motion': 'comad-motion',
+    'toc.pptx': 'comad-pptx',
+    'toc.infographic': 'comad-infographic',
+    'toc.prototype': 'comad-app-prototype',
+    'toc.repo': 'Repo / License',
+    'install.h2': 'Install + doctor',
+    'install.note': '<code>install.sh</code> copies the 5 skills into <code>~/.claude/skills/</code>. Existing files backed up to <code>.bak-&lt;UTC&gt;</code>. Re-run safely. About 90% of the 47 MB is BGM/SFX (CC-BY 4.0).',
+    'deps.h2': 'Dependency matrix',
+    'deps.desc': '<code>./doctor.sh</code> auto-diagnoses and prints install commands for any gap. Each skill also checks its own deps at trigger time.',
+    'th.dep': 'Dependency',
+    'th.install': 'Install',
+    'deps.py': '(general — many scripts use it)',
+    'image.h2': '7-mode image generation',
+    'image.p1': 'Uses Codex CLI <code>/imagen</code> with auto-detected mode: <strong>portrait · landscape · object · illustration · thumbnail · logo · conceptual</strong>. The image-studio system prompt is internalized — one trigger sentence is enough.',
+    'image.p2': '<strong>Output</strong> — <code>{git-root|pwd}/images/YYYY-MM-DD/{slug}-NN.png</code>. SHA1 dedup. Post-processing forbidden (model output preserved as-is).',
+    'image.trigger': '<strong>Triggers</strong> — "create image", "make thumbnail", "make logo", "render image", "create poster" / "이미지 만들어줘", "썸네일 만들어", "로고 만들어줘"',
+    'image.note': '<strong>Code-generation trigger conflict avoided</strong> — "make a function" routes to <code>parallel</code> or general Claude, not to image.',
+    'motion.h2': 'One-sentence video generation',
+    'motion.p1': 'Four-stage pipeline: HTML animation → Playwright recording → ffmpeg post-processing → SFX+BGM mixing. <strong>Stage+Sprite</strong> timeline engine (inline React) auto-composes a 5-beat narrative (Hook → Setup → Build → Climax → Rest).',
+    'motion.p2': '<strong>Output</strong> — 10–60s MP4 (1920×1080 @ 25fps) + optional GIF (720×405) + 60fps minterpolate upscale derivative. 2-pass palette GIF.',
+    'motion.audio': '<strong>Audio</strong> — 6 BGM tracks (Kevin MacLeod, CC-BY 4.0, incompetech.com) · 16 SFX. Frequency-separated mix (lowpass 4000 BGM / highpass 800 SFX / normalize=0).',
+    'motion.trigger': '<strong>Triggers</strong> — "motion design", "make video", "export MP4", "render GIF", "promo video" / "영상 만들어", "GIF 로 뽑아줘", "릴리스 영상"',
+    'motion.attribution': '<strong>Attribution required</strong> — BGM/SFX are CC-BY 4.0. Commercial videos must include the attribution snippet (see each <code>assets/{bgm,sfx}/LICENSES.md</code>) in video credits / README / About page.',
+    'pptx.h2': 'High-quality PPTX generation',
+    'pptx.p1': 'Generate each slide as a Codex <code>/imagen</code> image, then assemble into a LAYOUT_WIDE (13.333×7.5") PPTX with <strong>pptxgenjs</strong>. Design quality is Codex-image quality; edit via overlay text or spec change + regenerate.',
+    'pptx.p2': '<strong>Output</strong> — <code>{git-root|pwd}/slides/YYYY-MM-DD/{deck-name}.pptx</code>. Per-slide PNG also preserved.',
+    'pptx.trigger': '<strong>Triggers</strong> — "create pptx", "make slides", "pitch deck", "investor deck", "marketing deck" / "PPT 만들어줘", "발표자료", "프리젠테이션"',
+    'info.h2': 'Number-focused infographics',
+    'info.p1': 'Four patterns: metric hero, comparison (before/after, A/B), timeline, flow chart. Hybrid typography — <strong>Pretendard</strong> (text) + <strong>Inter</strong> (numbers).',
+    'info.p2': '<strong>Output</strong> — HTML (SVG charts + embedded fonts) + PNG (Playwright snapshot) + PDF.',
+    'info.trigger': '<strong>Triggers</strong> — "infographic", "data visualization", "stats graphic", "comparison chart", "timeline", "metric hero" / "인포그래픽 만들어줘", "수치 시각화"',
+    'proto.h2': 'App UI prototypes',
+    'proto.p1': 'Mobile/web/desktop app UI prototypes as HTML. <strong>4 frames</strong>: iOS (iPhone 15 Pro Dynamic Island reproduction) · Android (Material You) · macOS (Sonoma window) · Browser (Chrome). Dual routing — Flow demo (tab switching, scroll) + Overview (flat layout).',
+    'proto.p2': '<strong>Output</strong> — HTML (CSS-reproduced frames; spec-referenced reproduction, no external code dependency) + Playwright click-test.',
+    'proto.trigger': '<strong>Triggers</strong> — "app prototype", "iPhone mockup", "iOS screen", "Android screen", "desktop app UI", "browser mockup" / "앱 프로토타입", "iPhone 화면"',
+    'repo.h2': 'Repo / License',
+    'repo.intro': 'GitHub: <a href="https://github.com/kinkos1234/comad-studio" target="_blank" rel="noopener">kinkos1234/comad-studio</a> · Code license: MIT · BGM/SFX: CC-BY 4.0 (attribution required)',
+    'repo.sister': '<strong>Sister repos</strong> — Together with <a href="https://github.com/kinkos1234/comad-world">comad-world</a> (8 core modules) and <a href="https://github.com/kinkos1234/comad-world-extensions">comad-world-extensions</a> (9 hooks + 5 skills), they form one system. Recommended install order: <strong>world → extensions → studio</strong>.',
+    'footer.links': 'comad-studio · <a href="https://github.com/kinkos1234/comad-studio" style="color:var(--amber)">GitHub</a> · <a href="/comad">Landing page</a> · <a href="index.html">Guide home</a>',
+    'footer.sub': 'MIT (code) · CC-BY 4.0 (audio assets) · 5 visual/media generation skills'
+  },
+  ko: {
+    'meta.title': 'Studio — Comad 가이드',
+    'meta.desc': 'comad-studio 가이드 — 5 visual/media 생성 스킬 (image, motion, pptx, infographic, app-prototype)',
+    'brand.sub': '가이드',
+    'nav.home': '홈',
+    'nav.scheduler': '스케줄러',
+    'h1': 'Studio — <em>5 visual/media 생성 스킬</em>',
+    'page.desc': 'Codex CLI 와 ffmpeg / Playwright / pptxgenjs 를 활용해서 한 문장 트리거로 이미지·영상·슬라이드·인포그래픽·앱 프로토타입을 뽑아내는 산출물 스튜디오. 능동적 생성기 (사용자/Claude 가 명시적 호출).',
+    'tag.skills': '5 skills',
+    'toc.install': '설치 + doctor',
+    'toc.deps': '의존성 매트릭스',
+    'toc.image': 'comad-image',
+    'toc.motion': 'comad-motion',
+    'toc.pptx': 'comad-pptx',
+    'toc.infographic': 'comad-infographic',
+    'toc.prototype': 'comad-app-prototype',
+    'toc.repo': '레포 / 라이선스',
+    'install.h2': '설치 + doctor',
+    'install.note': '<code>install.sh</code> 가 5종 스킬을 <code>~/.claude/skills/</code> 로 복사. 기존 파일은 <code>.bak-&lt;UTC&gt;</code> 백업 후 덮어쓰기. 재실행 안전. 47 MB 중 약 90% 는 BGM/SFX (CC-BY 4.0).',
+    'deps.h2': '의존성 매트릭스',
+    'deps.desc': '<code>./doctor.sh</code> 가 자동 진단. 부족한 의존성 + 설치 명령 알려줌. 스킬마다 자체 deps check 도 트리거 시점에 동작.',
+    'th.dep': '의존성',
+    'th.install': '설치',
+    'deps.py': '(general — 다수 스크립트가 사용)',
+    'image.h2': '7-mode 이미지 생성',
+    'image.p1': 'Codex CLI 의 <code>/imagen</code> 기능을 사용해서 7가지 모드를 자동 감지: <strong>portrait · landscape · object · illustration · thumbnail · logo · conceptual</strong>. image-studio 시스템 프롬프트가 내면화되어 있어 한 문장 트리거로 충분.',
+    'image.p2': '<strong>출력</strong> &mdash; <code>{git-root|pwd}/images/YYYY-MM-DD/{slug}-NN.png</code>. SHA1 검증으로 중복 방지. 후처리 금지 가드 (모델 출력 그대로 보존).',
+    'image.trigger': '<strong>트리거</strong> &mdash; "이미지 만들어줘", "썸네일 만들어", "로고 만들어줘", "포스터 만들어", "프로필 이미지" / "create image", "make thumbnail", "make logo", "render image"',
+    'image.note': '<strong>코드 생성 트리거와 충돌 방지</strong> &mdash; "함수 만들어줘" 같은 코드 요청은 image 가 아닌 <code>parallel</code> 또는 일반 Claude 응답으로 라우팅됨.',
+    'motion.h2': '한 문장 영상 생성',
+    'motion.p1': 'HTML 애니메이션 → Playwright 녹화 → ffmpeg 후처리 → SFX+BGM 믹싱 의 4-단계 파이프라인. <strong>Stage+Sprite</strong> 시간축 엔진 (inline React) 으로 5-beat 서사 (Hook → Setup → Build → Climax → Rest) 자동 구성.',
+    'motion.p2': '<strong>출력</strong> &mdash; 10-60초 MP4 (1920×1080 @ 25fps) + 선택적 GIF (720×405) + 60fps minterpolate 업스케일 derivative. 2-pass palette GIF.',
+    'motion.audio': '<strong>오디오</strong> &mdash; BGM 6곡 (Kevin MacLeod, CC-BY 4.0, incompetech.com) · SFX 16곡. 주파수 분리 (lowpass 4000 BGM / highpass 800 SFX / normalize=0).',
+    'motion.trigger': '<strong>트리거</strong> &mdash; "영상 만들어", "GIF 로 뽑아줘", "릴리스 영상", "스킬 소개 영상", "MP4 로 뽑아줘" / "motion design", "make video", "export MP4", "render GIF"',
+    'motion.attribution': '<strong>Attribution 필수</strong> &mdash; BGM/SFX 는 CC-BY 4.0. 상용 영상에서는 영상 크레딧/README/About 페이지에 attribution 문구 (각 <code>assets/{bgm,sfx}/LICENSES.md</code> 참고) 반드시 포함.',
+    'pptx.h2': '고품질 PPTX 생성',
+    'pptx.p1': 'Codex <code>/imagen</code> 으로 슬라이드를 한 장씩 이미지로 생성한 후 <strong>pptxgenjs</strong> 로 LAYOUT_WIDE (13.333×7.5") PPTX 조립. 디자인 품질은 Codex 이미지 그대로, 편집은 overlay 텍스트 또는 spec 수정 후 재생성.',
+    'pptx.p2': '<strong>출력</strong> &mdash; <code>{git-root|pwd}/slides/YYYY-MM-DD/{deck-name}.pptx</code>. 슬라이드별 PNG 도 별도 보존.',
+    'pptx.trigger': '<strong>트리거</strong> &mdash; "PPT 만들어줘", "슬라이드 만들어줘", "발표자료", "프리젠테이션", "deck 만들어줘", "마케팅 덱", "투자자 덱" / "create pptx", "make slides", "pitch deck", "investor deck"',
+    'info.h2': '숫자 시각화 인포그래픽',
+    'info.p1': '단일 숫자 강조 (metric hero), 비교 (before/after, A/B), 타임라인, 플로우 차트 4종 패턴 제공. <strong>Pretendard</strong> (본문) + <strong>Inter</strong> (숫자 전용) 하이브리드 타이포그래피.',
+    'info.p2': '<strong>출력</strong> &mdash; HTML (SVG 차트 + 폰트 임베드) + PNG (Playwright 스냅샷) + PDF.',
+    'info.trigger': '<strong>트리거</strong> &mdash; "인포그래픽 만들어줘", "수치 시각화", "통계 그래픽", "차트 만들어줘", "비교 그래픽", "타임라인 만들어줘", "before/after 시각화", "숫자 강조 포스터" / "infographic", "data visualization", "stats graphic", "metric hero"',
+    'proto.h2': '앱 UI 프로토타입',
+    'proto.p1': '모바일·웹·데스크톱 앱 UI 프로토타입을 HTML 로 생성. <strong>4종 프레임</strong>: iOS (iPhone 15 Pro Dynamic Island 재구현) · Android (Material You) · macOS (Sonoma 창) · 브라우저 (Chrome). Flow demo (탭 전환·스크롤) 와 Overview (평철 배치) 듀얼 라우팅.',
+    'proto.p2': '<strong>출력</strong> &mdash; HTML (CSS 재구현 프레임, 스펙 참고 재구현이라 외부 코드 의존성 0) + Playwright click-test.',
+    'proto.trigger': '<strong>트리거</strong> &mdash; "앱 프로토타입", "iPhone 화면", "iOS 화면", "Android 화면", "데스크톱 앱 UI", "브라우저 목업", "UI 프로토타입", "앱 플로우 만들어줘" / "app prototype", "iPhone mockup", "Android screen", "browser mockup"',
+    'repo.h2': '레포 / 라이선스',
+    'repo.intro': 'GitHub: <a href="https://github.com/kinkos1234/comad-studio" target="_blank" rel="noopener">kinkos1234/comad-studio</a> &middot; 코드 라이선스: MIT &middot; BGM/SFX: CC-BY 4.0 (attribution 필요)',
+    'repo.sister': '<strong>자매 레포</strong> &mdash; <a href="https://github.com/kinkos1234/comad-world">comad-world</a> (8 핵심 모듈) + <a href="https://github.com/kinkos1234/comad-world-extensions">comad-world-extensions</a> (9 hooks + 5 skills) 와 함께 한 시스템을 이룹니다. 설치 순서 권장: <strong>world → extensions → studio</strong>.',
+    'footer.links': 'comad-studio · <a href="https://github.com/kinkos1234/comad-studio" style="color:var(--amber)">GitHub</a> · <a href="/comad">소개 페이지</a> · <a href="index.html">가이드 홈</a>',
+    'footer.sub': 'MIT (code) · CC-BY 4.0 (audio assets) · 5 visual/media generation skills'
+  }
+};
+</script>
+<script src="assets/js/guide.js"></script>
+<script src="assets/js/i18n.js"></script>
+
+</body>
+</html>

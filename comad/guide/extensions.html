@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n="meta.title">Extensions — Comad 가이드</title>
+<meta name="description" content="comad-world-extensions 가이드 — 9 hooks + 5 skills (T6 자가진화, Approval-Gated Destruction, Proof-Driven QA, Codex 병렬 외주)" data-i18n-meta="meta.desc">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="assets/css/guide.css">
+<link rel="stylesheet" href="/comad/assets/css/comad-shared.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a href="/comad" class="brand" style="color:var(--text)">Comad World <span class="sub" data-i18n="brand.sub">가이드</span></a>
+  <nav>
+    <a href="index.html" data-i18n="nav.home">홈</a>
+    <a href="scheduler.html" data-i18n="nav.scheduler">스케줄러</a>
+    <a href="brain.html">Brain</a>
+    <a href="ear.html">Ear</a>
+    <a href="eye.html">Eye</a>
+    <a href="search.html">Search</a>
+    <a href="photo.html">Photo</a>
+    <a href="sleep.html">Sleep</a>
+    <a href="voice.html">Voice</a>
+    <a href="browse.html">Browse</a>
+    <a href="extensions.html" class="active" style="color:var(--teal)">Extensions</a>
+    <a href="studio.html" style="color:var(--amber)">Studio</a>
+  </nav>
+  <button class="lang-toggle" onclick="toggleLang()"><span id="langEn">EN</span> / <span id="langKo">KO</span></button>
+</header>
+
+<div class="layout">
+
+  <aside class="toc">
+    <div class="toc-title">Extensions</div>
+    <a href="#install" data-i18n="toc.install">설치</a>
+    <a href="#hooks" data-i18n="toc.hooks">훅 9종</a>
+    <a href="#skills" data-i18n="toc.skills">스킬 5종</a>
+    <a href="#parallel" data-i18n="toc.parallel">comad-parallel 심화</a>
+    <a href="#t6" data-i18n="toc.t6">T6 자가진화 루프</a>
+    <a href="#repo" data-i18n="toc.repo">레포 / 라이선스</a>
+  </aside>
+
+  <main>
+
+    <div class="page-hero">
+      <h1 data-i18n-html="h1">Extensions — <em>9 hooks + 5 skills</em></h1>
+      <p class="page-desc" data-i18n-html="page.desc">
+        코마드월드(<code>~/.claude/</code>) 위에 얹는 자가진화·안전·증명 레이어. Claude Code OAuth 사용자를 위한 로컬 전용 확장,
+        외부 서비스 의존성 없음. 복사 기반 설치, Python stdlib + bash 만 사용.
+      </p>
+      <div class="tag-row">
+        <span class="tag">Python 3</span>
+        <span class="tag">bash</span>
+        <span class="tag accent" data-i18n="tag.hooks">9 hooks</span>
+        <span class="tag warm" data-i18n="tag.skills">5 skills</span>
+        <span class="tag lime">zero deps</span>
+      </div>
+    </div>
+
+    <!-- ── 설치 ── -->
+    <section id="install">
+      <h2 data-i18n="install.h2">설치</h2>
+      <p data-i18n-html="install.intro">한 명령으로 hooks/skills/config 가 <code>~/.claude/</code> 에 복사됩니다. 기존 파일은 <code>.bak-&lt;UTC&gt;</code> 백업 후 덮어쓰기. 재실행 안전.</p>
+      <pre><code><span style="color:var(--text-dim)"># Clone + install</span>
+git clone https://github.com/kinkos1234/comad-world-extensions \
+  ~/Programmer/01-comad/comad-world-extensions
+cd ~/Programmer/01-comad/comad-world-extensions
+./install.sh
+
+<span style="color:var(--text-dim)"># 설치 후 두 가지 수동 작업:</span>
+<span style="color:var(--text-dim)"># 1. ~/.claude/settings.json 의 hooks 블록에 9개 훅 등록</span>
+<span style="color:var(--text-dim)">#    (install.sh 종료 시 스니펫 출력)</span>
+<span style="color:var(--text-dim)"># 2. ~/.claude/CLAUDE.md 에 T6 섹션 추가</span></code></pre>
+      <div class="callout teal" data-i18n-html="install.note">
+        <strong>전제</strong> &mdash; comad-world 가 먼저 설치되어 있어야 합니다 (<code>~/.claude/</code> 디렉터리 구조 가정).
+        comad-world 가 없어도 hooks/skills 자체는 동작하지만 <code>brain</code>/<code>ear</code> 와의 연동 시나리오는 제한됩니다.
+      </div>
+    </section>
+
+    <!-- ── 훅 9종 ── -->
+    <section id="hooks">
+      <h2 data-i18n="hooks.h2">훅 9종</h2>
+      <p class="page-desc" data-i18n="hooks.desc">pre-tool-use 4개 + Stop 5개. 모두 silent (exit 0 + 로그); 환경변수 <code>COMAD_*_BLOCK=1</code> 로 exit 2 승격 가능.</p>
+
+      <h3 data-i18n="hooks.pre.h3">pre-tool-use (4종)</h3>
+      <table class="data-table">
+        <thead><tr>
+          <th data-i18n="th.hook">훅</th>
+          <th data-i18n="th.role">역할</th>
+          <th data-i18n="th.trigger">트리거</th>
+          <th data-i18n="th.approval">승인 플래그</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><code>destroy-gate</code></td><td data-i18n="hook.destroy.r">Approval-Gated Destruction</td><td><code>rm -rf /</code>, <code>rm -rf ~/...</code>, <code>git push --force</code>, <code>DROP</code>, <code>truncate</code> 등</td><td><code>approve-destroy[.&lt;hash&gt;]</code></td></tr>
+          <tr><td><code>no-env-commit</code></td><td data-i18n="hook.env.r"><code>.env</code>/credentials <code>git add</code> 차단</td><td><code>.env</code>, <code>credentials.json</code>, <code>*.pem</code> staging</td><td><code>approve-env-commit[.&lt;hash&gt;]</code></td></tr>
+          <tr><td><code>qa-gate-before-push</code></td><td data-i18n="hook.qa.r"><code>.qa-evidence.json</code> 있으면 verdict=PASS 강제</td><td><code>git push</code></td><td><code>approve-push-qa-skip[.&lt;hash&gt;]</code></td></tr>
+          <tr><td><code>usage-gate</code></td><td data-i18n="hook.usage.r">OAuth 5h/7d 쿼터 방어 (현재 dormant)</td><td>배경 <code>Task</code> 호출</td><td><code>approve-usage-once</code></td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin-top:2rem;" data-i18n="hooks.stop.h3">Stop (5종)</h3>
+      <table class="data-table">
+        <thead><tr>
+          <th data-i18n="th.hook">훅</th>
+          <th data-i18n="th.role">역할</th>
+          <th data-i18n="th.log">로그</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><code>t6-capture</code></td><td data-i18n="hook.t6.r">세션 종료 시 현재 repo 의 최근 <code>fix:/feat:/bugfix:</code> 커밋 포착</td><td><code>.comad/pending/*.json</code></td></tr>
+          <tr><td><code>claim-done-gate</code></td><td data-i18n="hook.claim.r">"모두 통과 / 92/92 PASS" 류 주장 + Bash 검증 없음 감지</td><td><code>.comad/pending/claim-done.jsonl</code></td></tr>
+          <tr><td><code>premature-completion-detector</code></td><td data-i18n="hook.prem.r">"수렴 달성" 조기 선언 감지</td><td><code>.comad/pending/premature-completion.jsonl</code></td></tr>
+          <tr><td><code>numeric-claim-gate</code></td><td data-i18n="hook.num.r">"완벽 / production-ready / 100%" 절대 주장 vs 실제 evidence 대조</td><td><code>.comad/pending/numeric-claim.jsonl</code></td></tr>
+          <tr><td><code>inventory-gate</code></td><td data-i18n="hook.inv.r">coverage 주장 vs inventory cross-check</td><td><code>.comad/pending/inventory-gate.jsonl</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ── 스킬 5종 ── -->
+    <section id="skills">
+      <h2 data-i18n="skills.h2">스킬 5종</h2>
+      <table class="data-table">
+        <thead><tr>
+          <th data-i18n="th.skill">스킬</th>
+          <th data-i18n="th.purpose">목적</th>
+          <th data-i18n="th.binary">핵심 바이너리</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><code>comad-learn</code></td><td data-i18n="skill.learn.p">T6 pending JSON → feedback memory 승격 + validator 2종</td><td><code>validate-pending.py</code>, <code>validate-feedback.py</code></td></tr>
+          <tr><td><code>comad-memory</code></td><td data-i18n="skill.memory.p"><code>~/.claude/projects/*/memory/*.md</code> 의 SQLite FTS5 인덱스 + 검색</td><td><code>sync.py</code>, <code>search.py</code>, <code>trace.py</code>, <code>refresh.py</code></td></tr>
+          <tr><td><code>comad-qa-evidence</code></td><td data-i18n="skill.qa.p"><code>.qa-evidence.json</code> 생성·검증 (L0~L5 QA levels)</td><td><code>init-qa-evidence.py</code>, <code>validate-qa-evidence.py</code></td></tr>
+          <tr><td><code>comad-second-opinion</code></td><td data-i18n="skill.so.p"><code>.second-opinion.md</code> 생성 가이드 (codex CLI → subagent → self-adversarial 3-tier fallback)</td><td><code>validate-second-opinion.py</code></td></tr>
+          <tr><td><code>comad-parallel</code></td><td data-i18n="skill.parallel.p">Codex CLI 병렬 외주 (Claude=PM, Codex×N=구현) + 5종 comad 통합 게이트</td><td><code>parallel.sh</code>, <code>parallel-job.js</code> (1500+ LOC)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ── parallel 심화 ── -->
+    <section id="parallel">
+      <h2 data-i18n="parallel.h2">comad-parallel 심화 — 5종 통합 게이트</h2>
+      <p class="page-desc" data-i18n-html="parallel.desc">gptaku-plugins/pumasi v1.7.2 를 포팅 후 comad 시스템에 맞게 5종 게이트 신설. 모두 opt-in (env 로 활성화) 또는 default-on (handoff). 한 번의 <code>parallel.sh run-all</code> 로 results → qa-gate → second-opinion-gate → destroy-check → handoff → ear-notify 의 6-단계 파이프라인 자동 실행.</p>
+
+      <table class="data-table">
+        <thead><tr>
+          <th data-i18n="th.cmd">명령</th>
+          <th data-i18n="th.what">기능</th>
+          <th data-i18n="th.env">환경변수</th>
+          <th data-i18n="th.output">산출물</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><code>parallel.sh handoff</code></td>
+            <td data-i18n="cmd.handoff">7-section 핸드오프 doc (Summary / Key Decisions / Traps / Working Agreements / Relevant Files / Open Work / Prompt for New Chat). Summary/Files/Open Work 자동 채움.</td>
+            <td><code>COMAD_AUTO_HANDOFF=0</code> 으로 비활성</td>
+            <td><code>.comad/sessions/&lt;ts&gt;-parallel-&lt;jobid&gt;.md</code></td>
+          </tr>
+          <tr>
+            <td><code>parallel.sh qa-gate</code></td>
+            <td data-i18n="cmd.qa">done task cwd 의 <code>.qa-evidence.json</code> + verdict=PASS 검증. <code>validate-qa-evidence.py</code> 우선, jq fallback.</td>
+            <td><code>COMAD_QA_EVIDENCE=1</code></td>
+            <td><code>members/&lt;task&gt;/qa-evidence.json</code></td>
+          </tr>
+          <tr>
+            <td><code>parallel.sh second-opinion-gate</code></td>
+            <td data-i18n="cmd.so"><code>.second-opinion.md</code> frontmatter verdict (APPROVED/REQUEST_CHANGES/BLOCKS) 검증. 자동 실행 X — verify only.</td>
+            <td><code>COMAD_SECOND_OPINION=1</code></td>
+            <td><code>members/&lt;task&gt;/second-opinion.json</code></td>
+          </tr>
+          <tr>
+            <td><code>parallel.sh destroy-check</code></td>
+            <td data-i18n="cmd.destroy">Worker output 에서 13종 destructive 패턴 grep (<code>rm -rf /|~|$HOME</code>, <code>git push --force</code>, <code>DROP DATABASE</code>, <code>mkfs.*</code>, fork bomb 등). Codex 가 별도 프로세스라 사후 검사.</td>
+            <td><code>COMAD_DESTROY_CHECK=1</code></td>
+            <td><code>members/&lt;task&gt;/destroy-check.json</code></td>
+          </tr>
+          <tr>
+            <td><span data-i18n="cmd.ear.name">(ear-notify, internal)</span></td>
+            <td data-i18n="cmd.ear">cmdRunAll 끝에 Discord webhook POST. 한 줄 요약 (job id + done/failed). 실패 silent.</td>
+            <td><code>COMAD_EAR_NOTIFY=1</code> + <code>DISCORD_WEBHOOK_URL</code></td>
+            <td data-i18n="cmd.ear.out">Discord 메시지</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin-top:2rem;" data-i18n="parallel.flow.h3">실행 흐름</h3>
+      <pre><code><span style="color:var(--text-dim)"># 한 번의 호출로 6단계 파이프라인 (default + 모든 게이트 활성화)</span>
+COMAD_QA_EVIDENCE=1 \
+COMAD_SECOND_OPINION=1 \
+COMAD_DESTROY_CHECK=1 \
+COMAD_EAR_NOTIFY=1 DISCORD_WEBHOOK_URL=... \
+parallel.sh run-all "프로젝트 컨텍스트"
+
+<span style="color:var(--text-dim)"># 흐름:
+# 1. start    → Codex worker N개 spawn
+# 2. wait     → 모두 종료까지 대기
+# 3. results  → 각 worker output.txt 출력
+# 4. qa-gate  → .qa-evidence.json verdict 검증     (env 활성 시)
+# 5. second-opinion-gate → .second-opinion.md verdict (env 활성 시)
+# 6. destroy-check → 13 패턴 사후 스캔             (env 활성 시)
+# 7. handoff  → 7섹션 doc 생성, 위 결과 모두 반영  (default ON)
+# 8. ear-notify → Discord 한 줄 요약 POST          (env 활성 시)
+# 9. clean    → job dir 삭제</span></code></pre>
+
+      <div class="callout warm" data-i18n-html="parallel.handoff.note">
+        <strong>handoff doc 의 인지적 섹션</strong> &mdash; Key Decisions / Traps / Working Agreements 는 <code>TODO(claude)</code> stub 으로 남겨집니다.
+        Claude 가 후속 세션에서 수동으로 채워야 함. Summary / Relevant Files / Open Work 는 worker report.json 에서 자동 채움.
+      </div>
+    </section>
+
+    <!-- ── T6 자가진화 ── -->
+    <section id="t6">
+      <h2 data-i18n="t6.h2">T6 자가진화 루프</h2>
+      <p data-i18n-html="t6.desc">"실수 → 자동 포착 → 분석 → 기억 → 반복 회피" 의 4-step 루프. 외부 서비스 없이 동작.</p>
+      <ol class="numbered-flow">
+        <li data-i18n-html="t6.s1"><strong>Stop hook (자동)</strong> &mdash; 매 Claude 세션 종료 시 <code>~/.claude/hooks/stop/t6-capture.sh</code> 가 현재 git repo 의 최근 <code>fix:/feat:/bugfix:</code> 커밋을 <code>~/.claude/.comad/pending/&lt;hash&gt;.json</code> 에 덤프. 사용자 개입 없음.</li>
+        <li data-i18n-html="t6.s2"><strong>분석 (사용자 호출)</strong> &mdash; <code>/comad-learn</code> 스킬이 pending JSON 들을 읽어 반복 패턴 추출. 판정 기준 통과 시 <code>memory/feedback_&lt;topic&gt;.md</code> 로 승격 (append-only).</li>
+        <li data-i18n-html="t6.s3"><strong>HARD 훅 후보 (2회+ 반복)</strong> &mdash; 같은 topic 이 2회 이상 관찰되면 해당 메모리 파일에 "HARD 훅 후보" 섹션 추가 + 사용자 승인 요청. 승인 시 <code>destroy-gate.sh</code> 패턴 리스트에 추가.</li>
+        <li data-i18n-html="t6.s4"><strong>처리 완료</strong> &mdash; 처리한 pending 은 <code>_processed/</code>, 거부는 <code>_rejected/</code> 로 이동 (원본 삭제 금지).</li>
+      </ol>
+      <div class="callout teal" data-i18n-html="t6.parallel.note">
+        <strong>parallel 과의 연계</strong> &mdash; <code>parallel</code> worker 가 산출 변경을 <code>fix:</code>/<code>feat:</code> prefix 로 git commit 하면, 다음 Claude 세션 종료에서 t6-capture 가 자동 포착 → <code>/comad-learn</code> 으로 학습 가능.
+        Worker instruction 에 "When done, create a git commit with prefix fix: or feat:" 명시 권장.
+      </div>
+    </section>
+
+    <!-- ── 레포 ── -->
+    <section id="repo">
+      <h2 data-i18n="repo.h2">레포 / 라이선스</h2>
+      <p data-i18n-html="repo.intro">
+        GitHub: <a href="https://github.com/kinkos1234/comad-world-extensions" target="_blank" rel="noopener">kinkos1234/comad-world-extensions</a>
+        &middot; 라이선스: MIT &middot; 외부 서비스 의존성 0 (Python stdlib + bash 만 사용)
+      </p>
+      <div class="callout lime" data-i18n-html="repo.sister">
+        <strong>자매 레포</strong> &mdash;
+        <a href="https://github.com/kinkos1234/comad-world">comad-world</a> (8 핵심 모듈) +
+        <a href="https://github.com/kinkos1234/comad-studio">comad-studio</a> (5 시각/미디어 생성) 와 함께 한 시스템을 이룹니다.
+        설치 순서 권장: <strong>world → extensions → studio</strong>.
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer style="text-align:center;color:var(--text-dim);font-size:0.78rem;padding:3rem 1rem 4rem;border-top:1px solid var(--border);margin-top:4rem;">
+  <div data-i18n-html="footer.links">comad-world-extensions · <a href="https://github.com/kinkos1234/comad-world-extensions" style="color:var(--teal)">GitHub</a> · <a href="/comad">소개 페이지</a> · <a href="index.html">가이드 홈</a></div>
+  <div style="margin-top:0.5rem;" data-i18n="footer.sub">MIT License · 9 hooks + 5 skills · zero external deps</div>
+</footer>
+
+<script>
+window.I18N_DICT = {
+  en: {
+    'meta.title': 'Extensions — Comad Guide',
+    'meta.desc': 'Guide for comad-world-extensions — 9 hooks + 5 skills (T6 self-evolve, Approval-Gated Destruction, Proof-Driven QA, Codex parallel outsource).',
+    'brand.sub': 'Guide',
+    'nav.home': 'Home',
+    'nav.scheduler': 'Scheduler',
+    'h1': 'Extensions — <em>9 hooks + 5 skills</em>',
+    'page.desc': 'A self-evolution / safety / proof layer over Comad World (<code>~/.claude/</code>). Local-only extension for Claude Code OAuth users, zero external dependencies. Copy-based install, Python stdlib + bash only.',
+    'tag.hooks': '9 hooks',
+    'tag.skills': '5 skills',
+    'toc.install': 'Install',
+    'toc.hooks': '9 hooks',
+    'toc.skills': '5 skills',
+    'toc.parallel': 'comad-parallel deep-dive',
+    'toc.t6': 'T6 self-evolve loop',
+    'toc.repo': 'Repo / License',
+    'install.h2': 'Install',
+    'install.intro': 'One command copies hooks/skills/config into <code>~/.claude/</code>. Existing files backed up to <code>.bak-&lt;UTC&gt;</code> before overwrite. Re-run safely.',
+    'install.note': '<strong>Prerequisite</strong> — comad-world should be installed first (assumes its <code>~/.claude/</code> directory layout). Hooks/skills work without it but the <code>brain</code>/<code>ear</code> integration scenarios are limited.',
+    'hooks.h2': '9 hooks',
+    'hooks.desc': '4 pre-tool-use + 5 Stop. All silent (exit 0 + log); set <code>COMAD_*_BLOCK=1</code> to escalate to exit 2.',
+    'hooks.pre.h3': 'pre-tool-use (4)',
+    'hooks.stop.h3': 'Stop (5)',
+    'th.hook': 'Hook',
+    'th.role': 'Role',
+    'th.trigger': 'Trigger',
+    'th.approval': 'Approval flag',
+    'th.log': 'Log',
+    'hook.destroy.r': 'Approval-Gated Destruction',
+    'hook.env.r': 'Block <code>git add</code> on <code>.env</code>/credentials',
+    'hook.qa.r': 'If <code>.qa-evidence.json</code> present, force verdict=PASS',
+    'hook.usage.r': 'OAuth 5h/7d quota guard (currently dormant)',
+    'hook.t6.r': 'On session end, capture recent <code>fix:/feat:/bugfix:</code> commits in current repo',
+    'hook.claim.r': 'Detect "all passed / 92/92 PASS" claims without Bash verification',
+    'hook.prem.r': 'Detect premature "convergence achieved" declarations',
+    'hook.num.r': 'Cross-check absolute claims ("perfect / production-ready / 100%") vs actual evidence',
+    'hook.inv.r': 'Coverage claim vs inventory cross-check',
+    'skills.h2': '5 skills',
+    'th.skill': 'Skill',
+    'th.purpose': 'Purpose',
+    'th.binary': 'Key binaries',
+    'skill.learn.p': 'Promote T6 pending JSON → feedback memory + 2 validators',
+    'skill.memory.p': 'SQLite FTS5 index + search over <code>~/.claude/projects/*/memory/*.md</code>',
+    'skill.qa.p': 'Generate/validate <code>.qa-evidence.json</code> (L0~L5 QA levels)',
+    'skill.so.p': '<code>.second-opinion.md</code> guide (codex CLI → subagent → self-adversarial 3-tier fallback)',
+    'skill.parallel.p': 'Codex CLI parallel outsource (Claude=PM, Codex×N=builders) + 5 comad integration gates',
+    'parallel.h2': 'comad-parallel deep-dive — 5 integration gates',
+    'parallel.desc': 'Ported from gptaku-plugins/pumasi v1.7.2 and re-engineered with 5 comad-native gates. All opt-in via env, except handoff (default-on). One <code>parallel.sh run-all</code> runs the 6-step pipeline: results → qa-gate → second-opinion-gate → destroy-check → handoff → ear-notify.',
+    'th.cmd': 'Command',
+    'th.what': 'What it does',
+    'th.env': 'Env var',
+    'th.output': 'Output',
+    'cmd.handoff': '7-section handoff doc (Summary / Key Decisions / Traps / Working Agreements / Relevant Files / Open Work / Prompt for New Chat). Auto-fills Summary/Files/Open Work.',
+    'cmd.qa': 'Verifies <code>.qa-evidence.json</code> + verdict=PASS in each done task cwd. <code>validate-qa-evidence.py</code> first, jq fallback.',
+    'cmd.so': 'Verifies <code>.second-opinion.md</code> frontmatter verdict (APPROVED/REQUEST_CHANGES/BLOCKS). Verify-only — does not auto-spawn codex review.',
+    'cmd.destroy': 'Greps worker output for 13 destructive patterns (<code>rm -rf /|~|$HOME</code>, <code>git push --force</code>, <code>DROP DATABASE</code>, <code>mkfs.*</code>, fork bomb, etc). Post-scan since Codex runs out-of-process.',
+    'cmd.ear.name': '(ear-notify, internal)',
+    'cmd.ear': 'POSTs a one-line summary (job id + done/failed) to Discord webhook on cmdRunAll completion. Silent on failure.',
+    'cmd.ear.out': 'Discord message',
+    'parallel.flow.h3': 'Execution flow',
+    'parallel.handoff.note': '<strong>Cognitive sections in handoff doc</strong> — Key Decisions / Traps / Working Agreements are left as <code>TODO(claude)</code> stubs. Claude must enrich them in the follow-up session. Summary / Relevant Files / Open Work auto-populate from worker report.json.',
+    't6.h2': 'T6 self-evolve loop',
+    't6.desc': 'A 4-step "mistake → auto-capture → analyze → remember → avoid repeat" loop. No external services.',
+    't6.s1': '<strong>Stop hook (automatic)</strong> — At every Claude session end, <code>~/.claude/hooks/stop/t6-capture.sh</code> dumps recent <code>fix:/feat:/bugfix:</code> commits from the current git repo into <code>~/.claude/.comad/pending/&lt;hash&gt;.json</code>. No user action.',
+    't6.s2': '<strong>Analysis (user-invoked)</strong> — <code>/comad-learn</code> reads pending JSON and extracts repeat patterns. Promotes qualifying ones to <code>memory/feedback_&lt;topic&gt;.md</code> (append-only).',
+    't6.s3': '<strong>HARD hook candidate (2× repeats)</strong> — When the same topic is observed 2+ times, a "HARD hook candidate" section is added to that memory file + user approval requested. On approval, the pattern is added to <code>destroy-gate.sh</code>.',
+    't6.s4': '<strong>Resolution</strong> — Processed pending → <code>_processed/</code>, rejected → <code>_rejected/</code>. Originals never deleted.',
+    't6.parallel.note': '<strong>Parallel coupling</strong> — When a <code>parallel</code> worker commits with <code>fix:</code>/<code>feat:</code> prefix, the next session\'s t6-capture auto-picks it up → <code>/comad-learn</code> can analyze. Recommend including "When done, create a git commit with prefix fix: or feat:" in worker instructions.',
+    'repo.h2': 'Repo / License',
+    'repo.intro': 'GitHub: <a href="https://github.com/kinkos1234/comad-world-extensions" target="_blank" rel="noopener">kinkos1234/comad-world-extensions</a> · License: MIT · Zero external service dependencies (Python stdlib + bash only)',
+    'repo.sister': '<strong>Sister repos</strong> — Together with <a href="https://github.com/kinkos1234/comad-world">comad-world</a> (8 core modules) and <a href="https://github.com/kinkos1234/comad-studio">comad-studio</a> (5 visual/media generation skills), they form one system. Recommended install order: <strong>world → extensions → studio</strong>.',
+    'footer.links': 'comad-world-extensions · <a href="https://github.com/kinkos1234/comad-world-extensions" style="color:var(--teal)">GitHub</a> · <a href="/comad">Landing page</a> · <a href="index.html">Guide home</a>',
+    'footer.sub': 'MIT License · 9 hooks + 5 skills · zero external deps'
+  },
+  ko: {
+    'meta.title': 'Extensions — Comad 가이드',
+    'meta.desc': 'comad-world-extensions 가이드 — 9 hooks + 5 skills (T6 자가진화, Approval-Gated Destruction, Proof-Driven QA, Codex 병렬 외주)',
+    'brand.sub': '가이드',
+    'nav.home': '홈',
+    'nav.scheduler': '스케줄러',
+    'h1': 'Extensions — <em>9 hooks + 5 skills</em>',
+    'page.desc': '코마드월드(<code>~/.claude/</code>) 위에 얹는 자가진화·안전·증명 레이어. Claude Code OAuth 사용자를 위한 로컬 전용 확장, 외부 서비스 의존성 없음. 복사 기반 설치, Python stdlib + bash 만 사용.',
+    'tag.hooks': '9 hooks',
+    'tag.skills': '5 skills',
+    'toc.install': '설치',
+    'toc.hooks': '훅 9종',
+    'toc.skills': '스킬 5종',
+    'toc.parallel': 'comad-parallel 심화',
+    'toc.t6': 'T6 자가진화 루프',
+    'toc.repo': '레포 / 라이선스',
+    'install.h2': '설치',
+    'install.intro': '한 명령으로 hooks/skills/config 가 <code>~/.claude/</code> 에 복사됩니다. 기존 파일은 <code>.bak-&lt;UTC&gt;</code> 백업 후 덮어쓰기. 재실행 안전.',
+    'install.note': '<strong>전제</strong> &mdash; comad-world 가 먼저 설치되어 있어야 합니다 (<code>~/.claude/</code> 디렉터리 구조 가정). comad-world 가 없어도 hooks/skills 자체는 동작하지만 <code>brain</code>/<code>ear</code> 와의 연동 시나리오는 제한됩니다.',
+    'hooks.h2': '훅 9종',
+    'hooks.desc': 'pre-tool-use 4개 + Stop 5개. 모두 silent (exit 0 + 로그); 환경변수 <code>COMAD_*_BLOCK=1</code> 로 exit 2 승격 가능.',
+    'hooks.pre.h3': 'pre-tool-use (4종)',
+    'hooks.stop.h3': 'Stop (5종)',
+    'th.hook': '훅',
+    'th.role': '역할',
+    'th.trigger': '트리거',
+    'th.approval': '승인 플래그',
+    'th.log': '로그',
+    'hook.destroy.r': 'Approval-Gated Destruction',
+    'hook.env.r': '<code>.env</code>/credentials <code>git add</code> 차단',
+    'hook.qa.r': '<code>.qa-evidence.json</code> 있으면 verdict=PASS 강제',
+    'hook.usage.r': 'OAuth 5h/7d 쿼터 방어 (현재 dormant)',
+    'hook.t6.r': '세션 종료 시 현재 repo 의 최근 <code>fix:/feat:/bugfix:</code> 커밋 포착',
+    'hook.claim.r': '"모두 통과 / 92/92 PASS" 류 주장 + Bash 검증 없음 감지',
+    'hook.prem.r': '"수렴 달성" 조기 선언 감지',
+    'hook.num.r': '"완벽 / production-ready / 100%" 절대 주장 vs 실제 evidence 대조',
+    'hook.inv.r': 'coverage 주장 vs inventory cross-check',
+    'skills.h2': '스킬 5종',
+    'th.skill': '스킬',
+    'th.purpose': '목적',
+    'th.binary': '핵심 바이너리',
+    'skill.learn.p': 'T6 pending JSON → feedback memory 승격 + validator 2종',
+    'skill.memory.p': '<code>~/.claude/projects/*/memory/*.md</code> 의 SQLite FTS5 인덱스 + 검색',
+    'skill.qa.p': '<code>.qa-evidence.json</code> 생성·검증 (L0~L5 QA levels)',
+    'skill.so.p': '<code>.second-opinion.md</code> 생성 가이드 (codex CLI → subagent → self-adversarial 3-tier fallback)',
+    'skill.parallel.p': 'Codex CLI 병렬 외주 (Claude=PM, Codex×N=구현) + 5종 comad 통합 게이트',
+    'parallel.h2': 'comad-parallel 심화 — 5종 통합 게이트',
+    'parallel.desc': 'gptaku-plugins/pumasi v1.7.2 를 포팅 후 comad 시스템에 맞게 5종 게이트 신설. 모두 opt-in (env 로 활성화) 또는 default-on (handoff). 한 번의 <code>parallel.sh run-all</code> 로 results → qa-gate → second-opinion-gate → destroy-check → handoff → ear-notify 의 6-단계 파이프라인 자동 실행.',
+    'th.cmd': '명령',
+    'th.what': '기능',
+    'th.env': '환경변수',
+    'th.output': '산출물',
+    'cmd.handoff': '7-section 핸드오프 doc (Summary / Key Decisions / Traps / Working Agreements / Relevant Files / Open Work / Prompt for New Chat). Summary/Files/Open Work 자동 채움.',
+    'cmd.qa': 'done task cwd 의 <code>.qa-evidence.json</code> + verdict=PASS 검증. <code>validate-qa-evidence.py</code> 우선, jq fallback.',
+    'cmd.so': '<code>.second-opinion.md</code> frontmatter verdict (APPROVED/REQUEST_CHANGES/BLOCKS) 검증. 자동 실행 X — verify only.',
+    'cmd.destroy': 'Worker output 에서 13종 destructive 패턴 grep (<code>rm -rf /|~|$HOME</code>, <code>git push --force</code>, <code>DROP DATABASE</code>, <code>mkfs.*</code>, fork bomb 등). Codex 가 별도 프로세스라 사후 검사.',
+    'cmd.ear.name': '(ear-notify, internal)',
+    'cmd.ear': 'cmdRunAll 끝에 Discord webhook POST. 한 줄 요약 (job id + done/failed). 실패 silent.',
+    'cmd.ear.out': 'Discord 메시지',
+    'parallel.flow.h3': '실행 흐름',
+    'parallel.handoff.note': '<strong>handoff doc 의 인지적 섹션</strong> &mdash; Key Decisions / Traps / Working Agreements 는 <code>TODO(claude)</code> stub 으로 남겨집니다. Claude 가 후속 세션에서 수동으로 채워야 함. Summary / Relevant Files / Open Work 는 worker report.json 에서 자동 채움.',
+    't6.h2': 'T6 자가진화 루프',
+    't6.desc': '"실수 → 자동 포착 → 분석 → 기억 → 반복 회피" 의 4-step 루프. 외부 서비스 없이 동작.',
+    't6.s1': '<strong>Stop hook (자동)</strong> &mdash; 매 Claude 세션 종료 시 <code>~/.claude/hooks/stop/t6-capture.sh</code> 가 현재 git repo 의 최근 <code>fix:/feat:/bugfix:</code> 커밋을 <code>~/.claude/.comad/pending/&lt;hash&gt;.json</code> 에 덤프. 사용자 개입 없음.',
+    't6.s2': '<strong>분석 (사용자 호출)</strong> &mdash; <code>/comad-learn</code> 스킬이 pending JSON 들을 읽어 반복 패턴 추출. 판정 기준 통과 시 <code>memory/feedback_&lt;topic&gt;.md</code> 로 승격 (append-only).',
+    't6.s3': '<strong>HARD 훅 후보 (2회+ 반복)</strong> &mdash; 같은 topic 이 2회 이상 관찰되면 해당 메모리 파일에 "HARD 훅 후보" 섹션 추가 + 사용자 승인 요청. 승인 시 <code>destroy-gate.sh</code> 패턴 리스트에 추가.',
+    't6.s4': '<strong>처리 완료</strong> &mdash; 처리한 pending 은 <code>_processed/</code>, 거부는 <code>_rejected/</code> 로 이동 (원본 삭제 금지).',
+    't6.parallel.note': '<strong>parallel 과의 연계</strong> &mdash; <code>parallel</code> worker 가 산출 변경을 <code>fix:</code>/<code>feat:</code> prefix 로 git commit 하면, 다음 Claude 세션 종료에서 t6-capture 가 자동 포착 → <code>/comad-learn</code> 으로 학습 가능. Worker instruction 에 "When done, create a git commit with prefix fix: or feat:" 명시 권장.',
+    'repo.h2': '레포 / 라이선스',
+    'repo.intro': 'GitHub: <a href="https://github.com/kinkos1234/comad-world-extensions" target="_blank" rel="noopener">kinkos1234/comad-world-extensions</a> &middot; 라이선스: MIT &middot; 외부 서비스 의존성 0 (Python stdlib + bash 만 사용)',
+    'repo.sister': '<strong>자매 레포</strong> &mdash; <a href="https://github.com/kinkos1234/comad-world">comad-world</a> (8 핵심 모듈) + <a href="https://github.com/kinkos1234/comad-studio">comad-studio</a> (5 시각/미디어 생성) 와 함께 한 시스템을 이룹니다. 설치 순서 권장: <strong>world → extensions → studio</strong>.',
+    'footer.links': 'comad-world-extensions · <a href="https://github.com/kinkos1234/comad-world-extensions" style="color:var(--teal)">GitHub</a> · <a href="/comad">소개 페이지</a> · <a href="index.html">가이드 홈</a>',
+    'footer.sub': 'MIT License · 9 hooks + 5 skills · zero external deps'
+  }
+};
+</script>
+<script src="assets/js/guide.js"></script>
+<script src="assets/js/i18n.js"></script>
+
+</body>
+</html>

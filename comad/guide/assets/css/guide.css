@@ -349,3 +349,56 @@ footer.page-foot a:hover { color: var(--text); }
   h2 { font-size: 1.5rem; margin-top: 3rem; padding-top: 1.5rem; }
   main { max-width: 100%; }
 }
+
+/* Data tables (used by extensions.html, studio.html) */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0 1.5rem;
+  font-size: 0.88rem;
+  background: var(--surface);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.data-table th,
+.data-table td {
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+.data-table th {
+  background: var(--surface2);
+  color: var(--text-bright);
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover { background: rgba(255,255,255,0.02); }
+.data-table code { font-size: 0.82rem; background: var(--surface2); padding: 0.1rem 0.35rem; border-radius: 3px; }
+
+/* Numbered ordered list with circles */
+ol.numbered-flow {
+  list-style: none;
+  counter-reset: step;
+  padding-left: 0;
+  margin: 1rem 0;
+}
+ol.numbered-flow li {
+  counter-increment: step;
+  position: relative;
+  padding: 0.6rem 0 0.6rem 2.6rem;
+  margin-bottom: 0.3rem;
+  line-height: 1.55;
+}
+ol.numbered-flow li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0; top: 0.55rem;
+  width: 1.8rem; height: 1.8rem;
+  background: var(--accent); color: #000;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.85rem;
+}
