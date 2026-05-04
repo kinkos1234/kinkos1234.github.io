@@ -308,10 +308,10 @@
       </div>
     </div>
     <div class="compact-card reveal">
-      <h3 style="color:var(--green)">comad-sleep</h3>
-      <p class="one-liner" data-i18n="sleep.desc">REM-style automatic memory scan, dedup, and consolidation</p>
-      <div class="detail" data-i18n="sleep.detail">MCP server, 122 LOC. <code>info</code> + <code>history</code> 2 tools.</div>
-      <div class="highlight" data-i18n="sleep.highlight">Auto-triggers on "dream" or when memory exceeds 150 lines</div>
+      <h3 style="color:var(--green)">comad-sleep <span style="font-size:0.6rem;color:var(--accent);background:rgba(71,159,250,0.12);padding:0.15em 0.5em;border-radius:0.4em;vertical-align:middle;">+ Memory Bank</span></h3>
+      <p class="one-liner" data-i18n="sleep.desc">Self-learning memory graph: kb_facts + embeddings + auto-consolidation loop</p>
+      <div class="detail" data-i18n="sleep.detail"><strong>kb_facts</strong> SQLite knowledge graph (94+ facts, INFLUENCES/SUPPORTS/REFINES edges) · <strong>Ollama embeddings</strong> for semantic search · <strong>5 MCP tools</strong> (search/trace/explore/cross_scope/stats) shared by Claude &amp; Codex.</div>
+      <div class="highlight" data-i18n="sleep.highlight">Always-on loop: kb-sleep tick every 2h + auto-dream nightly · live changelog at <a href="/memory-log/" style="color:var(--accent);">/memory-log/</a></div>
     </div>
     <div class="compact-card reveal">
       <h3 style="color:var(--amber)">comad-voice</h3>
@@ -683,9 +683,9 @@ const i18n = {
     'ear.highlight': 'Self-evolution loop closed: ear must-read → /search → adoption',
     'photo.desc': 'Image analysis &rarr; correction plan &rarr; Photoshop MCP non-destructive editing',
     'photo.detail': '3 stages: PIL &rarr; Camera Raw &rarr; Advanced<br>MAE > 20 guardrail. Portrait avg score: 92.2.',
-    'sleep.desc': 'REM-style automatic memory scan, dedup, and consolidation',
-    'sleep.detail': 'MCP server, 122 LOC. <code>info</code> + <code>history</code> 2 tools.',
-    'sleep.highlight': 'Auto-triggers on "dream" or when memory exceeds 150 lines',
+    'sleep.desc': 'Self-learning memory graph: kb_facts + embeddings + auto-consolidation loop',
+    'sleep.detail': '<strong>kb_facts</strong> SQLite knowledge graph (94+ facts, INFLUENCES/SUPPORTS/REFINES edges) · <strong>Ollama embeddings</strong> for semantic search · <strong>5 MCP tools</strong> (search/trace/explore/cross_scope/stats) shared by Claude &amp; Codex.',
+    'sleep.highlight': 'Always-on loop: kb-sleep tick every 2h + auto-dream nightly · live changelog at <a href="/memory-log/" style="color:var(--accent);">/memory-log/</a>',
     'voice.desc': 'Natural-language workflow automation for Claude Code',
     'voice.detail': 'Keyword triggers. CLAUDE.md-based. Zero external dependencies.<br>Review Army (5 specialist reviewers) + Browser QA included.',
     'voice.highlight': 'One sentence controls the entire process',
@@ -819,9 +819,9 @@ const i18n = {
     'ear.highlight': '\uc790\uac00\uc9c4\ud654 \ub8e8\ud504 \uc644\uc131: ear \ud544\ub3c5 \u2192 /search \u2192 adoption',
     'photo.desc': '\uc0ac\uc9c4 \ubd84\uc11d &rarr; \ubcf4\uc815\uc548 &rarr; Photoshop MCP \ube44\ud30c\uad34 \ubcf4\uc815',
     'photo.detail': '3\ub2e8\uacc4: PIL &rarr; Camera Raw &rarr; \uace0\uae09<br>MAE > 20 \uac00\ub4dc\ub808\uc77c. \uc778\ubb3c 15\uc7a5 \ud3c9\uade0 92.2\uc810.',
-    'sleep.desc': 'REM \uc218\uba74\ucc98\ub7fc, \uba54\ubaa8\ub9ac\ub97c \uc790\ub3d9 \uc2a4\uce94/\uc911\ubcf5 \uac10\uc9c0/\ud1b5\ud569',
-    'sleep.detail': 'MCP \uc11c\ubc84 122\uc904. <code>info</code> + <code>history</code> 2\uac1c \ub3c4\uad6c.',
-    'sleep.highlight': '"dream" \ub610\ub294 \uba54\ubaa8\ub9ac > 150\uc904 \uc2dc \uc790\ub3d9 \ud2b8\ub9ac\uac70',
+    'sleep.desc': '\uc790\uac00\ud559\uc2b5 \uba54\ubaa8\ub9ac \uadf8\ub798\ud504: kb_facts + \uc784\ubca0\ub529 + \uc790\ub3d9 \ud1b5\ud569 \ub8e8\ud504',
+    'sleep.detail': '<strong>kb_facts</strong> SQLite \uc9c0\uc2dd \uadf8\ub798\ud504 (94\uac74+, INFLUENCES/SUPPORTS/REFINES \uc5e3\uc9c0) \u00b7 <strong>Ollama \uc784\ubca0\ub529</strong>\uc73c\ub85c \uc2dc\ub9e8\ud2f1 \uac80\uc0c9 \u00b7 <strong>5\uac1c MCP \ud234</strong> (search/trace/explore/cross_scope/stats)\uc744 Claude\uc640 Codex \uacf5\uc720.',
+    'sleep.highlight': '\uc0c1\uc2dc \ub8e8\ud504: 2\uc2dc\uac04\ub9c8\ub2e4 kb-sleep tick + \ub9e4\uc77c \uc790\ub3d9 dream \u00b7 \uc2e4\uc2dc\uac04 \ubcc0\uacbd\uc774\ub825 <a href="/memory-log/" style="color:var(--accent);">/memory-log/</a>',
     'voice.desc': '\ube44\uac1c\ubc1c\uc790\ub97c \uc704\ud55c Claude Code \uc6cc\ud06c\ud50c\ub85c\uc6b0 \uc790\ub3d9\ud654',
     'voice.detail': '\ud0a4\uc6cc\ub4dc \ud2b8\ub9ac\uac70. CLAUDE.md \uae30\ubc18. \uc678\ubd80 \uc758\uc874\uc131 0.<br>Review Army (5\uac1c \uc2a4\ud398\uc15c\ub9ac\uc2a4\ud2b8 \ub9ac\ubdf0) + \ube0c\ub77c\uc6b0\uc800 QA \ud3ec\ud568.',
     'voice.highlight': '\uc790\uc5f0\uc5b4 \ud55c\ub9c8\ub514\ub85c \uc804\uccb4 \ud504\ub85c\uc138\uc2a4 \uc790\ub3d9 \uc81c\uc5b4',

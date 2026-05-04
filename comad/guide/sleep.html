@@ -33,25 +33,29 @@
   <aside class="toc">
     <div class="toc-title">Sleep</div>
     <a href="#overview" data-i18n="toc.overview">개요</a>
+    <a href="#loop" data-i18n="toc.loop" style="color:var(--accent);">⚡ 자동 루프</a>
+    <a href="#kb" data-i18n="toc.kb" style="color:var(--accent);">📊 kb_facts 그래프</a>
     <a href="#types" data-i18n="toc.types">메모리 유형</a>
     <a href="#trigger" data-i18n="toc.trigger">dream 실행</a>
     <a href="#memory-md" data-i18n="toc.md">MEMORY.md 인덱스</a>
     <a href="#mcp" data-i18n="toc.mcp">MCP 서버</a>
+    <a href="#log" data-i18n="toc.log" style="color:var(--accent);">📰 변경이력 게시</a>
     <a href="#policy" data-i18n="toc.policy">정리 정책</a>
   </aside>
 
   <main>
     <div class="page-hero">
-      <h1 data-i18n-html="h1">Sleep — <em>메모리 정리 에이전트</em></h1>
-      <p class="page-desc" data-i18n="page.desc">
-        Claude Code의 프로젝트별 auto memory 디렉토리를 전수 스캔해 중복 감지, 통합, 오래된 기록 정리를 수행합니다.
-        "dream" 한 마디로 발동되며, 변경 이력을 MCP 서버로 조회할 수 있습니다.
+      <h1 data-i18n-html="h1">Sleep — <em>자가학습 메모리 그래프 + 자동 정리</em></h1>
+      <p class="page-desc" data-i18n-html="page.desc">
+        Claude Code 프로젝트별 auto memory 디렉토리를 전수 스캔하고, <strong>kb_facts 지식 그래프</strong>(SQLite + Ollama 임베딩)로 시맨틱 메모리를 구축합니다.
+        Claude·Codex가 동일한 5개 MCP 툴로 공유. <strong>2시간마다 자동 tick + 매일 자동 dream</strong>으로 상시 운영되며, 모든 변경이력이 GitHub Pages에 라이브 게시됩니다.
       </p>
       <div class="tag-row">
-        <span class="tag">Bun</span>
-        <span class="tag">MCP server</span>
-        <span class="tag accent">auto memory</span>
-        <span class="tag warm">cross-project</span>
+        <span class="tag accent">always-on</span>
+        <span class="tag">kb_facts</span>
+        <span class="tag">Ollama embeddings</span>
+        <span class="tag">5 MCP tools</span>
+        <span class="tag warm">Claude + Codex shared</span>
       </div>
     </div>
 
@@ -72,7 +76,47 @@ memory/project_session_20260408.md   <span data-i18n="ov.a2">(6 lines)</span>
 feedback_ci_after_push.md            <span data-i18n="ov.a4">(통합 버전)</span>
 MEMORY.md                            <span data-i18n="ov.a5">(1,166 lines, 링크 전수 검증)</span></code></pre>
 
-    <h2 id="types" data-i18n="types.h2">메모리 유형</h2>
+    <h2 id="loop" data-i18n="loop.h2">⚡ 자동 루프 (Always-on)</h2>
+    <p data-i18n-html="loop.p1">Sleep은 더 이상 "dream" 한 마디가 있어야만 발동되지 않습니다. <strong>두 개의 LaunchAgent</strong>가 백그라운드에서 항상 돌고 있습니다.</p>
+
+    <table>
+      <tr><th data-i18n="loop.th1">트리거</th><th data-i18n="loop.th2">주기</th><th data-i18n="loop.th3">하는 일</th><th data-i18n="loop.th4">LLM 사용</th></tr>
+      <tr><td><strong>com.comad.kb-sleep</strong></td><td data-i18n="loop.r1.f">매 2시간</td><td data-i18n-html="loop.r1.do">.md → kb_facts 추출 (idempotent) · embedding 갱신 · rule-based consolidation · 변경이력 게시·push</td><td data-i18n="loop.r1.l">❌ 무필요 (rule-only)</td></tr>
+      <tr><td><strong>com.comad.auto-dream</strong></td><td data-i18n="loop.r2.f">매일 03:15 KST</td><td data-i18n-html="loop.r2.do">dream_pending 플래그 확인 → comad-sleep 에이전트 자동 호출 (.md 본격 압축)</td><td data-i18n="loop.r2.l">✅ Claude (mutex 가드 포함)</td></tr>
+      <tr><td><strong>SessionStart hook</strong></td><td data-i18n="loop.r3.f">세션 시작 시</td><td data-i18n="loop.r3.do">dream_pending=true이면 적극 알림 ("🌙 정리 권장")</td><td data-i18n="loop.r3.l">—</td></tr>
+    </table>
+
+    <p data-i18n-html="loop.p2"><strong>임계 조건</strong>: <code>.md</code> 총 라인 ≥ 3,500 또는 마지막 dream 후 7일 경과 시 <code>dream_pending=true</code>. 두 LaunchAgent가 협력해서 사용자 명시 호출 없이도 메모리가 비대해지지 않게 유지합니다.</p>
+
+    <div class="callout">
+      <strong data-i18n="loop.safe.t">안전장치</strong> — <span data-i18n-html="loop.safe.b">auto-dream은 ccd/cdx 활성 시 자동 skip(mutex 가드). kb-sleep은 destructive 작업 없음(rule-only consolidate). 모든 .md 변경은 comad-sleep 백업 디렉토리에 자동 복사.</span>
+    </div>
+
+    <h2 id="kb" data-i18n="kb.h2">📊 kb_facts 지식 그래프</h2>
+    <p data-i18n-html="kb.p1">메모리 본문(<code>~/.claude/.comad/memory/facts.sqlite</code>)에 5개 kb_* 테이블로 저장되는 시맨틱 그래프. memory-bank 패턴을 zero external dependency로 내제화한 것이 핵심입니다.</p>
+
+    <table>
+      <tr><th data-i18n="kb.th1">테이블</th><th data-i18n="kb.th2">역할</th></tr>
+      <tr><td><code>kb_facts</code></td><td data-i18n="kb.r1">원자적 fact (kind=decision/preference/pattern/knowledge/constraint)</td></tr>
+      <tr><td><code>kb_relations</code></td><td data-i18n="kb.r2">엣지 6종 (INFLUENCES / SUPPORTS / SUPERSEDES / CONTRADICTS / REFINES / RELATED)</td></tr>
+      <tr><td><code>kb_ontology</code></td><td data-i18n="kb.r3">Domain → Category 분류 (frontend, devops, memory 등)</td></tr>
+      <tr><td><code>kb_embeddings</code></td><td data-i18n-html="kb.r4">Ollama <code>nomic-embed-text</code> (768d float32 BLOB) — 시맨틱 검색용</td></tr>
+      <tr><td><code>kb_provenance</code></td><td data-i18n="kb.r5">출처 추적 (transcript / commit / mdfile / manual)</td></tr>
+    </table>
+
+    <p data-i18n-html="kb.p2"><strong>파이프라인</strong> (모두 stdlib 외 deps 없음 · 로컬 Ollama만 사용):</p>
+
+<pre><code><span class="dim" data-i18n="kb.pipe.h">~/.claude/skills/comad-memory/bin/</span>
+extract-facts.py     <span data-i18n="kb.pipe.1"># .md / transcript / stdin → kb_facts (regex / LLM)</span>
+embed.py             <span data-i18n="kb.pipe.2"># 새 fact만 incremental embedding (nomic-embed-text)</span>
+consolidate.py       <span data-i18n="kb.pipe.3"># DUPLICATE/CONTRADICTION/EVOLUTION 자동 판정 (선택: --llm)</span>
+semantic-search.py   <span data-i18n="kb.pipe.4"># 자연어 → cosine 유사도 → top-K facts</span>
+traverse.py          <span data-i18n="kb.pipe.5"># 멀티홉 BFS (1-N hops) 그래프 탐색</span>
+kb-trace.py          <span data-i18n="kb.pipe.6"># fact_id → 본문 + provenance + 엣지</span>
+kb-stats.py          <span data-i18n="kb.pipe.7"># 그래프 헬스 (kind / scope / domain / relation 분포)</span>
+kb-cross-scope.py    <span data-i18n="kb.pipe.8"># 도메인이 여러 scope 걸치는 facts (cross-project insights)</span></code></pre>
+
+    <h2 id="memory-md" data-i18n="md.h2">MEMORY.md 인덱스</h2>
     <p data-i18n="types.p1">자동 메모리는 4가지로 분류됩니다. Sleep은 유형별로 다른 정리 정책을 적용합니다.</p>
 
     <table>
@@ -123,14 +167,52 @@ Changes (13):</span>
 <span data-i18n="md.l5">- [Design simplicity](feedback_design_simplicity.md) — Karpathy 기준 심플리시티 선호</span>
 - ...</code></pre>
 
-    <h2 id="mcp" data-i18n="mcp.h2">MCP 서버 — 조회</h2>
-    <p data-i18n="mcp.p1">comad-sleep은 MCP 서버도 제공합니다. 정리 이력과 메타데이터를 대화로 조회.</p>
+    <h2 id="mcp" data-i18n="mcp.h2">MCP 서버 — Claude·Codex 공용 7툴</h2>
+    <p data-i18n-html="mcp.p1">comad-brain MCP 서버에 통합 등록되어 <strong>Claude(<code>claude</code>/<code>ccc</code>/<code>ccd</code>)와 Codex(<code>cdx</code>)가 동일한 툴로 같은 SQLite 메모리에 접근</strong>합니다. 코드는 단일 SoT(<code>01-comad/comad-world/brain</code>) — 한 군데 수정하면 양쪽 즉시 반영.</p>
 
+    <h3 data-i18n="mcp.h3.bank" style="margin-top:1.2rem;">📊 kb_facts 그래프 도구 (5개)</h3>
     <table>
       <tr><th data-i18n="mcp.th.tool">도구</th><th data-i18n="mcp.th.role">용도</th></tr>
+      <tr><td><code>comad_kb_search</code></td><td data-i18n="mcp.kb.search">자연어 시맨틱 검색 (Ollama 임베딩 → cosine 유사도)</td></tr>
+      <tr><td><code>comad_kb_trace</code></td><td data-i18n="mcp.kb.trace">fact_id → 본문 + provenance + 엣지 + ontology</td></tr>
+      <tr><td><code>comad_kb_explore</code></td><td data-i18n="mcp.kb.explore">BFS 멀티홉 그래프 탐색 (relation 타입 필터)</td></tr>
+      <tr><td><code>comad_kb_cross_scope</code></td><td data-i18n="mcp.kb.cross">한 도메인이 여러 프로젝트(scope)에 걸친 패턴 발견</td></tr>
+      <tr><td><code>comad_kb_stats</code></td><td data-i18n="mcp.kb.stats">그래프 헬스 (active/archived facts, 임베딩 커버리지, relation 분포)</td></tr>
+    </table>
+
+    <h3 data-i18n="mcp.h3.legacy" style="margin-top:1.2rem;">📁 dream 이력 도구 (2개, 기존)</h3>
+    <table>
+      <tr><th data-i18n="mcp.th.tool2">도구</th><th data-i18n="mcp.th.role2">용도</th></tr>
       <tr><td><code>comad_sleep_info</code></td><td data-i18n="mcp.info">마지막 dream 실행 시각, 다음 권장 실행 일정</td></tr>
       <tr><td><code>comad_sleep_history</code></td><td data-i18n="mcp.history">최근 N회의 dream 리포트 (무엇이 바뀌었나)</td></tr>
     </table>
+
+    <h2 id="log" data-i18n="log.h2">📰 변경이력 라이브 게시</h2>
+    <p data-i18n-html="log.p1">매 2시간 tick 마다 메타정보(파일/카운트/엣지/임계치)가 GitHub Pages에 자동 게시됩니다. <strong>본문은 비공개</strong> — 사용자 정보, API 키, 프로젝트 디테일은 노출되지 않고, 시스템이 정상 작동하는지를 외부에서 검증할 수 있는 메타 통계만 게시.</p>
+
+    <div class="callout">
+      📌 <strong data-i18n="log.url.t">라이브 URL</strong>: <a href="/memory-log/" style="color:var(--accent);font-weight:600;">kinkos1234.github.io/memory-log/</a> · <span data-i18n-html="log.url.f">매일 새 페이지: <code>/memory-log/YYYY-MM-DD/</code></span>
+    </div>
+
+<pre><code><span class="dim" data-i18n="log.example.h"># 게시되는 정보 (예시)</span>
+## 2026-05-04 03:14 KST (tick #5)
+
+<span data-i18n="log.example.kb">**KB 변화**
+| 항목         | 이전 | 이후 | Δ   |
+| active facts |  94 |  98 | +4  |
+| relations    |   5 |   8 | +3  |
+| embeddings   |  94 |  98 | +4  |</span>
+
+<span data-i18n="log.example.steps">**워커 단계**
+- extract: +4 new (87 idempotent skip, 0 fail)
+- embed: 4 embedded — ok
+- consolidate: 3 candidates (5 buckets)</span>
+
+<span data-i18n="log.example.th">**메모리 임계치**
+- .md 총 라인: <strong>3,761</strong> / threshold 3,500 → 🌙 dream pending
+- 마지막 dream: <strong>4.4일 전</strong> / threshold 7일</span></code></pre>
+
+    <p data-i18n-html="log.p2" style="font-size:0.85rem;color:var(--text-dim);">git push는 stash → pull --rebase --autostash → add → commit → push 순서로 진행되며, 충돌 시 abort 후 다음 tick에 재시도. <code>KB_SLEEP_NO_PUSH=1</code> 환경변수로 push만 비활성화 가능.</p>
 
     <h2 id="policy" data-i18n="pol.h2">정리 정책</h2>
     <p data-i18n="pol.p1">Sleep이 자동으로 판단하는 규칙들:</p>
@@ -173,13 +255,16 @@ window.I18N_DICT = {
     'nav.home': 'Home',
     'nav.scheduler': 'Scheduler',
     'toc.overview': 'Overview',
+    'toc.loop': '⚡ Auto loop',
+    'toc.kb': '📊 kb_facts graph',
     'toc.types': 'Memory types',
     'toc.trigger': 'Run "dream"',
     'toc.md': 'MEMORY.md index',
     'toc.mcp': 'MCP server',
+    'toc.log': '📰 Live changelog',
     'toc.policy': 'Consolidation policy',
-    'h1': 'Sleep — <em>Memory consolidation agent</em>',
-    'page.desc': 'Scans every Claude Code project\'s auto-memory directory to detect duplicates, consolidate related notes, and prune stale records. Invoked with one word ("dream"); a history-query MCP server surfaces past runs.',
+    'h1': 'Sleep — <em>Self-learning memory graph + auto cleanup</em>',
+    'page.desc': 'Full scan of every Claude Code project\'s auto-memory directory and a <strong>kb_facts knowledge graph</strong> (SQLite + Ollama embeddings) for semantic memory. Shared by Claude and Codex via 5 MCP tools. <strong>Always-on: kb-sleep tick every 2h + nightly auto-dream</strong>. Every change is published live to GitHub Pages.',
     'ov.h2': 'Overview',
     'ov.p1': 'Claude Code writes auto-memory to <code>~/.claude/projects/&lt;cwd&gt;/memory/</code> per project. Duplicates, stale notes, and fragmented content accumulate over time — Sleep periodically consolidates them.',
     'ov.before': 'Before sleep:',
@@ -229,12 +314,67 @@ window.I18N_DICT = {
     'md.l3': '- [Pending tasks](project_pending_tasks.md) — meta-edge split · 50K graph growth',
     'md.l4': '- [/search skill](project_search_skill_plan.md) — multi-source + Neo4j store + weekly cron done',
     'md.l5': '- [Design simplicity](feedback_design_simplicity.md) — Karpathy-grade simplicity preferred',
-    'mcp.h2': 'MCP server — queries',
-    'mcp.p1': 'comad-sleep also exposes an MCP server so you can query consolidation history and metadata conversationally.',
+    'loop.h2': '⚡ Auto loop (Always-on)',
+    'loop.p1': 'Sleep no longer requires "dream" to fire. <strong>Two LaunchAgents</strong> run continuously in the background.',
+    'loop.th1': 'Trigger',
+    'loop.th2': 'Cadence',
+    'loop.th3': 'What it does',
+    'loop.th4': 'LLM',
+    'loop.r1.f': 'Every 2 hours',
+    'loop.r1.do': '.md → kb_facts extraction (idempotent) · embedding refresh · rule-based consolidation · publish + push changelog',
+    'loop.r1.l': '❌ none (rule-only)',
+    'loop.r2.f': 'Daily 03:15 KST',
+    'loop.r2.do': 'Checks dream_pending flag → invokes comad-sleep agent for actual .md compaction',
+    'loop.r2.l': '✅ Claude (mutex-guarded)',
+    'loop.r3.f': 'Session start',
+    'loop.r3.do': 'If dream_pending=true, surfaces alert ("🌙 cleanup recommended")',
+    'loop.r3.l': '—',
+    'loop.p2': '<strong>Threshold</strong>: <code>.md</code> total lines ≥ 3,500 OR last dream &gt; 7 days → <code>dream_pending=true</code>. The two LaunchAgents cooperate so memory stays bounded without explicit user action.',
+    'loop.safe.t': 'Safety',
+    'loop.safe.b': 'auto-dream auto-skips when ccd/cdx is active (mutex guard). kb-sleep does no destructive ops (rule-only consolidate). Every .md change is auto-backed-up by comad-sleep before edit.',
+    'kb.h2': '📊 kb_facts knowledge graph',
+    'kb.p1': 'Body of memory (<code>~/.claude/.comad/memory/facts.sqlite</code>) stored as a 5-table semantic graph. Internalizes the memory-bank pattern with zero external dependencies.',
+    'kb.th1': 'Table',
+    'kb.th2': 'Role',
+    'kb.r1': 'Atomic facts (kind = decision/preference/pattern/knowledge/constraint)',
+    'kb.r2': '6 edge types (INFLUENCES / SUPPORTS / SUPERSEDES / CONTRADICTS / REFINES / RELATED)',
+    'kb.r3': 'Domain → Category classification (frontend, devops, memory, …)',
+    'kb.r4': 'Ollama <code>nomic-embed-text</code> (768d float32 BLOB) — for semantic search',
+    'kb.r5': 'Source tracing (transcript / commit / mdfile / manual)',
+    'kb.p2': '<strong>Pipeline</strong> (stdlib only · local Ollama):',
+    'kb.pipe.h': '~/.claude/skills/comad-memory/bin/',
+    'kb.pipe.1': '# .md / transcript / stdin → kb_facts (regex / LLM)',
+    'kb.pipe.2': '# incremental embedding for new facts only',
+    'kb.pipe.3': '# auto-classify DUPLICATE/CONTRADICTION/EVOLUTION (optional --llm)',
+    'kb.pipe.4': '# natural language → cosine similarity → top-K facts',
+    'kb.pipe.5': '# multi-hop BFS (1-N hops)',
+    'kb.pipe.6': '# fact_id → body + provenance + edges',
+    'kb.pipe.7': '# graph health (kind / scope / domain / relation distribution)',
+    'kb.pipe.8': '# domains spanning multiple scopes (cross-project insights)',
+    'mcp.h2': 'MCP server — 7 tools shared by Claude · Codex',
+    'mcp.p1': 'Registered into the comad-brain MCP server so <strong>Claude (<code>claude</code>/<code>ccc</code>/<code>ccd</code>) and Codex (<code>cdx</code>) hit the same SQLite memory through identical tools</strong>. Single-SoT codebase (<code>01-comad/comad-world/brain</code>) — edit once, both environments updated.',
+    'mcp.h3.bank': '📊 kb_facts graph tools (5)',
     'mcp.th.tool': 'Tool',
     'mcp.th.role': 'Purpose',
+    'mcp.kb.search': 'Natural-language semantic search (Ollama embedding → cosine similarity)',
+    'mcp.kb.trace': 'fact_id → body + provenance + edges + ontology',
+    'mcp.kb.explore': 'BFS multi-hop graph walk (relation-type filter)',
+    'mcp.kb.cross': 'Domains spanning multiple projects/scopes (cross-project insights)',
+    'mcp.kb.stats': 'Graph health (active/archived facts, embedding coverage, relation distribution)',
+    'mcp.h3.legacy': '📁 Dream history tools (2, legacy)',
+    'mcp.th.tool2': 'Tool',
+    'mcp.th.role2': 'Purpose',
     'mcp.info': 'Last dream time, recommended next run',
     'mcp.history': 'Recent N dream reports (what changed)',
+    'log.h2': '📰 Live changelog publishing',
+    'log.p1': 'Every 2-hour tick publishes meta-info (files / counts / edges / thresholds) to GitHub Pages. <strong>Body stays private</strong> — no user info, API keys, or project details exposed; only meta statistics that let you verify the system is working from outside.',
+    'log.url.t': 'Live URL',
+    'log.url.f': 'New page daily: <code>/memory-log/YYYY-MM-DD/</code>',
+    'log.example.h': '# What\'s published (example)',
+    'log.example.kb': '**KB delta**\n| Field        | Before | After | Δ   |\n| active facts |     94 |    98 | +4  |\n| relations    |      5 |     8 | +3  |\n| embeddings   |     94 |    98 | +4  |',
+    'log.example.steps': '**Worker steps**\n- extract: +4 new (87 idempotent skip, 0 fail)\n- embed: 4 embedded — ok\n- consolidate: 3 candidates (5 buckets)',
+    'log.example.th': '**Memory thresholds**\n- .md total lines: <strong>3,761</strong> / threshold 3,500 → 🌙 dream pending\n- last dream: <strong>4.4 days ago</strong> / threshold 7 days',
+    'log.p2': 'git push goes through stash → pull --rebase --autostash → add → commit → push; aborts on conflict and retries next tick. Use <code>KB_SLEEP_NO_PUSH=1</code> to disable push only.',
     'pol.h2': 'Consolidation policy',
     'pol.p1': 'Rules Sleep applies automatically:',
     'pol.h3_1': 'What NOT to save (redundant memory)',
@@ -258,13 +398,16 @@ window.I18N_DICT = {
     'nav.home': '홈',
     'nav.scheduler': '스케줄러',
     'toc.overview': '개요',
+    'toc.loop': '⚡ 자동 루프',
+    'toc.kb': '📊 kb_facts 그래프',
     'toc.types': '메모리 유형',
     'toc.trigger': 'dream 실행',
     'toc.md': 'MEMORY.md 인덱스',
     'toc.mcp': 'MCP 서버',
+    'toc.log': '📰 변경이력 게시',
     'toc.policy': '정리 정책',
-    'h1': 'Sleep — <em>메모리 정리 에이전트</em>',
-    'page.desc': 'Claude Code의 프로젝트별 auto memory 디렉토리를 전수 스캔해 중복 감지, 통합, 오래된 기록 정리를 수행합니다. "dream" 한 마디로 발동되며, 변경 이력을 MCP 서버로 조회할 수 있습니다.',
+    'h1': 'Sleep — <em>자가학습 메모리 그래프 + 자동 정리</em>',
+    'page.desc': 'Claude Code 프로젝트별 auto memory 디렉토리를 전수 스캔하고, <strong>kb_facts 지식 그래프</strong>(SQLite + Ollama 임베딩)로 시맨틱 메모리를 구축합니다. Claude·Codex가 동일한 5개 MCP 툴로 공유. <strong>2시간마다 자동 tick + 매일 자동 dream</strong>으로 상시 운영되며, 모든 변경이력이 GitHub Pages에 라이브 게시됩니다.',
     'ov.h2': '개요',
     'ov.p1': 'Claude Code는 각 프로젝트마다 <code>~/.claude/projects/&lt;cwd&gt;/memory/</code>에 자동 메모리를 저장합니다. 시간이 쌓이면 중복, 오래된 정보, 파편화된 내용이 축적되는데, Sleep이 이를 주기적으로 정리합니다.',
     'ov.before': 'Before sleep:',
@@ -314,12 +457,67 @@ window.I18N_DICT = {
     'md.l3': '- [Pending tasks](project_pending_tasks.md) — meta-edge 분할 · 50K 그래프 성장',
     'md.l4': '- [/search skill](project_search_skill_plan.md) — 멀티소스 + Neo4j 저장 + 주간 CRON 구현 완료',
     'md.l5': '- [Design simplicity](feedback_design_simplicity.md) — Karpathy 기준 심플리시티 선호',
-    'mcp.h2': 'MCP 서버 — 조회',
-    'mcp.p1': 'comad-sleep은 MCP 서버도 제공합니다. 정리 이력과 메타데이터를 대화로 조회.',
+    'loop.h2': '⚡ 자동 루프 (Always-on)',
+    'loop.p1': 'Sleep은 더 이상 "dream" 한 마디가 있어야만 발동되지 않습니다. <strong>두 개의 LaunchAgent</strong>가 백그라운드에서 항상 돌고 있습니다.',
+    'loop.th1': '트리거',
+    'loop.th2': '주기',
+    'loop.th3': '하는 일',
+    'loop.th4': 'LLM 사용',
+    'loop.r1.f': '매 2시간',
+    'loop.r1.do': '.md → kb_facts 추출 (idempotent) · embedding 갱신 · rule-based consolidation · 변경이력 게시·push',
+    'loop.r1.l': '❌ 무필요 (rule-only)',
+    'loop.r2.f': '매일 03:15 KST',
+    'loop.r2.do': 'dream_pending 플래그 확인 → comad-sleep 에이전트 자동 호출 (.md 본격 압축)',
+    'loop.r2.l': '✅ Claude (mutex 가드 포함)',
+    'loop.r3.f': '세션 시작 시',
+    'loop.r3.do': 'dream_pending=true이면 적극 알림 ("🌙 정리 권장")',
+    'loop.r3.l': '—',
+    'loop.p2': '<strong>임계 조건</strong>: <code>.md</code> 총 라인 ≥ 3,500 또는 마지막 dream 후 7일 경과 시 <code>dream_pending=true</code>. 두 LaunchAgent가 협력해서 사용자 명시 호출 없이도 메모리가 비대해지지 않게 유지합니다.',
+    'loop.safe.t': '안전장치',
+    'loop.safe.b': 'auto-dream은 ccd/cdx 활성 시 자동 skip(mutex 가드). kb-sleep은 destructive 작업 없음(rule-only consolidate). 모든 .md 변경은 comad-sleep 백업 디렉토리에 자동 복사.',
+    'kb.h2': '📊 kb_facts 지식 그래프',
+    'kb.p1': '메모리 본문(<code>~/.claude/.comad/memory/facts.sqlite</code>)에 5개 kb_* 테이블로 저장되는 시맨틱 그래프. memory-bank 패턴을 zero external dependency로 내제화한 것이 핵심입니다.',
+    'kb.th1': '테이블',
+    'kb.th2': '역할',
+    'kb.r1': '원자적 fact (kind=decision/preference/pattern/knowledge/constraint)',
+    'kb.r2': '엣지 6종 (INFLUENCES / SUPPORTS / SUPERSEDES / CONTRADICTS / REFINES / RELATED)',
+    'kb.r3': 'Domain → Category 분류 (frontend, devops, memory 등)',
+    'kb.r4': 'Ollama <code>nomic-embed-text</code> (768d float32 BLOB) — 시맨틱 검색용',
+    'kb.r5': '출처 추적 (transcript / commit / mdfile / manual)',
+    'kb.p2': '<strong>파이프라인</strong> (모두 stdlib 외 deps 없음 · 로컬 Ollama만 사용):',
+    'kb.pipe.h': '~/.claude/skills/comad-memory/bin/',
+    'kb.pipe.1': '# .md / transcript / stdin → kb_facts (regex / LLM)',
+    'kb.pipe.2': '# 새 fact만 incremental embedding (nomic-embed-text)',
+    'kb.pipe.3': '# DUPLICATE/CONTRADICTION/EVOLUTION 자동 판정 (선택: --llm)',
+    'kb.pipe.4': '# 자연어 → cosine 유사도 → top-K facts',
+    'kb.pipe.5': '# 멀티홉 BFS (1-N hops) 그래프 탐색',
+    'kb.pipe.6': '# fact_id → 본문 + provenance + 엣지',
+    'kb.pipe.7': '# 그래프 헬스 (kind / scope / domain / relation 분포)',
+    'kb.pipe.8': '# 도메인이 여러 scope 걸치는 facts (cross-project insights)',
+    'mcp.h2': 'MCP 서버 — Claude·Codex 공용 7툴',
+    'mcp.p1': 'comad-brain MCP 서버에 통합 등록되어 <strong>Claude(<code>claude</code>/<code>ccc</code>/<code>ccd</code>)와 Codex(<code>cdx</code>)가 동일한 툴로 같은 SQLite 메모리에 접근</strong>합니다. 코드는 단일 SoT(<code>01-comad/comad-world/brain</code>) — 한 군데 수정하면 양쪽 즉시 반영.',
+    'mcp.h3.bank': '📊 kb_facts 그래프 도구 (5개)',
     'mcp.th.tool': '도구',
     'mcp.th.role': '용도',
+    'mcp.kb.search': '자연어 시맨틱 검색 (Ollama 임베딩 → cosine 유사도)',
+    'mcp.kb.trace': 'fact_id → 본문 + provenance + 엣지 + ontology',
+    'mcp.kb.explore': 'BFS 멀티홉 그래프 탐색 (relation 타입 필터)',
+    'mcp.kb.cross': '한 도메인이 여러 프로젝트(scope)에 걸친 패턴 발견',
+    'mcp.kb.stats': '그래프 헬스 (active/archived facts, 임베딩 커버리지, relation 분포)',
+    'mcp.h3.legacy': '📁 dream 이력 도구 (2개, 기존)',
+    'mcp.th.tool2': '도구',
+    'mcp.th.role2': '용도',
     'mcp.info': '마지막 dream 실행 시각, 다음 권장 실행 일정',
     'mcp.history': '최근 N회의 dream 리포트 (무엇이 바뀌었나)',
+    'log.h2': '📰 변경이력 라이브 게시',
+    'log.p1': '매 2시간 tick 마다 메타정보(파일/카운트/엣지/임계치)가 GitHub Pages에 자동 게시됩니다. <strong>본문은 비공개</strong> — 사용자 정보, API 키, 프로젝트 디테일은 노출되지 않고, 시스템이 정상 작동하는지를 외부에서 검증할 수 있는 메타 통계만 게시.',
+    'log.url.t': '라이브 URL',
+    'log.url.f': '매일 새 페이지: <code>/memory-log/YYYY-MM-DD/</code>',
+    'log.example.h': '# 게시되는 정보 (예시)',
+    'log.example.kb': '**KB 변화**\n| 항목         | 이전 | 이후 | Δ   |\n| active facts |  94 |  98 | +4  |\n| relations    |   5 |   8 | +3  |\n| embeddings   |  94 |  98 | +4  |',
+    'log.example.steps': '**워커 단계**\n- extract: +4 new (87 idempotent skip, 0 fail)\n- embed: 4 embedded — ok\n- consolidate: 3 candidates (5 buckets)',
+    'log.example.th': '**메모리 임계치**\n- .md 총 라인: <strong>3,761</strong> / threshold 3,500 → 🌙 dream pending\n- 마지막 dream: <strong>4.4일 전</strong> / threshold 7일',
+    'log.p2': 'git push는 stash → pull --rebase --autostash → add → commit → push 순서로 진행되며, 충돌 시 abort 후 다음 tick에 재시도. <code>KB_SLEEP_NO_PUSH=1</code> 환경변수로 push만 비활성화 가능.',
     'pol.h2': '정리 정책',
     'pol.p1': 'Sleep이 자동으로 판단하는 규칙들:',
     'pol.h3_1': '무엇을 저장하지 말 것 (중복되는 기억)',
