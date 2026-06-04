@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-i18n="meta.title">Extensions — Comad 가이드</title>
-<meta name="description" content="comad-world-extensions 가이드 — 9 hooks + 8 skills (T6 자가진화, Approval-Gated Destruction, Proof-Driven QA, Codex 병렬 외주)" data-i18n-meta="meta.desc">
+<meta name="description" content="comad-world-extensions 가이드 — 9 hooks + 10 skills (T6 자가진화, Approval-Gated Destruction, Proof-Driven QA, Codex 병렬 외주)" data-i18n-meta="meta.desc">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="assets/css/guide.css">
 <link rel="stylesheet" href="/comad/assets/css/comad-shared.css">
@@ -37,7 +37,7 @@
     <div class="toc-title">Extensions</div>
     <a href="#install" data-i18n="toc.install">설치</a>
     <a href="#hooks" data-i18n="toc.hooks">훅 9종</a>
-    <a href="#skills" data-i18n="toc.skills">스킬 8종</a>
+    <a href="#skills" data-i18n="toc.skills">스킬 10종</a>
     <a href="#parallel" data-i18n="toc.parallel">comad-parallel 심화</a>
     <a href="#t6" data-i18n="toc.t6">T6 자가진화 루프</a>
     <a href="#repo" data-i18n="toc.repo">레포 / 라이선스</a>
@@ -46,7 +46,7 @@
   <main>
 
     <div class="page-hero">
-      <h1 data-i18n-html="h1">Extensions — <em>9 hooks + 8 skills</em></h1>
+      <h1 data-i18n-html="h1">Extensions — <em>9 hooks + 10 skills</em></h1>
       <p class="page-desc" data-i18n-html="page.desc">
         코마드월드(<code>~/.claude/</code>) 위에 얹는 자가진화·안전·증명 레이어. Claude Code OAuth 사용자를 위한 로컬 전용 확장,
         외부 서비스 의존성 없음. 복사 기반 설치, Python stdlib + bash 만 사용.
@@ -55,7 +55,7 @@
         <span class="tag">Python 3</span>
         <span class="tag">bash</span>
         <span class="tag accent" data-i18n="tag.hooks">9 hooks</span>
-        <span class="tag warm" data-i18n="tag.skills">8 skills</span>
+        <span class="tag warm" data-i18n="tag.skills">10 skills</span>
         <span class="tag lime">zero deps</span>
       </div>
     </div>
@@ -118,9 +118,9 @@ cd ~/Programmer/01-comad/comad-world-extensions
       </table>
     </section>
 
-    <!-- ── 스킬 8종 ── -->
+    <!-- ── 스킬 10종 ── -->
     <section id="skills">
-      <h2 data-i18n="skills.h2">스킬 8종</h2>
+      <h2 data-i18n="skills.h2">스킬 10종</h2>
       <table class="data-table">
         <thead><tr>
           <th data-i18n="th.skill">스킬</th>
@@ -136,6 +136,8 @@ cd ~/Programmer/01-comad/comad-world-extensions
           <tr><td><code>comad-ci-healer</code></td><td data-i18n="skill.ci.p">GH Actions 실패 → 분류 → headless claude 수정 → PR 자동생성 (launchd 폴러, dry_run+allowlist 가드)</td><td><code>poll.py</code>, <code>classify.py</code>, <code>heal.sh</code>, <code>notify.sh</code>, <code>run.sh</code></td></tr>
           <tr><td><code>comad-pr-review</code></td><td data-i18n="skill.pr.p">PR 4축(정확성·보안·성능·컨벤션) 자동 채점 → 인라인+요약 코멘트 (codex+claude, headSha dedup)</td><td><code>review.sh</code>, <code>post.sh</code>, <code>run.sh</code></td></tr>
           <tr><td><code>harness-report</code></td><td data-i18n="skill.hr.p">Loopy-Era 5축 하네스 점수 + 비용/efficiency(notional, composite와 분리) 측정 → results.tsv 추세 + HTML 대시보드</td><td><code>harness-report.py</code>, <code>collect-cost.py</code>, <code>dashboard.py</code></td></tr>
+          <tr><td><code>comad-recall</code> <span class="tag" style="font-size:0.7em">⚠️ comad-brain</span></td><td data-i18n="skill.rc.p">comad-brain(Neo4j) 출처-인덱스 리콜 — 주제의 실재 기사·기술계보. claim 은 미검증이라 헤지. recency 질문 +3.12 lift(블라인드 A/B 측정)</td><td><code>recall.sh</code></td></tr>
+          <tr><td><code>comad-foresight</code> <span class="tag" style="font-size:0.7em">⚠️ comad-brain</span></td><td data-i18n="skill.fs.p">brain hot클러스터 → 10렌즈(손자·탈레브·헤겔…) 전략 foresight + 주간 통합 인텔리전스 리포트. plain 대비 +1.375 lift. comad-eye 컨셉 승계</td><td><code>cluster.sh</code>, <code>digest.sh</code>, <code>run.sh</code></td></tr>
         </tbody>
       </table>
     </section>
@@ -247,24 +249,24 @@ parallel.sh run-all "프로젝트 컨텍스트"
 
 <footer style="text-align:center;color:var(--text-dim);font-size:0.78rem;padding:3rem 1rem 4rem;border-top:1px solid var(--border);margin-top:4rem;">
   <div data-i18n-html="footer.links">comad-world-extensions · <a href="https://github.com/kinkos1234/comad-world-extensions" style="color:var(--teal)">GitHub</a> · <a href="/comad">소개 페이지</a> · <a href="index.html">가이드 홈</a></div>
-  <div style="margin-top:0.5rem;" data-i18n="footer.sub">MIT License · 9 hooks + 8 skills · zero external deps</div>
+  <div style="margin-top:0.5rem;" data-i18n="footer.sub">MIT License · 9 hooks + 10 skills · zero external deps</div>
 </footer>
 
 <script>
 window.I18N_DICT = {
   en: {
     'meta.title': 'Extensions — Comad Guide',
-    'meta.desc': 'Guide for comad-world-extensions — 9 hooks + 8 skills (T6 self-evolve, Approval-Gated Destruction, Proof-Driven QA, Codex parallel outsource).',
+    'meta.desc': 'Guide for comad-world-extensions — 9 hooks + 10 skills (T6 self-evolve, Approval-Gated Destruction, Proof-Driven QA, Codex parallel outsource).',
     'brand.sub': 'Guide',
     'nav.home': 'Home',
     'nav.scheduler': 'Scheduler',
-    'h1': 'Extensions — <em>9 hooks + 8 skills</em>',
+    'h1': 'Extensions — <em>9 hooks + 10 skills</em>',
     'page.desc': 'A self-evolution / safety / proof layer over Comad World (<code>~/.claude/</code>). Local-only extension for Claude Code OAuth users, zero external dependencies. Copy-based install, Python stdlib + bash only.',
     'tag.hooks': '9 hooks',
-    'tag.skills': '8 skills',
+    'tag.skills': '10 skills',
     'toc.install': 'Install',
     'toc.hooks': '9 hooks',
-    'toc.skills': '8 skills',
+    'toc.skills': '10 skills',
     'toc.parallel': 'comad-parallel deep-dive',
     'toc.t6': 'T6 self-evolve loop',
     'toc.repo': 'Repo / License',
@@ -289,7 +291,7 @@ window.I18N_DICT = {
     'hook.prem.r': 'Detect premature "convergence achieved" declarations',
     'hook.num.r': 'Cross-check absolute claims ("perfect / production-ready / 100%") vs actual evidence',
     'hook.inv.r': 'Coverage claim vs inventory cross-check',
-    'skills.h2': '8 skills',
+    'skills.h2': '10 skills',
     'th.skill': 'Skill',
     'th.purpose': 'Purpose',
     'th.binary': 'Key binaries',
@@ -301,6 +303,8 @@ window.I18N_DICT = {
     'skill.ci.p': 'GH Actions failure → classify → headless claude fix → auto PR (launchd poller, dry_run+allowlist guards)',
     'skill.pr.p': 'PR 4-axis (correctness·security·performance·convention) auto-scoring → inline+summary comments (codex+claude, headSha dedup)',
     'skill.hr.p': 'Loopy-Era 5-axis harness score + cost/efficiency (notional, separate from quality composite) → results.tsv trend + HTML dashboard',
+    'skill.rc.p': 'comad-brain(Neo4j) source-index recall — real articles + tech genealogy for a topic. claims hedged (unverified). +3.12 lift on recency queries (blind A/B)',
+    'skill.fs.p': 'brain hot-cluster → 10-lens (Sun Tzu·Taleb·Hegel…) strategic foresight + weekly unified intelligence report. +1.375 vs plain. inherits comad-eye concept',
     'parallel.h2': 'comad-parallel deep-dive — 5 integration gates',
     'parallel.desc': 'Ported from gptaku-plugins/pumasi v1.7.2 and re-engineered with 5 comad-native gates. All opt-in via env, except handoff (default-on). One <code>parallel.sh run-all</code> runs the 6-step pipeline: results → qa-gate → second-opinion-gate → destroy-check → handoff → ear-notify.',
     'th.cmd': 'Command',
@@ -327,21 +331,21 @@ window.I18N_DICT = {
     'repo.intro': 'GitHub: <a href="https://github.com/kinkos1234/comad-world-extensions" target="_blank" rel="noopener">kinkos1234/comad-world-extensions</a> · License: MIT · Zero external service dependencies (Python stdlib + bash only)',
     'repo.sister': '<strong>Sister repos</strong> — Together with <a href="https://github.com/kinkos1234/comad-world">comad-world</a> (8 core modules) and <a href="https://github.com/kinkos1234/comad-studio">comad-studio</a> (5 visual/media generation skills), they form one system. Recommended install order: <strong>world → extensions → studio</strong>.',
     'footer.links': 'comad-world-extensions · <a href="https://github.com/kinkos1234/comad-world-extensions" style="color:var(--teal)">GitHub</a> · <a href="/comad">Landing page</a> · <a href="index.html">Guide home</a>',
-    'footer.sub': 'MIT License · 9 hooks + 8 skills · zero external deps'
+    'footer.sub': 'MIT License · 9 hooks + 10 skills · zero external deps'
   },
   ko: {
     'meta.title': 'Extensions — Comad 가이드',
-    'meta.desc': 'comad-world-extensions 가이드 — 9 hooks + 8 skills (T6 자가진화, Approval-Gated Destruction, Proof-Driven QA, Codex 병렬 외주)',
+    'meta.desc': 'comad-world-extensions 가이드 — 9 hooks + 10 skills (T6 자가진화, Approval-Gated Destruction, Proof-Driven QA, Codex 병렬 외주)',
     'brand.sub': '가이드',
     'nav.home': '홈',
     'nav.scheduler': '스케줄러',
-    'h1': 'Extensions — <em>9 hooks + 8 skills</em>',
+    'h1': 'Extensions — <em>9 hooks + 10 skills</em>',
     'page.desc': '코마드월드(<code>~/.claude/</code>) 위에 얹는 자가진화·안전·증명 레이어. Claude Code OAuth 사용자를 위한 로컬 전용 확장, 외부 서비스 의존성 없음. 복사 기반 설치, Python stdlib + bash 만 사용.',
     'tag.hooks': '9 hooks',
-    'tag.skills': '8 skills',
+    'tag.skills': '10 skills',
     'toc.install': '설치',
     'toc.hooks': '훅 9종',
-    'toc.skills': '스킬 8종',
+    'toc.skills': '스킬 10종',
     'toc.parallel': 'comad-parallel 심화',
     'toc.t6': 'T6 자가진화 루프',
     'toc.repo': '레포 / 라이선스',
@@ -366,7 +370,7 @@ window.I18N_DICT = {
     'hook.prem.r': '"수렴 달성" 조기 선언 감지',
     'hook.num.r': '"완벽 / production-ready / 100%" 절대 주장 vs 실제 evidence 대조',
     'hook.inv.r': 'coverage 주장 vs inventory cross-check',
-    'skills.h2': '스킬 8종',
+    'skills.h2': '스킬 10종',
     'th.skill': '스킬',
     'th.purpose': '목적',
     'th.binary': '핵심 바이너리',
@@ -378,6 +382,8 @@ window.I18N_DICT = {
     'skill.ci.p': 'GH Actions 실패 → 분류 → headless claude 수정 → PR 자동생성 (launchd 폴러, dry_run+allowlist 가드)',
     'skill.pr.p': 'PR 4축(정확성·보안·성능·컨벤션) 자동 채점 → 인라인+요약 코멘트 (codex+claude, headSha dedup)',
     'skill.hr.p': 'Loopy-Era 5축 하네스 점수 + 비용/efficiency(notional, composite와 분리) 측정 → results.tsv 추세 + HTML 대시보드',
+    'skill.rc.p': 'comad-brain(Neo4j) 출처-인덱스 리콜 — 주제의 실재 기사·기술계보. claim 은 미검증이라 헤지. recency 질문 +3.12 lift(블라인드 A/B 측정)',
+    'skill.fs.p': 'brain hot클러스터 → 10렌즈(손자·탈레브·헤겔…) 전략 foresight + 주간 통합 인텔리전스 리포트. plain 대비 +1.375 lift. comad-eye 컨셉 승계',
     'parallel.h2': 'comad-parallel 심화 — 5종 통합 게이트',
     'parallel.desc': 'gptaku-plugins/pumasi v1.7.2 를 포팅 후 comad 시스템에 맞게 5종 게이트 신설. 모두 opt-in (env 로 활성화) 또는 default-on (handoff). 한 번의 <code>parallel.sh run-all</code> 로 results → qa-gate → second-opinion-gate → destroy-check → handoff → ear-notify 의 6-단계 파이프라인 자동 실행.',
     'th.cmd': '명령',
@@ -404,7 +410,7 @@ window.I18N_DICT = {
     'repo.intro': 'GitHub: <a href="https://github.com/kinkos1234/comad-world-extensions" target="_blank" rel="noopener">kinkos1234/comad-world-extensions</a> &middot; 라이선스: MIT &middot; 외부 서비스 의존성 0 (Python stdlib + bash 만 사용)',
     'repo.sister': '<strong>자매 레포</strong> &mdash; <a href="https://github.com/kinkos1234/comad-world">comad-world</a> (8 핵심 모듈) + <a href="https://github.com/kinkos1234/comad-studio">comad-studio</a> (5 시각/미디어 생성) 와 함께 한 시스템을 이룹니다. 설치 순서 권장: <strong>world → extensions → studio</strong>.',
     'footer.links': 'comad-world-extensions · <a href="https://github.com/kinkos1234/comad-world-extensions" style="color:var(--teal)">GitHub</a> · <a href="/comad">소개 페이지</a> · <a href="index.html">가이드 홈</a>',
-    'footer.sub': 'MIT License · 9 hooks + 8 skills · zero external deps'
+    'footer.sub': 'MIT License · 9 hooks + 10 skills · zero external deps'
   }
 };
 </script>
