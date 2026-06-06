@@ -120,9 +120,7 @@ h1 {
 }
 h1 em {
   font-style: normal;
-  background: linear-gradient(100deg, var(--warm) 10%, var(--warm-deep) 90%);
-  -webkit-background-clip: text; background-clip: text;
-  color: transparent;
+  color: var(--accent);
 }
 .page-desc {
   color: var(--text-dim);
@@ -180,8 +178,8 @@ li { margin-bottom: 0.4rem; line-height: 1.65; }
   border: 1px solid var(--border);
 }
 .tag.accent { color: var(--accent); border-color: rgba(71,159,250,0.3); }
-.tag.warm { color: var(--warm); border-color: rgba(255,161,108,0.3); }
-.tag.lime { color: var(--lime); border-color: rgba(214,254,81,0.3); }
+.tag.warm { color: var(--accent); border-color: rgba(71,159,250,0.3); }
+.tag.lime { color: var(--accent); border-color: rgba(71,159,250,0.3); }
 
 /* Code */
 pre, .code {
@@ -250,8 +248,8 @@ figure.shot.placeholder {
   color: var(--text);
   line-height: 1.6;
 }
-.callout.warm { background: rgba(255,161,108,0.08); border-left-color: var(--warm); }
-.callout.lime { background: rgba(214,254,81,0.07); border-left-color: var(--lime); }
+.callout.warm { background: var(--accent-soft); border-left-color: var(--accent); }
+.callout.lime { background: var(--accent-soft); border-left-color: var(--accent); }
 
 /* Table */
 table {
