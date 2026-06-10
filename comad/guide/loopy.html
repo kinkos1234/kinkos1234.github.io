@@ -34,8 +34,8 @@
   <aside class="toc">
     <div class="toc-title">loopy-era</div>
     <a href="#overview" data-i18n="toc.overview">개요</a>
-    <a href="#three-agents" data-i18n="toc.three">3개 LaunchAgent</a>
-    <a href="#supervisor" data-i18n="toc.sup">supervisor 15-phase</a>
+    <a href="#three-agents" data-i18n="toc.three">8개 LaunchAgent</a>
+    <a href="#supervisor" data-i18n="toc.sup">supervisor 6-phase</a>
     <a href="#kb-tick" data-i18n="toc.kb">kb-sleep tick</a>
     <a href="#auto-dream" data-i18n="toc.dream">auto-dream</a>
     <a href="#layout" data-i18n="toc.layout">소스 vs 런타임</a>
@@ -47,14 +47,14 @@
     <div class="page-hero">
       <h1 data-i18n-html="h1">loopy-era — <em>Always-on Self-Evolution Harness</em></h1>
       <p class="page-desc" data-i18n-html="page.desc">
-        사용자가 명시적으로 "tick" 한 번 안 쳐도 시스템이 스스로 측정·학습·정리되도록 만든 3개 LaunchAgent 모음.
+        사용자가 명시적으로 "tick" 한 번 안 쳐도 시스템이 스스로 측정·학습·정리되도록 만든 8개 LaunchAgent 모음.
         30분마다 점수 갱신, 2시간마다 메모리 그래프 동기화, 매일 새벽 한 번 깊은 정리(dream).
         모든 결과가 Claude·Codex 양쪽에서 공유되며 메타 변경이력이 GitHub Pages에 라이브 게시됩니다.
       </p>
       <div class="tag-row">
         <span class="tag accent">always-on</span>
-        <span class="tag">3 LaunchAgents</span>
-        <span class="tag">15-phase tick</span>
+        <span class="tag">8 LaunchAgents</span>
+        <span class="tag">6-phase tick</span>
         <span class="tag warm">zero deps</span>
       </div>
     </div>
@@ -63,39 +63,44 @@
     <p data-i18n-html="ov.p1">loopy-era는 <strong>"진짜 자가진화하는 시스템"</strong>을 목표로 하는 하네스입니다. comad의 다른 모듈들(brain·ear·sleep·…)이 각자 역할을 수행한다면, loopy-era는 그 모듈들을 <strong>주기적으로 측정·갱신·통합</strong>하는 메타 레이어입니다.</p>
     <p data-i18n-html="ov.p2">사용자 개입 없이 다음이 자동으로 일어납니다:</p>
     <ul>
-      <li data-i18n-html="ov.l1">30분마다 <code>supervisor.py</code>가 <strong>15-phase tick</strong>을 돌려 시스템 헬스를 측정·기록</li>
+      <li data-i18n-html="ov.l1">30분마다 <code>supervisor.py</code>가 <strong>6-phase tick</strong>을 돌려 시스템 헬스를 측정·기록</li>
       <li data-i18n-html="ov.l2">2시간마다 <code>kb-sleep-tick.py</code>가 모든 <code>.md</code> 메모리를 <code>kb_facts</code> 그래프에 동기화하고 GitHub Pages에 변경이력 게시</li>
       <li data-i18n-html="ov.l3">매일 03:15 KST <code>auto-dream.sh</code>가 임계 도달 시 comad-sleep 에이전트를 자동 호출</li>
       <li data-i18n-html="ov.l4">모든 산출물이 Claude(<code>claude</code>/<code>ccc</code>/<code>ccd</code>)와 Codex(<code>cdx</code>) 어느 환경에서든 동일한 5개 MCP 툴로 즉시 조회</li>
+      <li data-i18n-html="ov.l5"><strong>R6 (2026-06)</strong>: 매일 04:00 야간감사 → 결정 큐, 매주 일 자가학습(learn-weekly), 매주 월 결정 다이제스트 Discord 전송, 매월 evolve 적용, 분기 엔트로피 감사 — "수확→분석→승인요청→적용→계측→감사"의 닫힌 루프 완성</li>
     </ul>
 
     <div class="callout">
       <strong data-i18n="ov.note.t">정체성</strong> — <span data-i18n-html="ov.note.b">loopy-era는 <strong>코드</strong>(이 모듈)와 <strong>런타임</strong>(<code>~/.comad/loopy-era/</code>)을 명확히 분리한 첫 모듈입니다. 다른 모듈도 점진적으로 같은 패턴으로 정리될 예정.</span>
     </div>
 
-    <h2 id="three-agents" data-i18n="th.h2">3개 LaunchAgent</h2>
-    <p data-i18n="th.p1">macOS launchd에 등록되는 백그라운드 데몬 3개. 사용자 머신이 켜져 있는 한 항상 돕니다.</p>
+    <h2 id="three-agents" data-i18n="th.h2">8개 LaunchAgent</h2>
+    <p data-i18n="th.p1">macOS launchd에 등록되는 백그라운드 데몬 8개. 사용자 머신이 켜져 있는 한 항상 돕니다.</p>
 
     <table>
       <tr><th data-i18n="th.t1">Label</th><th data-i18n="th.t2">주기</th><th data-i18n="th.t3">실행 대상</th><th data-i18n="th.t4">LLM</th></tr>
-      <tr><td><code>com.comad.loopy-era</code></td><td data-i18n="th.r1.f">30분 (StartInterval 1800s)</td><td><code>bin/supervisor.py tick</code></td><td data-i18n="th.r1.l">phase 04만 사용</td></tr>
+      <tr><td><code>com.comad.loopy-era</code></td><td data-i18n="th.r1.f">30분 (StartInterval 1800s)</td><td><code>bin/supervisor.py tick</code></td><td data-i18n="th.r1.l">❌ 무사용 (R6: LLM phase 제거)</td></tr>
       <tr><td><code>com.comad.kb-sleep</code></td><td data-i18n="th.r2.f">2시간 (StartInterval 7200s)</td><td><code>bin/kb-sleep-tick.py</code></td><td data-i18n="th.r2.l">❌ 무사용 (rule-only)</td></tr>
       <tr><td><code>com.comad.auto-dream</code></td><td data-i18n="th.r3.f">매일 03:15 KST (Calendar)</td><td><code>bin/auto-dream.sh</code></td><td data-i18n="th.r3.l">✅ Claude (mutex 가드)</td></tr>
+      <tr><td><code>com.comad.nightly-audit</code></td><td data-i18n="th.r4.f">매일 04:00 KST</td><td><code>bin/nightly-audit.sh</code></td><td data-i18n="th.r4.l">✅ Claude — 사람 판단 항목만 결정 큐로</td></tr>
+      <tr><td><code>com.comad.learn-weekly</code></td><td data-i18n="th.r5.f">매주 일 09:17</td><td><code>bin/learn-weekly.sh</code></td><td data-i18n="th.r5.l">✅ Claude (T6 pending 있을 때만)</td></tr>
+      <tr><td><code>com.comad.evolve-monthly</code></td><td data-i18n="th.r6.f">매월 2일 10:23</td><td><code>bin/evolve-monthly.sh</code></td><td data-i18n="th.r6.l">✅ Claude — 적용은 A/B 통과분만</td></tr>
+      <tr><td><code>com.comad.decision-digest</code></td><td data-i18n="th.r7.f">매주 월 08:13</td><td><code>bin/decision-digest.sh</code></td><td data-i18n="th.r7.l">❌ 무사용 (봇 REST 직접 호출)</td></tr>
+      <tr><td><code>com.comad.entropy-audit</code></td><td data-i18n="th.r8.f">분기 11일 09:37 (3·6·9·12월)</td><td><code>bin/entropy-audit.sh</code></td><td data-i18n="th.r8.l">✅ Claude — 90일 기여 증거 감사 (1회차 2026-09-11)</td></tr>
     </table>
 
-    <h2 id="supervisor" data-i18n="sup.h2">supervisor 15-phase</h2>
+    <h2 id="supervisor" data-i18n="sup.h2">supervisor 6-phase</h2>
     <p data-i18n-html="sup.p1"><code>supervisor.py</code>가 매 30분 깨어나서 다음 phase를 순서대로 실행합니다. 각 phase는 stdin으로 payload(<code>loopy_dir</code>, <code>state</code>, <code>iteration</code>)를 받고 stdout으로 JSON을 돌려줍니다.</p>
 
 <pre><code><span class="kw" data-i18n="sup.code.h">PHASE_ORDER (loopy-era/bin/phases/):</span>
 01-init-project          <span class="dim" data-i18n="sup.code.1"># context bootstrap (project metadata)</span>
 02-qa-scenario-gen       <span class="dim" data-i18n="sup.code.2"># derive QA scenarios from current state</span>
 03-self-improve-trigger  <span class="dim" data-i18n="sup.code.3"># pick the highest-priority pending signal</span>
-<span class="hl">04-self-improve-worker-initial  </span><span data-i18n="sup.code.4"># LLM 호출 → kb_facts 자동 적재</span>
 05-verify-initial        <span class="dim" data-i18n="sup.code.5"># lightweight verification (qa-evidence count)</span>
 13-verify-final          <span class="dim" data-i18n="sup.code.13"># final state validation</span>
-<span class="hl">15-closeout              </span><span data-i18n="sup.code.15"># results.tsv +1 row + embed/consolidate kb_facts</span></code></pre>
+<span class="hl">15-closeout              </span><span data-i18n="sup.code.15"># results.tsv +1 row (+ outcome 지표) + embed/consolidate kb_facts</span></code></pre>
 
-    <p data-i18n-html="sup.p2"><strong>phase 04와 15가 memory-bank 통합 지점</strong>. phase 04는 LLM이 distill한 패턴을 <code>kb_facts</code>에 직접 insert하고, phase 15는 cycle 끝에 <code>embed.py</code>+<code>consolidate.py</code>를 incremental 모드로 실행합니다.</p>
+    <p data-i18n-html="sup.p2"><strong>R6 (2026-06-11)에서 15→6 phase로 슬림화</strong> — worker 미설치로 noop만 반복하던 9개 phase를 제거했습니다 (설계는 git history 보존). phase 15가 memory-bank 통합 지점: cycle 끝에 <code>embed.py</code>+<code>consolidate.py</code>를 incremental 실행하고, results.tsv에 점수와 함께 <strong>outcome 지표</strong>(<code>fix_ratio</code> 7일 fix-커밋 비율 ↓좋음 · <code>ci_first_pass</code> CI 1차 통과율 ↑좋음)를 기록합니다. LLM 분석은 phase가 아니라 별도 크론(learn-weekly·nightly-audit)이 담당합니다.</p>
 
     <h2 id="kb-tick" data-i18n="kb.h2">kb-sleep tick (2시간)</h2>
     <p data-i18n-html="kb.p1">메모리 본문 동기화 + 임베딩 + GitHub Pages 게시를 한 번에 처리하는 워커. <strong>destructive 작업 없음</strong>(rule-only consolidate, archive 등 본격 정리는 auto-dream 또는 사용자 명시 dream에 맡김).</p>
@@ -117,9 +122,9 @@
 sleep_state.json.dream_pending == true ?
 ├─ NO  → exit 0   <span class="dim" data-i18n="ad.code.no">"no work to do"</span>
 └─ YES
-   ├─ ~/.comad/active-bot.json 의 pid 가 살아있나? (mutex)
-   │   ├─ YES → skip   <span class="dim" data-i18n="ad.code.skip">ccd/cdx와 충돌 회피</span>
-   │   └─ NO
+   ├─ bot-busy.py — 활성 봇이 CPU 사용 중인가? (활동 기반 mutex, R3)
+   │   ├─ BUSY → skip   <span class="dim" data-i18n="ad.code.skip">ccd/cdx와 충돌 회피 (idle 데몬은 차단 안 함)</span>
+   │   └─ IDLE
    └─ headless `claude -p --dangerously-skip-permissions "<span data-i18n="ad.code.prompt">comad-sleep agent를 실행해 메모리를 정리해줘…</span>"`
        <span data-i18n="ad.code.timeout">→ 15분 timeout, 결과 마지막 50줄을 logs/auto-dream.log 에 기록</span></code></pre>
 
@@ -146,7 +151,7 @@ sleep_state.json.dream_pending == true ?
 
 <span class="dim" data-i18n="ins.cmd.h2"># 수동 제어</span>
 loopy-era/bin/start-harness.sh status   <span data-i18n="ins.cmd.2"># 현재 iteration / metric / state</span>
-loopy-era/bin/start-harness.sh tick     <span data-i18n="ins.cmd.3"># 한 번 즉시 실행 (15-phase)</span>
+loopy-era/bin/start-harness.sh tick     <span data-i18n="ins.cmd.3"># 한 번 즉시 실행 (6-phase)</span>
 loopy-era/bin/kb-sleep-tick.py --no-push <span data-i18n="ins.cmd.4"># kb tick (push 안 함)</span>
 loopy-era/bin/auto-dream.sh             <span data-i18n="ins.cmd.5"># dream 임계 체크 + 실행</span>
 
@@ -183,37 +188,48 @@ window.I18N_DICT = {
     'nav.home': 'Home',
     'nav.scheduler': 'Scheduler',
     'toc.overview': 'Overview',
-    'toc.three': '3 LaunchAgents',
-    'toc.sup': 'supervisor 15-phase',
+    'toc.three': '8 LaunchAgents',
+    'toc.sup': 'supervisor 6-phase',
     'toc.kb': 'kb-sleep tick',
     'toc.dream': 'auto-dream',
     'toc.layout': 'Source vs runtime',
     'toc.install': 'Install / control',
     'toc.env': 'Environment',
     'h1': 'loopy-era — <em>Always-on Self-Evolution Harness</em>',
-    'page.desc': 'Three LaunchAgents that keep the system measuring, syncing, and pruning itself without any user prompt. 30-min score refresh, 2-hour memory-graph sync, daily nightly dream. Every result is shared between Claude and Codex; the meta-changelog is published live to GitHub Pages.',
+    'page.desc': 'Eight LaunchAgents that keep the system measuring, learning, deciding, and pruning itself without any user prompt. 30-min score refresh, 2-hour memory-graph sync, nightly audit + dream, weekly learn + decision digest, monthly evolve, quarterly entropy audit. Every result is shared between Claude and Codex; the meta-changelog is published live to GitHub Pages.',
     'ov.h2': 'Overview',
     'ov.p1': 'loopy-era is a harness aimed at <strong>"a system that actually evolves itself"</strong>. While other comad modules (brain·ear·sleep·…) each play a role, loopy-era is the meta layer that <strong>periodically measures, refreshes, and consolidates</strong> them.',
     'ov.p2': 'Without user intervention, the following happen automatically:',
-    'ov.l1': 'Every 30 min, <code>supervisor.py</code> runs a <strong>15-phase tick</strong> to measure and record system health',
+    'ov.l1': 'Every 30 min, <code>supervisor.py</code> runs a <strong>6-phase tick</strong> to measure and record system health',
     'ov.l2': 'Every 2 hours, <code>kb-sleep-tick.py</code> syncs all <code>.md</code> memory into the <code>kb_facts</code> graph and publishes the changelog to GitHub Pages',
     'ov.l3': 'Daily 03:15 KST, <code>auto-dream.sh</code> auto-invokes the comad-sleep agent if thresholds are met',
     'ov.l4': 'Every output is queryable via the same 5 MCP tools from Claude (<code>claude</code>/<code>ccc</code>/<code>ccd</code>) and Codex (<code>cdx</code>) alike',
+    'ov.l5': '<strong>R6 (2026-06)</strong>: nightly audit → decision queue (daily 04:00), weekly self-learning (learn-weekly), weekly decision digest to Discord, monthly evolve apply, quarterly entropy audit — closing the harvest → analyze → request-approval → apply → instrument → audit loop',
     'ov.note.t': 'Identity',
     'ov.note.b': 'loopy-era is the first module that cleanly separates <strong>code</strong> (this module) from <strong>runtime</strong> (<code>~/.comad/loopy-era/</code>). Other modules will gradually adopt the same pattern.',
-    'th.h2': '3 LaunchAgents',
-    'th.p1': 'Three macOS launchd background daemons. They run as long as your machine is on.',
+    'th.h2': '8 LaunchAgents',
+    'th.p1': 'Eight macOS launchd background daemons. They run as long as your machine is on.',
     'th.t1': 'Label',
     'th.t2': 'Cadence',
     'th.t3': 'Target',
     'th.t4': 'LLM',
     'th.r1.f': '30 min (StartInterval 1800s)',
-    'th.r1.l': 'phase 04 only',
+    'th.r1.l': '❌ none (R6 removed the LLM phase)',
     'th.r2.f': '2 hours (StartInterval 7200s)',
     'th.r2.l': '❌ none (rule-only)',
     'th.r3.f': 'Daily 03:15 KST (Calendar)',
     'th.r3.l': '✅ Claude (mutex-guarded)',
-    'sup.h2': 'supervisor 15-phase',
+    'th.r4.f': 'Daily 04:00 KST',
+    'th.r4.l': '✅ Claude — escalates only human-judgment items to the decision queue',
+    'th.r5.f': 'Sun 09:17',
+    'th.r5.l': '✅ Claude (only when T6 pending exists)',
+    'th.r6.f': '2nd of month 10:23',
+    'th.r6.l': '✅ Claude — applies only A/B-passed items',
+    'th.r7.f': 'Mon 08:13',
+    'th.r7.l': '❌ none (direct bot REST)',
+    'th.r8.f': 'Quarterly, 11th 09:37 (Mar·Jun·Sep·Dec)',
+    'th.r8.l': '✅ Claude — 90-day contribution-evidence audit (first run 2026-09-11)',
+    'sup.h2': 'supervisor 6-phase',
     'sup.p1': '<code>supervisor.py</code> wakes every 30 min and runs the next phase in order. Each phase reads stdin (<code>loopy_dir</code>, <code>state</code>, <code>iteration</code>) and emits JSON on stdout.',
     'sup.code.h': 'PHASE_ORDER (loopy-era/bin/phases/):',
     'sup.code.1': '# context bootstrap (project metadata)',
@@ -222,8 +238,8 @@ window.I18N_DICT = {
     'sup.code.4': '# LLM call → auto-insert into kb_facts',
     'sup.code.5': '# lightweight verification (qa-evidence count)',
     'sup.code.13': '# final state validation',
-    'sup.code.15': '# results.tsv +1 row + embed/consolidate kb_facts',
-    'sup.p2': '<strong>Phases 04 and 15 are the memory-bank integration points.</strong> Phase 04 inserts LLM-distilled patterns directly into <code>kb_facts</code>; phase 15 runs <code>embed.py</code>+<code>consolidate.py</code> in incremental mode at cycle close.',
+    'sup.code.15': '# results.tsv +1 row (+ outcome metrics) + embed/consolidate kb_facts',
+    'sup.p2': '<strong>Slimmed from 15 to 6 phases in R6 (2026-06-11)</strong> — nine phases that only ever noop\'d ("no worker installed") were removed (design preserved in git history). Phase 15 is the memory-bank integration point: it runs <code>embed.py</code>+<code>consolidate.py</code> incrementally at cycle close and records <strong>outcome metrics</strong> (<code>fix_ratio</code> 7-day fix-commit ratio, lower=better · <code>ci_first_pass</code> first-attempt CI pass rate, higher=better) alongside the score. LLM analysis lives in dedicated crons (learn-weekly · nightly-audit), not in phases.',
     'kb.h2': 'kb-sleep tick (2 hours)',
     'kb.p1': 'A worker that handles memory-body sync + embeddings + GitHub Pages publishing in one go. <strong>No destructive work</strong> (rule-only consolidate; archives are left to auto-dream or explicit user dream).',
     'kb.code.h': 'kb-sleep-tick.py flow:',
@@ -258,7 +274,7 @@ window.I18N_DICT = {
     'ins.cmd.1': '# "Install always-on loopy-era harness?" → y',
     'ins.cmd.h2': '# Manual control',
     'ins.cmd.2': '# current iteration / metric / state',
-    'ins.cmd.3': '# run one full 15-phase cycle now',
+    'ins.cmd.3': '# run one full 6-phase cycle now',
     'ins.cmd.4': '# kb tick (no push)',
     'ins.cmd.5': '# threshold check + dream invocation',
     'ins.cmd.h3': '# Toggle a LaunchAgent',
@@ -281,37 +297,48 @@ window.I18N_DICT = {
     'nav.home': '홈',
     'nav.scheduler': '스케줄러',
     'toc.overview': '개요',
-    'toc.three': '3개 LaunchAgent',
-    'toc.sup': 'supervisor 15-phase',
+    'toc.three': '8개 LaunchAgent',
+    'toc.sup': 'supervisor 6-phase',
     'toc.kb': 'kb-sleep tick',
     'toc.dream': 'auto-dream',
     'toc.layout': '소스 vs 런타임',
     'toc.install': '설치 / 제어',
     'toc.env': '환경변수',
     'h1': 'loopy-era — <em>Always-on 자가진화 하네스</em>',
-    'page.desc': '사용자가 명시적으로 "tick" 한 번 안 쳐도 시스템이 스스로 측정·학습·정리되도록 만든 3개 LaunchAgent 모음. 30분마다 점수 갱신, 2시간마다 메모리 그래프 동기화, 매일 새벽 한 번 깊은 정리(dream). 모든 결과가 Claude·Codex 양쪽에서 공유되며 메타 변경이력이 GitHub Pages에 라이브 게시됩니다.',
+    'page.desc': '사용자가 명시적으로 "tick" 한 번 안 쳐도 시스템이 스스로 측정·학습·결정·정리되도록 만든 8개 LaunchAgent 모음. 30분 점수 갱신, 2시간 메모리 동기화, 매일 야간감사+dream, 매주 자가학습+결정 다이제스트, 매월 evolve 적용, 분기 엔트로피 감사. 모든 결과가 Claude·Codex 양쪽에서 공유되며 메타 변경이력이 GitHub Pages에 라이브 게시됩니다.',
     'ov.h2': '개요',
     'ov.p1': 'loopy-era는 <strong>"진짜 자가진화하는 시스템"</strong>을 목표로 하는 하네스입니다. comad의 다른 모듈들(brain·ear·sleep·…)이 각자 역할을 수행한다면, loopy-era는 그 모듈들을 <strong>주기적으로 측정·갱신·통합</strong>하는 메타 레이어입니다.',
     'ov.p2': '사용자 개입 없이 다음이 자동으로 일어납니다:',
-    'ov.l1': '30분마다 <code>supervisor.py</code>가 <strong>15-phase tick</strong>을 돌려 시스템 헬스를 측정·기록',
+    'ov.l1': '30분마다 <code>supervisor.py</code>가 <strong>6-phase tick</strong>을 돌려 시스템 헬스를 측정·기록',
     'ov.l2': '2시간마다 <code>kb-sleep-tick.py</code>가 모든 <code>.md</code> 메모리를 <code>kb_facts</code> 그래프에 동기화하고 GitHub Pages에 변경이력 게시',
     'ov.l3': '매일 03:15 KST <code>auto-dream.sh</code>가 임계 도달 시 comad-sleep 에이전트를 자동 호출',
     'ov.l4': '모든 산출물이 Claude(<code>claude</code>/<code>ccc</code>/<code>ccd</code>)와 Codex(<code>cdx</code>) 어느 환경에서든 동일한 5개 MCP 툴로 즉시 조회',
+    'ov.l5': '<strong>R6 (2026-06)</strong>: 매일 04:00 야간감사 → 결정 큐, 매주 일 자가학습(learn-weekly), 매주 월 결정 다이제스트 Discord 전송, 매월 evolve 적용, 분기 엔트로피 감사 — "수확→분석→승인요청→적용→계측→감사"의 닫힌 루프 완성',
     'ov.note.t': '정체성',
     'ov.note.b': 'loopy-era는 <strong>코드</strong>(이 모듈)와 <strong>런타임</strong>(<code>~/.comad/loopy-era/</code>)을 명확히 분리한 첫 모듈입니다. 다른 모듈도 점진적으로 같은 패턴으로 정리될 예정.',
-    'th.h2': '3개 LaunchAgent',
-    'th.p1': 'macOS launchd에 등록되는 백그라운드 데몬 3개. 사용자 머신이 켜져 있는 한 항상 돕니다.',
+    'th.h2': '8개 LaunchAgent',
+    'th.p1': 'macOS launchd에 등록되는 백그라운드 데몬 8개. 사용자 머신이 켜져 있는 한 항상 돕니다.',
     'th.t1': 'Label',
     'th.t2': '주기',
     'th.t3': '실행 대상',
     'th.t4': 'LLM',
     'th.r1.f': '30분 (StartInterval 1800s)',
-    'th.r1.l': 'phase 04만 사용',
+    'th.r1.l': '❌ 무사용 (R6: LLM phase 제거)',
     'th.r2.f': '2시간 (StartInterval 7200s)',
     'th.r2.l': '❌ 무사용 (rule-only)',
     'th.r3.f': '매일 03:15 KST (Calendar)',
     'th.r3.l': '✅ Claude (mutex 가드)',
-    'sup.h2': 'supervisor 15-phase',
+    'th.r4.f': '매일 04:00 KST',
+    'th.r4.l': '✅ Claude — 사람 판단 항목만 결정 큐로',
+    'th.r5.f': '매주 일 09:17',
+    'th.r5.l': '✅ Claude (T6 pending 있을 때만)',
+    'th.r6.f': '매월 2일 10:23',
+    'th.r6.l': '✅ Claude — 적용은 A/B 통과분만',
+    'th.r7.f': '매주 월 08:13',
+    'th.r7.l': '❌ 무사용 (봇 REST 직접 호출)',
+    'th.r8.f': '분기 11일 09:37 (3·6·9·12월)',
+    'th.r8.l': '✅ Claude — 90일 기여 증거 감사 (1회차 2026-09-11)',
+    'sup.h2': 'supervisor 6-phase',
     'sup.p1': '<code>supervisor.py</code>가 매 30분 깨어나서 다음 phase를 순서대로 실행합니다. 각 phase는 stdin으로 payload(<code>loopy_dir</code>, <code>state</code>, <code>iteration</code>)를 받고 stdout으로 JSON을 돌려줍니다.',
     'sup.code.h': 'PHASE_ORDER (loopy-era/bin/phases/):',
     'sup.code.1': '# context bootstrap (project metadata)',
@@ -320,8 +347,8 @@ window.I18N_DICT = {
     'sup.code.4': '# LLM 호출 → kb_facts 자동 적재',
     'sup.code.5': '# lightweight verification (qa-evidence count)',
     'sup.code.13': '# final state validation',
-    'sup.code.15': '# results.tsv +1 row + embed/consolidate kb_facts',
-    'sup.p2': '<strong>phase 04와 15가 memory-bank 통합 지점</strong>. phase 04는 LLM이 distill한 패턴을 <code>kb_facts</code>에 직접 insert하고, phase 15는 cycle 끝에 <code>embed.py</code>+<code>consolidate.py</code>를 incremental 모드로 실행합니다.',
+    'sup.code.15': '# results.tsv +1 row (+ outcome 지표) + embed/consolidate kb_facts',
+    'sup.p2': '<strong>R6 (2026-06-11)에서 15→6 phase로 슬림화</strong> — worker 미설치로 noop만 반복하던 9개 phase를 제거했습니다 (설계는 git history 보존). phase 15가 memory-bank 통합 지점: cycle 끝에 <code>embed.py</code>+<code>consolidate.py</code>를 incremental 실행하고, results.tsv에 점수와 함께 <strong>outcome 지표</strong>(<code>fix_ratio</code> 7일 fix-커밋 비율 ↓좋음 · <code>ci_first_pass</code> CI 1차 통과율 ↑좋음)를 기록합니다. LLM 분석은 phase가 아니라 별도 크론(learn-weekly·nightly-audit)이 담당합니다.',
     'kb.h2': 'kb-sleep tick (2시간)',
     'kb.p1': '메모리 본문 동기화 + 임베딩 + GitHub Pages 게시를 한 번에 처리하는 워커. <strong>destructive 작업 없음</strong>(rule-only consolidate, archive 등 본격 정리는 auto-dream 또는 사용자 명시 dream에 맡김).',
     'kb.code.h': 'kb-sleep-tick.py 의 흐름:',
@@ -356,7 +383,7 @@ window.I18N_DICT = {
     'ins.cmd.1': '# "Install always-on loopy-era harness?" → y',
     'ins.cmd.h2': '# 수동 제어',
     'ins.cmd.2': '# 현재 iteration / metric / state',
-    'ins.cmd.3': '# 한 번 즉시 실행 (15-phase)',
+    'ins.cmd.3': '# 한 번 즉시 실행 (6-phase)',
     'ins.cmd.4': '# kb tick (push 안 함)',
     'ins.cmd.5': '# dream 임계 체크 + 실행',
     'ins.cmd.h3': '# LaunchAgent on/off',
