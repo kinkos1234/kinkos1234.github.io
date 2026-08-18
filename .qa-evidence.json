@@ -1,47 +1,20 @@
 {
-  "schema_version": "2",
-  "profile": "smoke",
-  "generated_at": "2026-08-15T12:34:53+00:00",
+  "schema_version": "1",
+  "generated_at": "2026-08-18T12:16:14+00:00",
   "project_root": "/Users/jhkim/Programmer/03-web/kinkos1234.github.io",
-  "git_head": "151ae332",
-  "scope": "comad.html + comad/guide/extensions.html — 2026-06 이후 공백 최신화 (R7/R8 타임라인, 그래프 실측, 훅 21/규칙 7)",
+  "git_head": "b3b9ea174fee75c26bde823341f18cd7983b70d8",
+  "profile": "smoke",
+  "scope": "work.html 신설 — 온톨로지 SoT 기반 영업용 작업 사례 페이지 (운영 4·납품 7·기능유닛 6, 고객 익명·편집샵 제외)",
   "verdict": "PASS",
   "checks": {
+    "build": { "status": "N/A", "details": "정적 HTML (gen_work_page.py 생성물)" },
     "browser_qa": {
       "status": "PASS",
+      "tool": "playwright",
+      "viewports": ["1440x900", "375x812"],
       "console_errors": 0,
-      "how": "로컬 정적 서버(python http.server) + 헤드리스 크롬으로 두 페이지를 실제 렌더. --enable-logging=stderr 로 ERROR:CONSOLE/Uncaught/SyntaxError 수집 결과 0건.",
-      "pages": [
-        "/comad.html",
-        "/comad/guide/extensions.html"
-      ],
-      "tool": "headless chrome (Google Chrome 헤드리스) + python http.server",
-      "viewports": [
-        "1200x900",
-        "1280x800"
-      ]
+      "details": "scrollWidth 1440/375 == viewport (가로 오버플로 0), 카드 11개 렌더, 풀페이지·모바일 스크린샷 육안 검수 — 라이트 에디토리얼·액센트 1색"
     },
-    "i18n_toggle": {
-      "status": "PASS",
-      "how": "같은 오리진 iframe 안에서 toggleLang() 을 실제 호출해 신규 키의 KO→EN 전환을 확인. 랜딩 tl.21/tl.22, 가이드 rules.h2·hook.proto.r·rule.sync 모두 양방향 번역됨.",
-      "note": "페이지 기본 언어는 KO 이고 토글 시 EN 으로 바뀐다(확인함)."
-    },
-    "content_counts": {
-      "status": "PASS",
-      "how": "렌더된 DOM 에서 표 행 수를 직접 세어 문구와 대조 — 훅 표 21행(pre 12 + stop 9) · 규칙 표 7행. 문서 표기(21종/7종)와 일치."
-    },
-    "numbers_measured": {
-      "status": "PASS",
-      "how": "그래프 노드 144,050 은 Neo4j cypher-shell 직접 조회(관계 227,542). 훅·스킬·규칙 수는 ~/.claude 디렉터리 실측. 검증하지 못한 기존 수치(테스트 1,422 등)는 변경하지 않음."
-    }
-  },
-  "inventory": {
-    "ui_files_changed": 2,
-    "timeline_entries_added": 2,
-    "hook_rows": 21,
-    "rule_rows": 7,
-    "i18n_keys_added": 40
-  },
-  "artifacts": [],
-  "notes": "랜딩 타임라인이 2026-06-11(R6)에서 멈춰 있었는데 check-pages-sync 가드는 통과 중이었다 — 그 가드가 comad-world feature surface 만 보고 ~/.claude(rules·hooks·skills)를 안 보기 때문. 가드 범위 확장은 후속 작업."
+    "L4_console_errors": { "status": "PASS", "tool": "chromium", "console_errors": 0 }
+  }
 }
