@@ -55,9 +55,9 @@
       <div class="tag-row">
         <span class="tag">Python 3</span>
         <span class="tag">bash</span>
-        <span class="tag accent" data-i18n="tag.hooks">21 hooks</span>
+        <span class="tag accent" data-i18n="tag.hooks">25 hooks</span>
         <span class="tag warm" data-i18n="tag.skills">21 skills</span>
-        <span class="tag" data-i18n="tag.rules">7 rules</span>
+        <span class="tag" data-i18n="tag.rules">8 rules</span>
         <span class="tag lime">zero deps</span>
       </div>
     </div>
@@ -108,6 +108,10 @@ cd ~/Programmer/01-comad/comad-world-extensions
           <tr><td><code>cron-zero-minute-gate</code></td><td data-i18n="hook.cron.r">새 cron 의 정각(:00) 스케줄 경고 — 정각 발화 드롭 재발 방지</td><td>cron/launchd 정의 추가</td><td>warn</td></tr>
           <tr><td><code>launchd-nvm-path-gate</code></td><td data-i18n="hook.nvm.r">launchd 스크립트가 PATH 확장 없이 npm 전역 바이너리를 프로브하면 경고</td><td>launchd 스크립트 작성</td><td>warn</td></tr>
           <tr><td><code>block-text-overlay</code></td><td data-i18n="hook.overlay.r">생성 이미지 위 글자 후처리(오버레이) 차단</td><td>이미지 텍스트 합성 명령</td><td>—</td></tr>
+          <tr><td><code>always-true-assertion-gate</code></td><td data-i18n="hook.alwaystrue.r">어떤 값이든 통과하는 죽은 단언 차단 — <code>? true : true</code>, <code>assert.ok(true)</code></td><td>테스트·검사 스크립트 작성</td><td>—</td></tr>
+          <tr><td><code>push-checks-warn</code></td><td data-i18n="hook.pushchecks.r">push 되는 <b>변경 파일에만</b> 재발 감지 체크 8종 (CSP·프린지·등급 에셋·iframe 위임·hydration·합성 볼드·@media 순서·저장 실패)</td><td><code>git push</code></td><td>warn (destroy-gate 테스트 실패만 차단)</td></tr>
+          <tr><td><code>client-clock-rev-gate</code></td><td data-i18n="hook.clockrev.r">rev/version 을 클라이언트 시계로 매기는 것 경고 — 시계 빠른 기기의 낡은 값이 영구히 이긴다</td><td><code>rev: Date.now()</code> 류</td><td>warn</td></tr>
+          <tr><td><code>empty-coalesce-warn</code></td><td data-i18n="hook.emptycoalesce.r">동기화 경로에서 «모름»을 빈 문자열로 눌러 담는 것 경고 — downstream 이 삭제로 읽는다</td><td>sync·reconcile·worker 파일의 <code>?? ''</code></td><td>warn</td></tr>
         </tbody>
       </table>
 
@@ -151,6 +155,7 @@ cd ~/Programmer/01-comad/comad-world-extensions
           <tr><td><code>standalone-bundle-trace</code></td><td data-i18n="rule.bundle">번들러 trace 밖 프로세스(spawn 워커·별도 프로세스)의 의존성 누락 — 로컬은 되는데 배포에서만 죽는 조합</td></tr>
           <tr><td><code>frontend-overflow-and-modal-traps</code></td><td data-i18n="rule.fe">텍스트 잘림 3대 원인·모달 스크롤 보존·시트 안에서 스크롤을 어디에 거나</td></tr>
           <tr><td><code>prototype-isolation</code></td><td data-i18n="rule.proto">확정되지 않은 시안이 프로덕션에 섞이는 것 — 마커가 있을 때만 도는 훅과 짝</td></tr>
+          <tr><td><code>authz-server-side-every-path</code></td><td data-i18n="rule.authz">권한을 화면에서만 막는 것 — 판정은 서버 액션 안에서, 게이트는 엔드포인트가 아니라 리소스에</td></tr>
         </tbody>
       </table>
     </section>
@@ -301,13 +306,13 @@ window.I18N_DICT = {
     'nav.scheduler': 'Scheduler',
     'h1': 'Extensions — <em>21 hooks + 21 skills + 7 rules</em>',
     'page.desc': 'A self-evolution / safety / proof layer over Comad World (<code>~/.claude/</code>). Local-only extension for Claude Code OAuth users, zero external dependencies. Copy-based install, Python stdlib + bash only.',
-    'tag.hooks': '21 hooks',
+    'tag.hooks': '25 hooks',
     'tag.skills': '21 skills',
     'toc.install': 'Install',
     'toc.hooks': '21 hooks',
     'toc.skills': '21 skills',
     'toc.rules': '7 rules',
-    'tag.rules': '7 rules',
+    'tag.rules': '8 rules',
     'rules.h2': '7 rules',
     'rules.desc': 'What a hook can mechanically block becomes a hook; <strong>what only a person can judge</strong> stays a rule. Only patterns observed twice or more get promoted into <code>rules/</code>, and the evolve pipeline does the promoting. Judgments that resist always-on blocking — the ones where false positives would kill the guard — land here.',
     'th.rule': 'Rule',
@@ -319,6 +324,7 @@ window.I18N_DICT = {
     'rule.bundle': 'Dependencies of processes outside the bundler trace (spawned workers, separate processes) — the combination that works locally and only dies in deploy',
     'rule.fe': 'The three causes of clipped text, preserving scroll across modals, and where to attach scrolling inside a sheet',
     'rule.proto': 'Unconfirmed drafts leaking into production — paired with a hook that only runs when a marker is present',
+    'rule.authz': 'Permission enforced only in the UI — decide inside the server action, and gate the resource rather than the endpoint',
     'toc.parallel': 'comad-parallel deep-dive',
     'toc.t6': 'T6 self-evolve loop',
     'toc.repo': 'Repo / License',
@@ -351,6 +357,10 @@ window.I18N_DICT = {
     'hook.cron.r': 'Warns on on-the-hour (:00) cron schedules — repeated dropped firings',
     'hook.nvm.r': 'Warns when a launchd script probes a global npm binary without extending PATH',
     'hook.overlay.r': 'Blocks post-hoc text overlay on generated images',
+    'hook.alwaystrue.r': 'Blocks dead assertions that pass for any value — <code>? true : true</code>, <code>assert.ok(true)</code>',
+    'hook.pushchecks.r': 'Runs eight recurrence checks on <b>only the files being pushed</b> (CSP, sprite fringe, tier assets, iframe delegation, hydration guard, synthetic bold, @media order, silent save failures)',
+    'hook.clockrev.r': 'Warns when rev/version is stamped by the client clock — a fast-clocked device wins forever with stale data',
+    'hook.emptycoalesce.r': 'Warns when a sync path coerces «unknown» into an empty string — downstream reads that as a delete',
     'hook.adv.r': 'Substantial code changes get an adversarial review by default',
     'hook.harsh.r': 'User-perspective anti-pattern detector',
     'hook.recur.r': 'Signals a loop of repeated fixes to the same file',
@@ -407,13 +417,13 @@ window.I18N_DICT = {
     'nav.scheduler': '스케줄러',
     'h1': 'Extensions — <em>21 hooks + 21 skills + 7 rules</em>',
     'page.desc': '코마드월드(<code>~/.claude/</code>) 위에 얹는 자가진화·안전·증명 레이어. Claude Code OAuth 사용자를 위한 로컬 전용 확장, 외부 서비스 의존성 없음. 복사 기반 설치, Python stdlib + bash 만 사용.',
-    'tag.hooks': '21 hooks',
+    'tag.hooks': '25 hooks',
     'tag.skills': '21 skills',
     'toc.install': '설치',
     'toc.hooks': '훅 21종',
     'toc.skills': '스킬 21종',
     'toc.rules': '규칙 7종',
-    'tag.rules': '7 rules',
+    'tag.rules': '8 rules',
     'rules.h2': '규칙 7종',
     'rules.desc': '훅이 기계적으로 막을 수 있는 것은 훅으로, <strong>판정이 사람 몫인 것</strong>은 규칙으로 남긴다. 같은 실수가 2회 이상 관측된 메모리만 <code>rules/</code> 로 승격되며, 승격은 evolve 파이프라인이 수행한다. 상시 차단이 어려운 판단(오탐이 잦아 가드가 죽는 영역)이 여기로 온다.',
     'th.rule': '규칙',
@@ -425,6 +435,7 @@ window.I18N_DICT = {
     'rule.bundle': '번들러 trace 밖 프로세스(spawn 워커·별도 프로세스)의 의존성 누락 — 로컬은 되는데 배포에서만 죽는 조합',
     'rule.fe': '텍스트 잘림 3대 원인·모달 스크롤 보존·시트 안에서 스크롤을 어디에 거나',
     'rule.proto': '확정되지 않은 시안이 프로덕션에 섞이는 것 — 마커가 있을 때만 도는 훅과 짝',
+    'rule.authz': '권한을 화면에서만 막는 것 — 판정은 서버 액션 안에서, 게이트는 엔드포인트가 아니라 리소스에',
     'toc.parallel': 'comad-parallel 심화',
     'toc.t6': 'T6 자가진화 루프',
     'toc.repo': '레포 / 라이선스',
@@ -457,6 +468,10 @@ window.I18N_DICT = {
     'hook.cron.r': '새 cron 의 정각(:00) 스케줄 경고 — 정각 발화 드롭 재발 방지',
     'hook.nvm.r': 'launchd 스크립트가 PATH 확장 없이 npm 전역 바이너리를 프로브하면 경고',
     'hook.overlay.r': '생성 이미지 위 글자 후처리(오버레이) 차단',
+    'hook.alwaystrue.r': '어떤 값이든 통과하는 죽은 단언 차단 — <code>? true : true</code>, <code>assert.ok(true)</code>',
+    'hook.pushchecks.r': 'push 되는 <b>변경 파일에만</b> 재발 감지 체크 8종 (CSP·프린지·등급 에셋·iframe 위임·hydration·합성 볼드·@media 순서·저장 실패)',
+    'hook.clockrev.r': 'rev/version 을 클라이언트 시계로 매기는 것 경고 — 시계 빠른 기기의 낡은 값이 영구히 이긴다',
+    'hook.emptycoalesce.r': '동기화 경로에서 «모름»을 빈 문자열로 눌러 담는 것 경고 — downstream 이 삭제로 읽는다',
     'hook.adv.r': '분량 있는 코드 변경은 기본으로 적대적 리뷰를 요구',
     'hook.harsh.r': '사용자 관점 안티패턴 탐지',
     'hook.recur.r': '같은 파일을 반복 수정하는 루프 신호',

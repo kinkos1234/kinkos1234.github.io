@@ -1,20 +1,36 @@
 {
   "schema_version": "1",
-  "generated_at": "2026-08-18T12:16:14+00:00",
+  "generated_at": "2026-08-27T23:58:43+00:00",
   "project_root": "/Users/jhkim/Programmer/03-web/kinkos1234.github.io",
-  "git_head": "b3b9ea174fee75c26bde823341f18cd7983b70d8",
+  "git_head": "95c59a78d3f1851cf6c62ecd28ca94ad6b3da786",
   "profile": "smoke",
-  "scope": "work.html 신설 — 온톨로지 SoT 기반 영업용 작업 사례 페이지 (운영 4·납품 7·기능유닛 6, 고객 익명·편집샵 제외)",
+  "scope": "comad/guide/extensions.html — 훅 21→25종·규칙 7→8종 표기 갱신 + 신규 훅 4행(always-true-assertion-gate·push-checks-warn·client-clock-rev-gate·empty-coalesce-warn)·신규 규칙 1행(authz-server-side-every-path) 추가 + EN/KO i18n 키 10개 추가. 문서 전용 변경.",
   "verdict": "PASS",
   "checks": {
-    "build": { "status": "N/A", "details": "정적 HTML (gen_work_page.py 생성물)" },
+    "build": {
+      "status": "N/A",
+      "details": "정적 HTML — 빌드 단계 없음"
+    },
+    "structural": {
+      "status": "PASS",
+      "tool": "comad-world/scripts/check-pages-counts.sh",
+      "details": "가이드 표기 vs 실측: 훅 25 일치 · 스킬 21 일치 · 규칙 8 일치 (변경 전에는 21 vs 25, 7 vs 8 불일치로 comad-world push 가 막혀 있었다)"
+    },
     "browser_qa": {
       "status": "PASS",
-      "tool": "playwright",
-      "viewports": ["1440x900", "375x812"],
+      "tool": "playwright chromium (local http.server, file:// 아님)",
+      "viewports": [
+        "1440x812",
+        "375x812"
+      ],
       "console_errors": 0,
-      "details": "scrollWidth 1440/375 == viewport (가로 오버플로 0), 카드 11개 렌더, 풀페이지·모바일 스크린샷 육안 검수 — 라이트 에디토리얼·액센트 1색"
+      "details": "tbody 행 45→50 증가 확인(단언), 신규 5행 텍스트 렌더 확인, 히어로 태그 '25 hooks'/'8 rules' 확인, EN 토글 후 신규 4행이 영어로 치환되고 한글 잔존 0 확인. file:// 로 재면 루트절대경로 CSS 가 404 라 오탐이 나므로 로컬 HTTP 로 측정했고, 응답 200·행수 단언을 붙여 404 페이지를 재는 오탐을 차단했다(실제로 한 번 발생)."
     },
-    "L4_console_errors": { "status": "PASS", "tool": "chromium", "console_errors": 0 }
-  }
+    "regression": {
+      "status": "PASS",
+      "tool": "playwright 기준선 대조",
+      "details": "375px 가로 오버플로 514px 는 **기준선(HEAD)과 동일** — 원인은 상단 내비 링크(Eye/Search/Photo)이지 이번에 추가한 표 행이 아니다(가장 넓은 요소 좌표·태그 일치). 이번 변경으로 늘어난 오버플로 0. 1440px 오버플로 0."
+    }
+  },
+  "notes": "미해결(이번 변경과 무관, 별건): 가이드 3개 페이지가 375px 에서 상단 내비 때문에 가로로 넘친다 — extensions 514px · loopy 239px · brain 35px (index 는 0). 내비를 자체 overflow-x 컨테이너에 넣거나 모바일에서 접어야 한다(rules/frontend-overflow-and-modal-traps). 사용자 보고 완료, 수정은 별도 작업."
 }
