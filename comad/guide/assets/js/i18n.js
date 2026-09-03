@@ -16,7 +16,8 @@
 
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const k = el.getAttribute('data-i18n');
-      if (d[k] !== undefined) el.textContent = d[k];
+      // 사전 값에 마크업(<code>·<strong>·<b>)이 있으면 innerHTML — textContent 로 넣으면 태그가 글자로 보인다 (2026-09-03)
+      if (d[k] !== undefined) { if (/<[a-z][^>]*>/i.test(d[k])) el.innerHTML = d[k]; else el.textContent = d[k]; }
     });
     document.querySelectorAll('[data-i18n-html]').forEach(el => {
       const k = el.getAttribute('data-i18n-html');

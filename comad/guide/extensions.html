@@ -36,7 +36,7 @@
   <aside class="toc">
     <div class="toc-title">Extensions</div>
     <a href="#install" data-i18n="toc.install">설치</a>
-    <a href="#hooks" data-i18n="toc.hooks">훅 21종</a>
+    <a href="#hooks" data-i18n="toc.hooks">훅 33종</a>
     <a href="#rules" data-i18n="toc.rules">규칙 7종</a>
     <a href="#skills" data-i18n="toc.skills">스킬 21종</a>
     <a href="#parallel" data-i18n="toc.parallel">comad-parallel 심화</a>
@@ -47,7 +47,7 @@
   <main>
 
     <div class="page-hero">
-      <h1 data-i18n-html="h1">Extensions — <em>21 hooks + 21 skills + 7 rules</em></h1>
+      <h1 data-i18n-html="h1">Extensions — <em>33 hooks + 21 skills + 7 rules</em></h1>
       <p class="page-desc" data-i18n-html="page.desc">
         코마드월드(<code>~/.claude/</code>) 위에 얹는 자가진화·안전·증명 레이어. Claude Code OAuth 사용자를 위한 로컬 전용 확장,
         외부 서비스 의존성 없음. 복사 기반 설치, Python stdlib + bash 만 사용.
@@ -55,9 +55,9 @@
       <div class="tag-row">
         <span class="tag">Python 3</span>
         <span class="tag">bash</span>
-        <span class="tag accent" data-i18n="tag.hooks">25 hooks</span>
+        <span class="tag accent" data-i18n="tag.hooks">33 hooks</span>
         <span class="tag warm" data-i18n="tag.skills">21 skills</span>
-        <span class="tag" data-i18n="tag.rules">8 rules</span>
+        <span class="tag" data-i18n="tag.rules">7 rules</span>
         <span class="tag lime">zero deps</span>
       </div>
     </div>
@@ -82,12 +82,12 @@ cd ~/Programmer/01-comad/comad-world-extensions
       </div>
     </section>
 
-    <!-- ── 훅 21종 ── -->
+    <!-- ── 훅 33종 ── -->
     <section id="hooks">
-      <h2 data-i18n="hooks.h2">훅 21종</h2>
-      <p class="page-desc" data-i18n="hooks.desc">pre-tool-use 12개 + Stop 9개. 모두 silent (exit 0 + 로그); 환경변수 <code>COMAD_*_BLOCK=1</code> 로 exit 2 승격 가능.</p>
+      <h2 data-i18n="hooks.h2">훅 33종</h2>
+      <p class="page-desc" data-i18n="hooks.desc">pre-tool-use 21개 + Stop 12개. 2026-09-03 개편(3개월 감사: 교정 178건)으로 하드 게이트 7종(agent-contract·deploy-approval·still-broken-edit·claim-done·discord-reply·numbered-requirements-echo·ui-render)은 exit 2 로 차단하고, 나머지는 경고·로그(exit 0). 일부는 환경변수 <code>COMAD_*_BLOCK=1</code> 로 exit 2 승격 가능.</p>
 
-      <h3 data-i18n="hooks.pre.h3">pre-tool-use (12종)</h3>
+      <h3 data-i18n="hooks.pre.h3">pre-tool-use (21종)</h3>
       <table class="data-table">
         <thead><tr>
           <th data-i18n="th.hook">훅</th>
@@ -112,10 +112,15 @@ cd ~/Programmer/01-comad/comad-world-extensions
           <tr><td><code>push-checks-warn</code></td><td data-i18n="hook.pushchecks.r">push 되는 <b>변경 파일에만</b> 재발 감지 체크 8종 (CSP·프린지·등급 에셋·iframe 위임·hydration·합성 볼드·@media 순서·저장 실패)</td><td><code>git push</code></td><td>warn (destroy-gate 테스트 실패만 차단)</td></tr>
           <tr><td><code>client-clock-rev-gate</code></td><td data-i18n="hook.clockrev.r">rev/version 을 클라이언트 시계로 매기는 것 경고 — 시계 빠른 기기의 낡은 값이 영구히 이긴다</td><td><code>rev: Date.now()</code> 류</td><td>warn</td></tr>
           <tr><td><code>empty-coalesce-warn</code></td><td data-i18n="hook.emptycoalesce.r">동기화 경로에서 «모름»을 빈 문자열로 눌러 담는 것 경고 — downstream 이 삭제로 읽는다</td><td>sync·reconcile·worker 파일의 <code>?? ''</code></td><td>warn</td></tr>
+          <tr><td><code>agent-contract-gate</code></td><td data-i18n="hook.agentc.r">Agent 스폰 계약 — <code>name</code> 없음·fork 외 <code>model</code> 없음·버전 핀 모델이면 차단, <code>DELIVERABLE:</code> 없으면 경고</td><td><code>Agent</code> 호출</td><td>exit 2</td></tr>
+          <tr><td><code>deploy-approval-gate</code></td><td data-i18n="hook.deploy.r">프로드 배포는 매번 사용자의 명시 지시 후 — 30분 내 승인 마커 없으면 차단, 마커는 1회용</td><td><code>flyctl deploy</code>·<code>vercel --prod</code>·prod 레포 <code>git push</code></td><td><code>approvals/deploy-&lt;repo&gt;</code></td></tr>
+          <tr><td><code>still-broken-edit-gate</code></td><td data-i18n="hook.stillbroken.r">«여전히» 3회째부터 가설 문서 없이는 코드를 만지지 못한다 — 같은 층 패치 반복 차단</td><td>still-broken 카운트 ≥3 + Write/Edit</td><td><code>hypotheses*.md</code> 작성</td></tr>
+          <tr><td><code>recurring-fix-needs-test</code></td><td data-i18n="hook.recurtest.r">30일 내 같은 scope 의 fix 2회째는 테스트 파일 변경을 동반해야 push</td><td><code>git push</code> (fix 커밋)</td><td>exit 2</td></tr>
+          <tr><td><code>authz-path-enumeration</code></td><td data-i18n="hook.authzpath.r">권한 판정을 바꾸는 push 는 커밋 메시지에 닿는 경로(page·api·action·nav·proxy)를 열거해야 한다</td><td><code>git push</code> (권한 diff)</td><td>exit 2</td></tr>
         </tbody>
       </table>
 
-      <h3 style="margin-top:2rem;" data-i18n="hooks.stop.h3">Stop (9종)</h3>
+      <h3 style="margin-top:2rem;" data-i18n="hooks.stop.h3">Stop (12종)</h3>
       <table class="data-table">
         <thead><tr>
           <th data-i18n="th.hook">훅</th>
@@ -125,13 +130,16 @@ cd ~/Programmer/01-comad/comad-world-extensions
         <tbody>
           <tr><td><code>t6-capture</code></td><td data-i18n="hook.t6.r">세션 종료 시 현재 repo 의 최근 <code>fix:/feat:/bugfix:</code> 커밋 포착</td><td><code>.comad/pending/*.json</code></td></tr>
           <tr><td><code>claim-done-gate</code></td><td data-i18n="hook.claim.r">"모두 통과 / 92/92 PASS" 류 주장 + Bash 검증 없음 감지</td><td><code>.comad/pending/claim-done.jsonl</code></td></tr>
-          <tr><td><code>premature-completion-detector</code></td><td data-i18n="hook.prem.r">"수렴 달성" 조기 선언 감지</td><td><code>.comad/pending/premature-completion.jsonl</code></td></tr>
           <tr><td><code>numeric-claim-gate</code></td><td data-i18n="hook.num.r">"완벽 / production-ready / 100%" 절대 주장 vs 실제 evidence 대조</td><td><code>.comad/pending/numeric-claim.jsonl</code></td></tr>
-          <tr><td><code>inventory-gate</code></td><td data-i18n="hook.inv.r">coverage 주장 vs inventory cross-check</td><td><code>.comad/pending/inventory-gate.jsonl</code></td></tr>
           <tr><td><code>adversarial-review-gate</code></td><td data-i18n="hook.adv.r">분량 있는 코드 변경은 기본으로 적대적 리뷰를 요구</td><td><code>.comad/pending/adversarial-review.jsonl</code></td></tr>
           <tr><td><code>harsh-critic-gate</code></td><td data-i18n="hook.harsh.r">사용자 관점 안티패턴 탐지</td><td><code>.comad/pending/harsh-critic.jsonl</code></td></tr>
           <tr><td><code>recurring-fix-detector</code></td><td data-i18n="hook.recur.r">같은 파일을 반복 수정하는 루프 신호</td><td><code>.comad/pending/recurring-fix.jsonl</code></td></tr>
           <tr><td><code>visual-thrash-warn</code></td><td data-i18n="hook.thrash.r">시각 재구성 스래싱 경고 (신호만, 항상 통과)</td><td><code>.comad/pending/visual-thrash.jsonl</code></td></tr>
+          <tr><td><code>discord-reply-enforce</code></td><td data-i18n="hook.discord.r">Discord 채널로 들어온 메시지에 reply 도구 호출 없이 턴을 끝내지 못한다 (하드 룰 #0)</td><td>exit 2</td></tr>
+          <tr><td><code>numbered-requirements-echo</code></td><td data-i18n="hook.numecho.r">번호 요구 N개 → 항목별 상태(완료·미착수·보류…) N개 없이는 종료 금지 — 조용한 누락 차단</td><td>exit 2</td></tr>
+          <tr><td><code>ui-render-before-stop</code></td><td data-i18n="hook.uirender.r">이번 턴에 UI 파일을 고쳤으면 렌더 png 없이는 종료 금지 (예외 «렌더 생략 사유:»)</td><td>exit 2</td></tr>
+          <tr><td><code>worker-recovery-gate</code></td><td data-i18n="hook.workerrec.r">스폰한 비동기 워커를 회수·재지시·ABANDON·TaskStop 중 하나로 처리했는지 (현재 기록만)</td><td><code>.comad/pending/worker-recovery.jsonl</code></td></tr>
+          <tr><td><code>test-data-ledger-warn</code></td><td data-i18n="hook.ledger.r">장부에 남은 미정리 테스트 데이터를 세션 끝에 알린다 (경고만)</td><td><code>.comad/test-data-ledger.md</code></td></tr>
         </tbody>
       </table>
     </section>
@@ -141,21 +149,20 @@ cd ~/Programmer/01-comad/comad-world-extensions
       <h2 data-i18n="rules.h2">규칙 7종</h2>
       <p class="page-desc" data-i18n="rules.desc">훅이 기계적으로 막을 수 있는 것은 훅으로, <strong>판정이 사람 몫인 것</strong>은 규칙으로 남긴다.
         같은 실수가 2회 이상 관측된 메모리만 <code>rules/</code> 로 승격되며, 승격은 evolve 파이프라인이 수행한다.
-        상시 차단이 어려운 판단(오탐이 잦아 가드가 죽는 영역)이 여기로 온다.</p>
+        상시 차단이 어려운 판단(오탐이 잦아 가드가 죽는 영역)이 여기로 온다. 근거가 한 레포에만 있는 규칙(sync-integrity·authz-server-side-every-path)은 2026-09-03 부터 그 레포의 <code>.claude/rules/</code> 로 이관했다.</p>
       <table class="data-table">
         <thead><tr>
           <th data-i18n="th.rule">규칙</th>
           <th data-i18n="th.what">무엇을 막나</th>
         </tr></thead>
         <tbody>
-          <tr><td><code>sync-integrity</code></td><td data-i18n="rule.sync">외부 소스 동기화가 SoT 를 덮는 것 — insert-only 금지·빈 결과를 성공으로 읽지 않기·연속 확증·사람이 확정한 값 보호</td></tr>
           <tr><td><code>guard-scope-discipline</code></td><td data-i18n="rule.guard">가드의 감시 범위가 넓어 오탐이 쌓이는 것 — 오탐이 반복되면 사람이 가드를 무시하고, 그 순간 가드가 죽는다</td></tr>
           <tr><td><code>untrusted-content-egress</code></td><td data-i18n="rule.egress">외부에서 읽은 내용을 지시로 받아들이는 것 — 유입에서 유출로 이어지는 경로에 사람을 둔다</td></tr>
           <tr><td><code>first-match-rule-ordering</code></td><td data-i18n="rule.order">순차 first-match 체인에서 넓은 규칙이 위에 있어 좁은 규칙이 도달 불가가 되는 것</td></tr>
           <tr><td><code>standalone-bundle-trace</code></td><td data-i18n="rule.bundle">번들러 trace 밖 프로세스(spawn 워커·별도 프로세스)의 의존성 누락 — 로컬은 되는데 배포에서만 죽는 조합</td></tr>
           <tr><td><code>frontend-overflow-and-modal-traps</code></td><td data-i18n="rule.fe">텍스트 잘림 3대 원인·모달 스크롤 보존·시트 안에서 스크롤을 어디에 거나</td></tr>
           <tr><td><code>prototype-isolation</code></td><td data-i18n="rule.proto">확정되지 않은 시안이 프로덕션에 섞이는 것 — 마커가 있을 때만 도는 훅과 짝</td></tr>
-          <tr><td><code>authz-server-side-every-path</code></td><td data-i18n="rule.authz">권한을 화면에서만 막는 것 — 판정은 서버 액션 안에서, 게이트는 엔드포인트가 아니라 리소스에</td></tr>
+          <tr><td><code>secrets-never-in-responses</code></td><td data-i18n="rule.secrets">응답 직렬화에 비밀번호 해시·토큰·쿠키·API 키를 싣는 것 — 가린(redact) 필드는 저장 왕복에서 «빈 값 = 변경 없음»으로 보존</td></tr>
         </tbody>
       </table>
     </section>
@@ -304,37 +311,36 @@ window.I18N_DICT = {
     'brand.sub': 'Guide',
     'nav.home': 'Home',
     'nav.scheduler': 'Scheduler',
-    'h1': 'Extensions — <em>21 hooks + 21 skills + 7 rules</em>',
+    'h1': 'Extensions — <em>33 hooks + 21 skills + 7 rules</em>',
     'page.desc': 'A self-evolution / safety / proof layer over Comad World (<code>~/.claude/</code>). Local-only extension for Claude Code OAuth users, zero external dependencies. Copy-based install, Python stdlib + bash only.',
-    'tag.hooks': '25 hooks',
+    'tag.hooks': '33 hooks',
     'tag.skills': '21 skills',
     'toc.install': 'Install',
-    'toc.hooks': '21 hooks',
+    'toc.hooks': '33 hooks',
     'toc.skills': '21 skills',
     'toc.rules': '7 rules',
-    'tag.rules': '8 rules',
+    'tag.rules': '7 rules',
     'rules.h2': '7 rules',
-    'rules.desc': 'What a hook can mechanically block becomes a hook; <strong>what only a person can judge</strong> stays a rule. Only patterns observed twice or more get promoted into <code>rules/</code>, and the evolve pipeline does the promoting. Judgments that resist always-on blocking — the ones where false positives would kill the guard — land here.',
+    'rules.desc': 'What a hook can mechanically block becomes a hook; <strong>what only a person can judge</strong> stays a rule. Only patterns observed twice or more get promoted into <code>rules/</code>, and the evolve pipeline does the promoting. Judgments that resist always-on blocking — the ones where false positives would kill the guard — land here. Rules whose evidence lives in a single repo (sync-integrity, authz-server-side-every-path) moved into that repo\'s <code>.claude/rules/</code> on 2026-09-03.',
     'th.rule': 'Rule',
     'th.what': 'What it prevents',
-    'rule.sync': 'External sync overwriting the source of truth — no insert-only mirroring, never read an empty result as success, require consecutive confirmation, protect human-set values',
     'rule.guard': 'Guards watching too wide a surface — repeated false positives train people to ignore the guard, and that is when the guard dies',
     'rule.egress': 'Treating fetched content as instructions — put a person on the path from ingest to egress',
     'rule.order': 'Broad rules sitting above narrow ones in a first-match chain, making the narrow rule unreachable',
     'rule.bundle': 'Dependencies of processes outside the bundler trace (spawned workers, separate processes) — the combination that works locally and only dies in deploy',
     'rule.fe': 'The three causes of clipped text, preserving scroll across modals, and where to attach scrolling inside a sheet',
     'rule.proto': 'Unconfirmed drafts leaking into production — paired with a hook that only runs when a marker is present',
-    'rule.authz': 'Permission enforced only in the UI — decide inside the server action, and gate the resource rather than the endpoint',
+    'rule.secrets': 'Password hashes, tokens, cookies or API keys in a response payload — and redacted fields must survive a save round-trip as «empty = unchanged»',
     'toc.parallel': 'comad-parallel deep-dive',
     'toc.t6': 'T6 self-evolve loop',
     'toc.repo': 'Repo / License',
     'install.h2': 'Install',
     'install.intro': 'One command copies hooks/skills/config into <code>~/.claude/</code>. Existing files backed up to <code>.bak-&lt;UTC&gt;</code> before overwrite. Re-run safely.',
     'install.note': '<strong>Prerequisite</strong> — comad-world should be installed first (assumes its <code>~/.claude/</code> directory layout). Hooks/skills work without it but the <code>brain</code>/<code>ear</code> integration scenarios are limited.',
-    'hooks.h2': '21 hooks',
-    'hooks.desc': '4 pre-tool-use + 5 Stop. All silent (exit 0 + log); set <code>COMAD_*_BLOCK=1</code> to escalate to exit 2.',
-    'hooks.pre.h3': 'pre-tool-use (4)',
-    'hooks.stop.h3': 'Stop (5)',
+    'hooks.h2': '33 hooks',
+    'hooks.desc': '21 pre-tool-use + 12 Stop. The 2026-09-03 overhaul (a three-month audit, 178 user corrections) made seven of them hard exit-2 gates (agent-contract · deploy-approval · still-broken-edit · claim-done · discord-reply · numbered-requirements-echo · ui-render); the rest warn and log (exit 0). Some can be escalated with <code>COMAD_*_BLOCK=1</code>.',
+    'hooks.pre.h3': 'pre-tool-use (21)',
+    'hooks.stop.h3': 'Stop (12)',
     'th.hook': 'Hook',
     'th.role': 'Role',
     'th.trigger': 'Trigger',
@@ -346,9 +352,7 @@ window.I18N_DICT = {
     'hook.usage.r': 'OAuth 5h/7d quota guard (currently dormant)',
     'hook.t6.r': 'On session end, capture recent <code>fix:/feat:/bugfix:</code> commits in current repo',
     'hook.claim.r': 'Detect "all passed / 92/92 PASS" claims without Bash verification',
-    'hook.prem.r': 'Detect premature "convergence achieved" declarations',
     'hook.num.r': 'Cross-check absolute claims ("perfect / production-ready / 100%") vs actual evidence',
-    'hook.inv.r': 'Coverage claim vs inventory cross-check',
     'hook.proto.r': 'Keeps draft work from touching production files (only active when a marker exists)',
     'hook.pushstruct.r': 'Structural-regression checks right before push',
     'hook.taskq.r': 'Demands visual evidence when a UI change is pushed',
@@ -365,6 +369,16 @@ window.I18N_DICT = {
     'hook.harsh.r': 'User-perspective anti-pattern detector',
     'hook.recur.r': 'Signals a loop of repeated fixes to the same file',
     'hook.thrash.r': 'Warns on visual-rework thrash (signal only, always passes)',
+    'hook.agentc.r': 'Agent spawn contract — blocks a spawn with no <code>name</code>, a non-fork spawn with no <code>model</code>, or a version-pinned model; warns when <code>DELIVERABLE:</code> is missing',
+    'hook.deploy.r': 'Production deploys need an explicit order every time — blocked without an approval marker from the last 30 minutes; the marker is single-use',
+    'hook.stillbroken.r': 'From the third «still broken», no code edit without a hypothesis file — stops same-layer patch loops',
+    'hook.recurtest.r': 'A second fix in the same scope within 30 days must ship with a test-file change',
+    'hook.authzpath.r': 'A push that changes permission logic must enumerate every touched path (page · api · action · nav · proxy) in the commit message',
+    'hook.discord.r': 'A message that arrived via a Discord channel cannot end the turn without a reply tool call (hard rule #0)',
+    'hook.numecho.r': 'N numbered requirements → N per-item statuses (done · not started · deferred …) before the turn may end — blocks silent omissions',
+    'hook.uirender.r': 'UI files edited this turn must be rendered to a png before stopping (escape hatch: «렌더 생략 사유:»)',
+    'hook.workerrec.r': 'Was every async worker recovered, re-instructed, ABANDONed or TaskStopped? (log-only for now)',
+    'hook.ledger.r': 'Reminds at session end about test data still open in the ledger (warn only)',
     'skills.h2': '21 skills',
     'th.skill': 'Skill',
     'th.purpose': 'Purpose',
@@ -415,37 +429,36 @@ window.I18N_DICT = {
     'brand.sub': '가이드',
     'nav.home': '홈',
     'nav.scheduler': '스케줄러',
-    'h1': 'Extensions — <em>21 hooks + 21 skills + 7 rules</em>',
+    'h1': 'Extensions — <em>33 hooks + 21 skills + 7 rules</em>',
     'page.desc': '코마드월드(<code>~/.claude/</code>) 위에 얹는 자가진화·안전·증명 레이어. Claude Code OAuth 사용자를 위한 로컬 전용 확장, 외부 서비스 의존성 없음. 복사 기반 설치, Python stdlib + bash 만 사용.',
-    'tag.hooks': '25 hooks',
+    'tag.hooks': '33 hooks',
     'tag.skills': '21 skills',
     'toc.install': '설치',
-    'toc.hooks': '훅 21종',
+    'toc.hooks': '훅 33종',
     'toc.skills': '스킬 21종',
     'toc.rules': '규칙 7종',
-    'tag.rules': '8 rules',
+    'tag.rules': '7 rules',
     'rules.h2': '규칙 7종',
-    'rules.desc': '훅이 기계적으로 막을 수 있는 것은 훅으로, <strong>판정이 사람 몫인 것</strong>은 규칙으로 남긴다. 같은 실수가 2회 이상 관측된 메모리만 <code>rules/</code> 로 승격되며, 승격은 evolve 파이프라인이 수행한다. 상시 차단이 어려운 판단(오탐이 잦아 가드가 죽는 영역)이 여기로 온다.',
+    'rules.desc': '훅이 기계적으로 막을 수 있는 것은 훅으로, <strong>판정이 사람 몫인 것</strong>은 규칙으로 남긴다. 같은 실수가 2회 이상 관측된 메모리만 <code>rules/</code> 로 승격되며, 승격은 evolve 파이프라인이 수행한다. 상시 차단이 어려운 판단(오탐이 잦아 가드가 죽는 영역)이 여기로 온다. 근거가 한 레포에만 있는 규칙(sync-integrity·authz-server-side-every-path)은 2026-09-03 부터 그 레포의 <code>.claude/rules/</code> 로 이관했다.',
     'th.rule': '규칙',
     'th.what': '무엇을 막나',
-    'rule.sync': '외부 소스 동기화가 SoT 를 덮는 것 — insert-only 금지·빈 결과를 성공으로 읽지 않기·연속 확증·사람이 확정한 값 보호',
     'rule.guard': '가드의 감시 범위가 넓어 오탐이 쌓이는 것 — 오탐이 반복되면 사람이 가드를 무시하고, 그 순간 가드가 죽는다',
     'rule.egress': '외부에서 읽은 내용을 지시로 받아들이는 것 — 유입에서 유출로 이어지는 경로에 사람을 둔다',
     'rule.order': '순차 first-match 체인에서 넓은 규칙이 위에 있어 좁은 규칙이 도달 불가가 되는 것',
     'rule.bundle': '번들러 trace 밖 프로세스(spawn 워커·별도 프로세스)의 의존성 누락 — 로컬은 되는데 배포에서만 죽는 조합',
     'rule.fe': '텍스트 잘림 3대 원인·모달 스크롤 보존·시트 안에서 스크롤을 어디에 거나',
     'rule.proto': '확정되지 않은 시안이 프로덕션에 섞이는 것 — 마커가 있을 때만 도는 훅과 짝',
-    'rule.authz': '권한을 화면에서만 막는 것 — 판정은 서버 액션 안에서, 게이트는 엔드포인트가 아니라 리소스에',
+    'rule.secrets': '응답 직렬화에 비밀번호 해시·토큰·쿠키·API 키를 싣는 것 — 가린(redact) 필드는 저장 왕복에서 «빈 값 = 변경 없음»으로 보존',
     'toc.parallel': 'comad-parallel 심화',
     'toc.t6': 'T6 자가진화 루프',
     'toc.repo': '레포 / 라이선스',
     'install.h2': '설치',
     'install.intro': '한 명령으로 hooks/skills/config 가 <code>~/.claude/</code> 에 복사됩니다. 기존 파일은 <code>.bak-&lt;UTC&gt;</code> 백업 후 덮어쓰기. 재실행 안전.',
     'install.note': '<strong>전제</strong> &mdash; comad-world 가 먼저 설치되어 있어야 합니다 (<code>~/.claude/</code> 디렉터리 구조 가정). comad-world 가 없어도 hooks/skills 자체는 동작하지만 <code>brain</code>/<code>ear</code> 와의 연동 시나리오는 제한됩니다.',
-    'hooks.h2': '훅 21종',
-    'hooks.desc': 'pre-tool-use 12개 + Stop 9개. 모두 silent (exit 0 + 로그); 환경변수 <code>COMAD_*_BLOCK=1</code> 로 exit 2 승격 가능.',
-    'hooks.pre.h3': 'pre-tool-use (12종)',
-    'hooks.stop.h3': 'Stop (9종)',
+    'hooks.h2': '훅 33종',
+    'hooks.desc': 'pre-tool-use 21개 + Stop 12개. 2026-09-03 개편(3개월 감사: 교정 178건)으로 하드 게이트 7종(agent-contract·deploy-approval·still-broken-edit·claim-done·discord-reply·numbered-requirements-echo·ui-render)은 exit 2 로 차단하고, 나머지는 경고·로그(exit 0). 일부는 환경변수 <code>COMAD_*_BLOCK=1</code> 로 exit 2 승격 가능.',
+    'hooks.pre.h3': 'pre-tool-use (21종)',
+    'hooks.stop.h3': 'Stop (12종)',
     'th.hook': '훅',
     'th.role': '역할',
     'th.trigger': '트리거',
@@ -457,9 +470,7 @@ window.I18N_DICT = {
     'hook.usage.r': 'OAuth 5h/7d 쿼터 방어 (현재 dormant)',
     'hook.t6.r': '세션 종료 시 현재 repo 의 최근 <code>fix:/feat:/bugfix:</code> 커밋 포착',
     'hook.claim.r': '"모두 통과 / 92/92 PASS" 류 주장 + Bash 검증 없음 감지',
-    'hook.prem.r': '"수렴 달성" 조기 선언 감지',
     'hook.num.r': '"완벽 / production-ready / 100%" 절대 주장 vs 실제 evidence 대조',
-    'hook.inv.r': 'coverage 주장 vs inventory cross-check',
     'hook.proto.r': '시안 작업이 프로덕션 파일을 건드리는 것 차단 (마커 있을 때만 동작)',
     'hook.pushstruct.r': 'push 직전 구조적 재발 체크',
     'hook.taskq.r': 'UI 변경 push 시 시각 증거 강제',
@@ -476,6 +487,16 @@ window.I18N_DICT = {
     'hook.harsh.r': '사용자 관점 안티패턴 탐지',
     'hook.recur.r': '같은 파일을 반복 수정하는 루프 신호',
     'hook.thrash.r': '시각 재구성 스래싱 경고 (신호만, 항상 통과)',
+    'hook.agentc.r': 'Agent 스폰 계약 — <code>name</code> 없음·fork 외 <code>model</code> 없음·버전 핀 모델이면 차단, <code>DELIVERABLE:</code> 없으면 경고',
+    'hook.deploy.r': '프로드 배포는 매번 사용자의 명시 지시 후 — 30분 내 승인 마커 없으면 차단, 마커는 1회용',
+    'hook.stillbroken.r': '«여전히» 3회째부터 가설 문서 없이는 코드를 만지지 못한다 — 같은 층 패치 반복 차단',
+    'hook.recurtest.r': '30일 내 같은 scope 의 fix 2회째는 테스트 파일 변경을 동반해야 push',
+    'hook.authzpath.r': '권한 판정을 바꾸는 push 는 커밋 메시지에 닿는 경로(page·api·action·nav·proxy)를 열거해야 한다',
+    'hook.discord.r': 'Discord 채널로 들어온 메시지에 reply 도구 호출 없이 턴을 끝내지 못한다 (하드 룰 #0)',
+    'hook.numecho.r': '번호 요구 N개 → 항목별 상태(완료·미착수·보류…) N개 없이는 종료 금지 — 조용한 누락 차단',
+    'hook.uirender.r': '이번 턴에 UI 파일을 고쳤으면 렌더 png 없이는 종료 금지 (예외 «렌더 생략 사유:»)',
+    'hook.workerrec.r': '스폰한 비동기 워커를 회수·재지시·ABANDON·TaskStop 중 하나로 처리했는지 (현재 기록만)',
+    'hook.ledger.r': '장부에 남은 미정리 테스트 데이터를 세션 끝에 알린다 (경고만)',
     'skills.h2': '스킬 21종',
     'th.skill': '스킬',
     'th.purpose': '목적',
